@@ -9,7 +9,9 @@ Bootcamp sekmesi düzeni (her bootcamp ve dönem için aynı; Mentor Map bu düz
   8. satır   : her oturum grubunun adı (serbest: "Ders", "Pazartesi dersi" ...)
   9. satır   : sütun başlıkları
   10+        : satır başına bir hafta
-Oturumun kimliği = Kod + Dönem + Hafta + grup harfi (A/B/C). Tarih değişse de oturum aynı kalır.
+Oturumun kimliği = Dönem (Kod + numara, ör. DA11) + Hafta + grup harfi (A/B/C). Tarih değişse de oturum aynı kalır.
+Okuyucu kuralı: "kalktı" işareti yalnızca şablonda hâlâ bulunan dönemlerin oturumlarına uygulanır; şablondan tamamen
+çıkan (ör. DA11 → DA12 yapılan) dönemin oturumları arşivde dokunulmadan kalır.
 """
 import datetime as dt
 import json
@@ -57,8 +59,9 @@ def bootcamp_sekmesi(wb, baslik, bilgi, gruplar):
     ws = wb.create_sheet(baslik)
     sol = [("Bootcamp", bilgi.get("ad", ""), "Bootcamp'in tam adı."),
            ("Kod", bilgi.get("kod", ""), "Kısa kod (DA, İK, Fabric...). Takvimde ve haritada bu kodla görünür. Dönemden döneme değiştirmeyin."),
-           ("Dönem", bilgi.get("donem", ""), "Örnek: 2026 Yaz. Yeni dönem başlarken bu sekmeyi kopyalayın, dönemi ve tarihleri güncelleyin. "
-                                            "Dönem değişince Mentor Map yeni bir dönem açar; eski dönemin geçmişi korunur."),
+           ("Dönem", bilgi.get("donem", ""), "Kod + dönem numarası: DA11, Vibe2. Mentor Map her dönemi ayrı tutar. Yeni dönem başlarken "
+                                            "numarayı artırın (DA11 → DA12); eski dönemin oturumları Mentor Map'te arşiv olarak kalır. "
+                                            "Numarayı artırmadan tarihleri değiştirirseniz eski dönemin üzerine yazılır."),
            ("Varsayılan saat", bilgi.get("saat", "20:30–23:00"), "Saat hücresi boş olan oturumlar bu saati alır. Biçim: 20:30–23:00 (gece yarısı için 20:30–00:00).")]
     sag = [("Başlangıç – bitiş", None, "Otomatik: oturum tarihlerinden hesaplanır, elle yazmayın.")]
     for i, (etiket, deger, aciklama) in enumerate(sol, start=1):
@@ -68,6 +71,12 @@ def bootcamp_sekmesi(wb, baslik, bilgi, gruplar):
         yorum(c, aciklama)
         if etiket in ("Dönem",) and not deger:
             c.fill = F_SARI
+    # Dönem = Kod + numara (DA11): oturum kimliğinin parçası, yeni dönem eskisinin üzerine yazmasın diye zorunlu biçim
+    dv = DataValidation(type="custom", formula1='REGEXMATCH(TO_TEXT(B3),"^"&B2&"[0-9]+$")', allow_blank=True)
+    dv.error = "Dönem = Kod + numara, boşluksuz: DA11, Vibe2"
+    dv.prompt = "Kod + dönem numarası, boşluksuz: DA11, Vibe2. Yeni dönemde numarayı artırın (DA11 → DA12)."
+    ws.add_data_validation(dv)
+    dv.add("B3")
     for i, (etiket, deger, aciklama) in enumerate(sag, start=1):
         ws.cell(i, 4, etiket).font = ETIKET
         c = ws.cell(i, 5, deger)
@@ -232,7 +241,7 @@ def main(kaynak, kisiler_yolu, cikti):
         ("• Genel: bir bootcamp'e bağlı olmayan etkinlikler. Mentor Map'te \"Genel\" olarak görünür.", 0),
         ("", 0),
         ("Bootcamp sekmesi", 2),
-        ("1. Üst blok: Bootcamp, Kod ve Dönem dolu olmalı. Başlangıç – bitiş kendiliğinden hesaplanır.", 0),
+        ("1. Üst blok: Bootcamp, Kod ve Dönem dolu olmalı. Dönem = Kod + dönem numarası, boşluksuz (DA11, Vibe2); başka biçim kabul edilmez. Başlangıç – bitiş kendiliğinden hesaplanır.", 0),
         ("2. 7–8. satırda haftalık oturum gruplarını tanımlayın: her grubun türü ve adı (DA: Ders / Mentor Görüşmesi / Güçlendirme; "
          "Fabric: Pazartesi dersi / Perşembe dersi). Kullanılmayan grubu boş bırakın.", 0),
         ("3. Her satır bir hafta. Hafta numarası kalıcıdır: araya hafta eklerken mevcut numaraları değiştirmeyin, yeni satıra kullanılmamış bir numara verin.", 0),
@@ -248,7 +257,7 @@ def main(kaynak, kisiler_yolu, cikti):
         ("Değişiklikler ne olur?", 2),
         ("• Tarih ya da saat değişirse oturum aynı kalır; ilgili eğitmenlere \"saat değişti\" bildirimi gider.", 0),
         ("• Bir haftayı silerseniz Mentor Map oturumu \"programdan kalktı\" olarak işaretler; birden çok satır birden silinirse onay ister.", 0),
-        ("• Yeni dönem: sekmeyi kopyalayın, Dönem'i değiştirin, tarihleri güncelleyin.", 0),
+        ("• Yeni dönem: Dönem numarasını artırın (DA11 → DA12) ve tarihleri güncelleyin; isterseniz önce sekmeyi kopyalayın. Mentor Map yeni dönemi ayrı açar, eski dönemin oturumları arşivde kalır. Numarayı artırmadan tarihleri değiştirmeyin: eski dönemin üzerine yazılır.", 0),
         ("", 0),
         ("Renkler", 2),
         ("Sarı: teyit bekleyen hücre (üzerindeki notu okuyun). Pembe: aynı hafta numarası iki kez kullanılmış.", 0),
