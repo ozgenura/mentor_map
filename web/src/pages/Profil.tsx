@@ -8,8 +8,11 @@ import { cikis, demoKisiSec } from "../lib/kimlik";
 import { gorece, sehir, TR } from "../lib/time";
 
 export function Profil({ demoSec }: { demoSec: (id: string) => void }) {
-  const { ben, kisiler, tz, sonGuncelleme, anaEgitmenMi, tum, bakis } = useBaglam();
-  const anaBootcamplar = [...new Map(tum.filter((o) => anaEgitmenMi(o.bootcamp_id)).map((o) => [o.bootcamp_id, o.bootcamp_ad])).values()];
+  const { ben, kisiler, tz, sonGuncelleme, yetkilerim, tum, bakis } = useBaglam();
+  const bootcampAdi = new Map(tum.map((o) => [o.bootcamp_id, o.bootcamp_ad]));
+  const yetkiListesi = (t: string) => yetkilerim.filter((y) => (y.yetki ?? "ana_egitmen") === t)
+    .map((y) => bootcampAdi.get(y.bootcamp_id)).filter(Boolean).join(", ");
+  const rolAdi = ben?.rol === "yonetici" ? "Yönetici" : ben?.rol === "asistan" ? "Asistan" : "Eğitmen";
   return (
     <>
       <SayfaUstu baslik="Profil" />
@@ -50,7 +53,10 @@ export function Profil({ demoSec }: { demoSec: (id: string) => void }) {
             <Satir etiket="Ad">{ben.ad}</Satir>
             <Satir etiket="E-posta">{ben.eposta}</Satir>
             <Satir etiket="Saat dilimi">{tz === TR ? "Türkiye (TR)" : `${sehir(tz)} · saatler TR ile birlikte gösterilir`}</Satir>
-            {anaBootcamplar.length > 0 && <Satir etiket="Ana eğitmen">{anaBootcamplar.join(", ")}</Satir>}
+            <Satir etiket="Rol">{rolAdi}{ben.dis_egitmen ? " · dış eğitmen" : ""}</Satir>
+            {yetkiListesi("ana_egitmen") && <Satir etiket="Ana eğitmen">{yetkiListesi("ana_egitmen")}</Satir>}
+            {yetkiListesi("po") && <Satir etiket="Product owner">{yetkiListesi("po")}</Satir>}
+            {yetkiListesi("asistan") && <Satir etiket="Asistan">{yetkiListesi("asistan")}</Satir>}
           </Kart>
         )}
 

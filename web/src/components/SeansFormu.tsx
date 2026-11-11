@@ -222,7 +222,7 @@ export function YanSeansFormu({ o, bootcampId, onKapat, onKaydedildi }: {
         )}
         <select aria-label="Eğitmen ekle" value={secilecek} onChange={(e) => ekleKisi(e.target.value)} className={GIRDI}>
           <option value="">+ Kayıtlı eğitmen ekle</option>
-          {kisiler.filter((k) => k.rol === "egitmen" && !seciliKisiler.includes(k.id)).map((k) => <option key={k.id} value={k.id}>{k.ad}</option>)}
+          {kisiler.filter((k) => k.rol === "egitmen" && !seciliKisiler.includes(k.id)).map((k) => <option key={k.id} value={k.id}>{k.ad}{k.dis_egitmen ? " (dış)" : ""}</option>)}
         </select>
         <div className="flex gap-2">
           <input aria-label="Konuk anlatıcı adı" value={konuk} onChange={(e) => setKonuk(e.target.value)} placeholder="Konuk anlatıcı adı"

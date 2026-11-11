@@ -73,3 +73,18 @@ describe("guvenliLink", () => {
     expect(guvenliLink(null)).toBeNull();
   });
 });
+
+import { anlattigiMi, benimMi } from "./derive";
+
+describe("benimMi (roller)", () => {
+  const ders = o("x", "2026-11-03", "20:30", "23:00", { bootcamp_id: "da" });
+  it("anlatıcı kendi oturumunu görür", () => {
+    expect(benimMi(ders, "k1")).toBe(true);
+    expect(benimMi(ders, "k2")).toBe(false);
+  });
+  it("asistan / PO sorumlu olduğu bootcamp'in oturumunu görür ama anlatıcı sayılmaz", () => {
+    expect(benimMi(ders, "k2", new Set(["da"]))).toBe(true);
+    expect(benimMi(ders, "k2", new Set(["ik"]))).toBe(false);
+    expect(anlattigiMi(ders, "k2")).toBe(false);
+  });
+});

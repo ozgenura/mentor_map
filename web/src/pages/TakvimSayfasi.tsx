@@ -40,7 +40,7 @@ function haftaEtiketi(bas: string) {
 }
 
 export function TakvimSayfasi() {
-  const { tum, ben, kisiler, anaEgitmenMi, sec } = useBaglam();
+  const { tum, ben, kisiler, anaEgitmenMi, sec, banaMi, sorumlu } = useBaglam();
   const qc = useQueryClient();
   const [yeniSeans, setYeniSeans] = useState(false);
   const yonetebilir = useMemo(() => tum.some((o) => anaEgitmenMi(o.bootcamp_id)), [tum, anaEgitmenMi]);
@@ -55,18 +55,19 @@ export function TakvimSayfasi() {
 
   const gorunen = useMemo(() => tum.filter((o) => {
     if (bootcamp && o.kisa_kod !== bootcamp) return false;
-    if (kapsam === "ben" && ben) return o.anlaticilar.some((a) => a.kisi_id === ben.id);
+    if (kapsam === "ben" && ben) return banaMi(o);
     if (egitmen) return o.anlaticilar.some((a) => a.kisi_id === egitmen);
     return true;
-  }), [tum, bootcamp, kapsam, egitmen, ben]);
+  }), [tum, bootcamp, kapsam, egitmen, ben, banaMi]);
 
   // Harita tüm programı gösterir: kişinin (ya da seçili eğitmenin) bootcamp'lerinin bütün oturumları, kişininkiler vurgulu.
   const vurguId = kapsam === "ben" && ben ? ben.id : egitmen || null;
   const vurgu = useMemo(() => (o: Oturum) => !!vurguId && o.anlaticilar.some((a) => a.kisi_id === vurguId), [vurguId]);
   const haritaOturumlari = useMemo(() => {
     const hatlar = vurguId ? new Set(tum.filter(vurgu).map((o) => o.bootcamp_id)) : null;
+    if (hatlar && kapsam === "ben") for (const id of sorumlu) hatlar.add(id);  // asistan / PO olduğu bootcamp'ler
     return tum.filter((o) => (!bootcamp || o.kisa_kod === bootcamp) && (!hatlar || hatlar.has(o.bootcamp_id)));
-  }, [tum, vurgu, vurguId, bootcamp]);
+  }, [tum, vurgu, vurguId, bootcamp, kapsam, sorumlu]);
 
   return (
     <>
@@ -102,7 +103,7 @@ export function TakvimSayfasi() {
           {kapsam === "hepsi" && (
             <select aria-label="Eğitmen" value={egitmen} onChange={(e) => setEgitmen(e.target.value)} className="secim">
               <option value="">Tüm eğitmenler</option>
-              {kisiler.filter((k) => k.rol === "egitmen").map((k) => <option key={k.id} value={k.id}>{k.ad}</option>)}
+              {kisiler.filter((k) => k.rol === "egitmen").map((k) => <option key={k.id} value={k.id}>{k.ad}{k.dis_egitmen ? " (dış)" : ""}</option>)}
             </select>
           )}
         </div>

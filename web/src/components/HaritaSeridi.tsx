@@ -14,14 +14,15 @@ const AY_KISA = ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl"
 const MUREKKEP = "#22110F", MERCAN = "#F08891", MERCAN_KOYU = "#8E0D19";
 
 export function HaritaSeridi() {
-  const { tum, ben, sec, git } = useBaglam();
+  const { tum, ben, sec, git, sorumlu } = useBaglam();
   const bugun = bugunTR();
   const vurgu = useMemo(() => (o: Oturum) => !!ben && o.anlaticilar.some((a) => a.kisi_id === ben.id), [ben]);
   const h = useMemo(() => {
-    const hatlar = new Set(tum.filter(vurgu).map((o) => o.bootcamp_id));
+    const hatlar = new Set([...tum.filter(vurgu).map((o) => o.bootcamp_id), ...sorumlu]);
     return haritaKur(tum.filter((o) => hatlar.has(o.bootcamp_id)), vurgu, bugun);
-  }, [tum, vurgu, bugun]);
-  const ilerleme = useMemo(() => new Map(ben ? ilerlemeler(tum, ben.id).map((p) => [p.bootcampId, p]) : []), [tum, ben]);
+  }, [tum, vurgu, bugun, sorumlu]);
+  const ilerleme = useMemo(() => new Map(ben ? ilerlemeler(tum, ben.id, Date.now(), sorumlu).map((p) => [p.bootcampId, p]) : []),
+    [tum, ben, sorumlu]);
 
   if (!ben || h.bugunHafta < 0 || h.bugunHafta >= h.haftalar.length) return null;
   const w0 = h.bugunHafta, w1 = Math.min(h.haftalar.length - 1, w0 + PENCERE - 1);

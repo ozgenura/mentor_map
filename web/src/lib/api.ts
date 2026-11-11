@@ -71,10 +71,10 @@ function supabaseApi(db: SupabaseClient): Api {
       return ok(await db.from("oturum_gorunumu").select("*").gte("tarih", sinir()).order("tarih").order("baslangic"));
     },
     async kisiler() {
-      return ok(await db.from("kisiler").select("id, ad, eposta, saat_dilimi, rol").eq("aktif", true).order("ad"));
+      return ok(await db.from("kisiler").select("id, ad, eposta, saat_dilimi, rol, dis_egitmen").eq("aktif", true).order("ad"));
     },
     async yetkiler() {
-      return ok(await db.from("bootcamp_yetkilileri").select("bootcamp_id, kisi_id"));
+      return ok(await db.from("bootcamp_yetkilileri").select("bootcamp_id, kisi_id, yetki"));
     },
     async degisiklikler(kisiId) {
       const r = await db.from("bildirim_kuyrugu").select("id, olay, oturum_id, detay, olusturma")

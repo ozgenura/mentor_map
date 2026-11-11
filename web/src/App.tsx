@@ -7,9 +7,9 @@ import { Logo } from "./components/ui";
 import { api, DEMO, type Api } from "./lib/api";
 import { BaglamCtx, type Baglam, type SaatModu, type Sekme } from "./lib/baglam";
 import { cikis, useKimlik } from "./lib/kimlik";
-import { benimMi, cakisanIdler, cakismalar, siradaki } from "./lib/derive";
+import { anlattigiMi, benimMi, cakisanIdler, cakismalar, siradaki } from "./lib/derive";
 import { TR } from "./lib/time";
-import type { Kisi } from "./lib/types";
+import { DUZENLEYEN_YETKILER, type Kisi, type Oturum } from "./lib/types";
 import { Bugun } from "./pages/Bugun";
 import { Degisenler } from "./pages/Degisenler";
 import { Profil } from "./pages/Profil";
@@ -112,13 +112,20 @@ function Ana({ api, eposta, demoKisiId }: { api: Api; eposta: string | null; dem
   const kapat = useCallback(() => setSeciliId(null), []);
 
   const tum = oturumlar.data ?? [];
-  const benimler = useMemo(() => tum.filter((o) => benimMi(o, ben?.id)), [tum, ben]);
-  const cs = useMemo(() => cakismalar(ben ? benimler : []), [benimler, ben]);
+  const yetkilerim = useMemo(() => (yetkiler.data ?? []).filter((y) => y.kisi_id === ben?.id), [yetkiler.data, ben]);
+  const sorumlu = useMemo(() => new Set(yetkilerim.filter((y) => y.yetki === "asistan" || y.yetki === "po").map((y) => y.bootcamp_id)),
+    [yetkilerim]);
+  const banaMi = useCallback((o: Oturum) => benimMi(o, ben?.id, sorumlu), [ben, sorumlu]);
+  const benimler = useMemo(() => tum.filter(banaMi), [tum, banaMi]);
+  // Çakışma yalnızca anlattığı oturumlar arasında: asistanın takip ettiği iki bootcamp aynı saatte olabilir.
+  const cs = useMemo(() => cakismalar(ben ? tum.filter((o) => anlattigiMi(o, ben.id)) : []), [tum, ben]);
 
   const baglam: Baglam = {
     api, tum, benimler, kisiler: kisiler.data ?? [], ben,
     tz: ben?.saat_dilimi ?? TR, saatModu, setSaatModu,
-    anaEgitmenMi: (bid) => ben?.rol === "yonetici" || !!yetkiler.data?.some((y) => y.bootcamp_id === bid && y.kisi_id === ben?.id),
+    anaEgitmenMi: (bid) => ben?.rol === "yonetici"
+      || yetkilerim.some((y) => y.bootcamp_id === bid && DUZENLEYEN_YETKILER.includes(y.yetki ?? "ana_egitmen")),
+    yetkilerim, sorumlu, banaMi,
     sec: (o) => setSeciliId(o.id),
     cakismalar: cs, cakisanlar: cakisanIdler(cs),
     degisiklikler: degisiklikler.data ?? [],

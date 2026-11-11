@@ -4,7 +4,7 @@ import { createContext, useContext } from "react";
 import type { Api } from "./api";
 import type { Cakisma } from "./derive";
 import { farkliSaat, saatAraligi, sehir, TR } from "./time";
-import type { Degisiklik, Kisi, Oturum } from "./types";
+import type { Degisiklik, Kisi, Oturum, Yetki } from "./types";
 
 export type SaatModu = "tr" | "yerel";
 
@@ -17,7 +17,14 @@ export type Baglam = {
   tz: string;
   saatModu: SaatModu;
   setSaatModu: (m: SaatModu) => void;
+  /** Bootcamp'te düzenleme yetkisi: yönetici, ana eğitmen ya da PO. */
   anaEgitmenMi: (bootcampId: string) => boolean;
+  /** Kişinin bootcamp yetkileri (ana eğitmen, PO, asistan). */
+  yetkilerim: Yetki[];
+  /** Asistan ya da PO olduğu bootcamp'ler: tüm oturumları kişinin takviminde görünür. */
+  sorumlu: ReadonlySet<string>;
+  /** Oturum kişinin takviminde mi (anlatıyor ya da bootcamp'ten sorumlu). */
+  banaMi: (o: Oturum) => boolean;
   sec: (o: Oturum) => void;
   cakismalar: Cakisma[];
   cakisanlar: Set<string>;

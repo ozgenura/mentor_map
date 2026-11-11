@@ -24,8 +24,14 @@ export function siraliOturumlar(os: Oturum[]): Oturum[] {
   return [...os].sort((a, b) => a.tarih.localeCompare(b.tarih) || basMs(a) - basMs(b));
 }
 
-export function benimMi(o: Oturum, kisiId: string | undefined): boolean {
+/** Kişi oturumu anlatıyor mu. */
+export function anlattigiMi(o: Oturum, kisiId: string | undefined): boolean {
   return !!kisiId && o.anlaticilar.some((a) => a.kisi_id === kisiId);
+}
+
+/** Kişinin takviminde görünür mü: anlattığı oturumlar + sorumlu olduğu (asistan / PO) bootcamp'lerin tüm oturumları. */
+export function benimMi(o: Oturum, kisiId: string | undefined, sorumlu?: ReadonlySet<string>): boolean {
+  return anlattigiMi(o, kisiId) || !!sorumlu?.has(o.bootcamp_id);
 }
 
 /** Bitmemiş ilk planlı oturum. */
@@ -72,8 +78,8 @@ export function cakisanIdler(cs: Cakisma[]): Set<string> {
 export type Ilerleme = { bootcampId: string; ad: string; kod: string; renk: string; gecen: number; toplam: number; son: string; sonKonu: string };
 
 /** Kişinin içinde olduğu her bootcamp için tüm programın ilerlemesi. */
-export function ilerlemeler(tum: Oturum[], kisiId: string, simdi = Date.now()): Ilerleme[] {
-  const benimkiler = new Set(tum.filter((o) => benimMi(o, kisiId)).map((o) => o.bootcamp_id));
+export function ilerlemeler(tum: Oturum[], kisiId: string, simdi = Date.now(), sorumlu?: ReadonlySet<string>): Ilerleme[] {
+  const benimkiler = new Set(tum.filter((o) => benimMi(o, kisiId, sorumlu)).map((o) => o.bootcamp_id));
   const out: Ilerleme[] = [];
   for (const id of benimkiler) {
     const list = siraliOturumlar(tum.filter((o) => o.bootcamp_id === id && o.durum === "planli" && o.kaynak === "excel"));

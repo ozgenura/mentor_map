@@ -67,7 +67,8 @@ function listeleriKur() {
   const kisi = SpreadsheetApp.newDataValidation().requireValueInRange(ki.getRange('A2:A'), true).setAllowInvalid(true)
     .setHelpText('Kişiler sekmesindeki adlardan birini seçin. Listede yoksa önce Kişiler sekmesine ekleyin.').build();
   const tur = SpreadsheetApp.newDataValidation()
-    .requireValueInList(['Kick-Off', 'Ders', 'Uygulama', 'Mentor Görüşmesi', 'Master Class', 'Proje', 'Sunum'], true)
+    .requireValueInList(['Kick-Off', 'Ders', 'Ek Ders', 'Uygulama', 'Mentor Görüşmesi', 'Office Hours', 'Master Class',
+                         'Proje', 'Sunum', 'Etkinlik'], true)
     .setAllowInvalid(false).build();
   ot.getRange('B2:B').setDataValidation(kod);   // Bootcamp
   ot.getRange('F2:F').setDataValidation(tur);   // Tür
@@ -76,11 +77,16 @@ function listeleriKur() {
   const bootcampCoklu = SpreadsheetApp.newDataValidation().requireValueInRange(bc.getRange('A2:A'), true)
     .setAllowInvalid(true).build();
   ki.getRange('E2:E').setDataValidation(bootcampCoklu); // Ana eğitmen olduğu bootcamp'ler
+  ki.getRange('C2:C').setDataValidation(SpreadsheetApp.newDataValidation()
+    .requireValueInList(['Eğitmen', 'Asistan', 'Yönetici'], true).setAllowInvalid(false).build());   // Rol
+  ki.getRange('G2:G').setDataValidation(SpreadsheetApp.newDataValidation()
+    .requireValueInList(['İç', 'Dış'], true).setAllowInvalid(false).build());                        // Kurum
+  bc.getRange('E2:F').setDataValidation(kisi);  // PO, Asistan(lar): Kişiler sekmesindeki adlar
 }
 
 function listeleriKurMenu() {
   listeleriKur();
-  SpreadsheetApp.getUi().alert('Açılır listeler kuruldu.\n\nBirden fazla yardımcı eğitmen seçebilmek için bir kez: Oturumlar sekmesinde I sütununu seçin → Veri → Veri doğrulama → kurala tıklayın → "Birden çok seçime izin ver" kutusunu işaretleyin. Aynısını Kişiler sekmesinin E sütunu için yapın.');
+  SpreadsheetApp.getUi().alert('Açılır listeler kuruldu.\n\nBirden fazla yardımcı eğitmen seçebilmek için bir kez: Oturumlar sekmesinde I sütununu seçin → Veri → Veri doğrulama → kurala tıklayın → "Birden çok seçime izin ver" kutusunu işaretleyin. Aynısını Kişiler sekmesinin E sütunu ve Bootcamp\'ler sekmesinin F sütunu (asistanlar) için yapın.');
 }
 
 /**
@@ -166,12 +172,12 @@ function gonder(onay) {
     const veri = {
       kaynak: ss.getName(),
       onay: !!onay,
-      bootcamplar: satirlar(ss.getSheetByName(SEKME.BOOTCAMP), 4).map(function (x) {
-        return { satir: x.satir, kod: x.d[0], ad: x.d[1], renk: x.d[2], zoom: x.d[3] };
+      bootcamplar: satirlar(ss.getSheetByName(SEKME.BOOTCAMP), 6).map(function (x) {
+        return { satir: x.satir, kod: x.d[0], ad: x.d[1], renk: x.d[2], zoom: x.d[3], po: x.d[4], asistan: x.d[5] };
       }),
-      kisiler: satirlar(ss.getSheetByName(SEKME.KISI), 6).map(function (x) {
+      kisiler: satirlar(ss.getSheetByName(SEKME.KISI), 7).map(function (x) {
         return { satir: x.satir, ad: x.d[0], eposta: x.d[1], rol: x.d[2], saat_dilimi: x.d[3], ana_egitmen: x.d[4],
-                 aktif: String(x.d[5]).trim().toUpperCase() !== 'HAYIR' };
+                 aktif: String(x.d[5]).trim().toUpperCase() !== 'HAYIR', kurum: x.d[6] };
       }),
       oturumlar: oturumSatirlari(ss.getSheetByName(SEKME.OTURUM))
     };

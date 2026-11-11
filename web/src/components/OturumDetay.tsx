@@ -12,7 +12,8 @@ const ROL: Record<string, string> = { ana: "", yardimci: "yardımcı", konuk: "k
 
 /** Oturum detayı: mobilde tam ekran sayfa, geniş ekranda sağdan açılan panel. */
 export function OturumDetay({ o, onKapat }: { o: Oturum; onKapat: () => void }) {
-  const { tz, saatModu, anaEgitmenMi, cakisanlar, ben } = useBaglam();
+  const { tz, saatModu, anaEgitmenMi, cakisanlar, ben, kisiler } = useBaglam();
+  const disEgitmen = new Set(kisiler.filter((k) => k.dis_egitmen).map((k) => k.id));
   const [iptalAcik, setIptalAcik] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const g = gosterim(o, tz, saatModu);
@@ -84,6 +85,7 @@ export function OturumDetay({ o, onKapat }: { o: Oturum; onKapat: () => void }) 
                     <li key={i}>
                       {a.kisi_id && a.kisi_id === ben?.id ? "Sen" : a.ad}
                       {ROL[a.rol] && <span className="ml-1 text-xs text-soluk">({ROL[a.rol]})</span>}
+                      {a.kisi_id && disEgitmen.has(a.kisi_id) && <span className="ml-1 text-xs text-soluk">· dış eğitmen</span>}
                     </li>
                   ))}
                 </ul>
