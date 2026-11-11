@@ -4,10 +4,10 @@ E-posta, rol, PO, asistan, Zoom, renk ve etkinlikler bu dosyada değil, Mentor M
 Kullanım: python3 -I program_sablonu.py <eski_ekip_excel.xlsx> <kisiler.json> <cikti.xlsx>
 
 Bootcamp sekmesi düzeni (her bootcamp ve dönem için aynı; Mentor Map bu düzeni okur):
-  1–5. satır : bootcamp ve dönem bilgileri (etiket A/D sütununda, değer B/E sütununda)
+  1–5. satır : bootcamp ve dönem bilgileri (etiket A/E sütununda, değer B/F sütununda)
   7. satır   : her oturum grubunun türü (açılır liste)
   8. satır   : her oturum grubunun adı (serbest: "Ders", "Pazartesi dersi" ...)
-  9. satır   : sütun başlıkları
+  9. satır   : sütun başlıkları; her grup: Tarih, Saat, Tür (boşsa grubun türü), Konu, Eğitmen(ler)
   10+        : satır başına bir hafta
 Oturumun kimliği = Dönem (Kod + numara, ör. DA11) + Hafta + grup harfi (A/B/C). Tarih değişse de oturum aynı kalır.
 Okuyucu kuralı: "kalktı" işareti yalnızca şablonda hâlâ bulunan dönemlerin oturumlarına uygulanır; şablondan tamamen
@@ -32,11 +32,11 @@ F_SARI = PatternFill("solid", fgColor=SARI)
 F_ACIK = PatternFill("solid", fgColor=ACIK)
 ETIKET = Font(bold=True, color=YESIL)
 INCE = Side(style="thin", color="D9CDC6")
-TURLER = ["Kick-Off", "Ders", "Uygulama", "Mentor Görüşmesi", "Proje", "Sunum", "Master Class", "Etkinlik"]
+TURLER = ["Kick-Off", "Ders", "Ek Ders", "Uygulama", "Mentor Görüşmesi", "Office Hours", "Proje", "Sunum", "Master Class", "Etkinlik"]
 ILK = 10                      # ilk hafta satırı
 SON = 300                     # biçim ve doğrulamaların uzandığı son satır
-GRUP_KOL = {"A": 5, "B": 9, "C": 13}   # her grubun Tarih sütunu; ardından Saat, Konu, Eğitmen(ler)
-NOT_KOL = 17
+GRUP_KOL = {"A": 4, "B": 9, "C": 14}   # her grubun Tarih sütunu; ardından Saat, Tür, Konu, Eğitmen(ler)
+NOT_KOL = 19
 ETK_BASLIK = ["No", "Tarih", "Saat", "Başlık", "Açıklama", "Konuşmacı(lar)", "Dış konuşmacı", "Not"]
 ETK_GENISLIK = [6, 12, 13, 32, 36, 26, 20, 26]
 
@@ -78,16 +78,16 @@ def bootcamp_sekmesi(wb, baslik, bilgi, gruplar):
     ws.add_data_validation(dv)
     dv.add("B3")
     for i, (etiket, deger, aciklama) in enumerate(sag, start=1):
-        ws.cell(i, 4, etiket).font = ETIKET
-        c = ws.cell(i, 5, deger)
+        ws.cell(i, 5, etiket).font = ETIKET
+        c = ws.cell(i, 6, deger)
         c.fill = F_ACIK
         yorum(c, aciklama)
     tarih_araliklari = ",".join(f"{openpyxl.utils.get_column_letter(k)}{ILK}:{openpyxl.utils.get_column_letter(k)}{SON}"
                                 for k in GRUP_KOL.values())
-    ws["E1"] = (f'=IF(COUNT({tarih_araliklari})=0,"",TEXT(MIN({tarih_araliklari}),"yyyy-mm-dd")&" → "&'
+    ws["F1"] = (f'=IF(COUNT({tarih_araliklari})=0,"",TEXT(MIN({tarih_araliklari}),"yyyy-mm-dd")&" → "&'
                 f'TEXT(MAX({tarih_araliklari}),"yyyy-mm-dd"))')
-    ws["E1"].fill = PatternFill(fill_type=None)
-    ws["E1"].font = Font(italic=True, color="6B5C57")
+    ws["F1"].fill = PatternFill(fill_type=None)
+    ws["F1"].font = Font(italic=True, color="6B5C57")
 
     # oturum grubu tanımları (7–8. satır) ve sütun başlıkları (9. satır)
     ws.cell(7, 1, "Oturum türü →").font = Font(italic=True, color="6B5C57")
@@ -96,16 +96,16 @@ def bootcamp_sekmesi(wb, baslik, bilgi, gruplar):
         k = GRUP_KOL[harf]
         for satir, deger in ((7, tur), (8, ad)):
             c = ws.cell(satir, k, deger)
-            ws.merge_cells(start_row=satir, start_column=k, end_row=satir, end_column=k + 3)
+            ws.merge_cells(start_row=satir, start_column=k, end_row=satir, end_column=k + 4)
             c.font, c.fill, c.alignment = BASLIK, F_KOYU, Alignment(horizontal="center")
-        yorum(ws.cell(7, k), f"{harf} grubunun varsayılan türü. Haftanın Tür hücresi doluysa yalnızca A grubu için onun yerine geçer.")
+        yorum(ws.cell(7, k), f"{harf} grubunun varsayılan türü. Oturumun kendi Tür hücresi doluysa o geçerli.")
         yorum(ws.cell(8, k), f"{harf} grubunun adı (Ders, Mentor Görüşmesi, Pazartesi dersi...). Kullanılmıyorsa boş bırakın.")
-    liste(ws, "E7:P7", TURLER)
-    basliklar = ["Hafta", "Modül", "Haftanın konusu", "Tür"]
+    liste(ws, "D7:R7", TURLER)
+    basliklar = ["Hafta", "Modül", "Haftanın konusu"]
     for _ in GRUP_KOL:
-        basliklar += ["Tarih", "Saat", "Konu", "Eğitmen(ler)"]
+        basliklar += ["Tarih", "Saat", "Tür", "Konu", "Eğitmen(ler)"]
     basliklar.append("Not")
-    genislik = [7, 18, 40, 13] + [12, 12, 26, 28] * 3 + [34]
+    genislik = [7, 18, 40] + [12, 12, 14, 26, 28] * 3 + [34]
     for k, (h, w) in enumerate(zip(basliklar, genislik), start=1):
         c = ws.cell(9, k, h)
         c.font, c.fill = BASLIK, F_YESIL
@@ -114,20 +114,21 @@ def bootcamp_sekmesi(wb, baslik, bilgi, gruplar):
     ws.row_dimensions[9].height = 20
     yorum(ws.cell(9, 1), "Haftanın kalıcı numarası; oturumun kimliğinin parçası. Araya hafta eklerken mevcut numaraları değiştirmeyin, "
                          "yeni satıra kullanılmamış bir numara verin. Satır sırası önemli değil.")
-    yorum(ws.cell(9, 4), "Boşsa A grubunun türü geçerli. Kick-Off, Sunum gibi özel haftalarda doldurun.")
     for k in GRUP_KOL.values():
         yorum(ws.cell(9, k + 1), "Boşsa varsayılan saat. Farklıysa 19:00–22:00 biçiminde.")
-        yorum(ws.cell(9, k + 2), "Boşsa haftanın konusu geçerli.")
-        yorum(ws.cell(9, k + 3), "Eğitmenler sekmesindeki tam adlarla; birden fazla kişi virgülle.")
+        yorum(ws.cell(9, k + 2), "Boşsa grubun türü (7. satır) geçerli. Bu oturum farklıysa seçin: Kick-Off, Proje, Sunum, Etkinlik...")
+        yorum(ws.cell(9, k + 3), "Boşsa haftanın konusu geçerli.")
+        yorum(ws.cell(9, k + 4), "Eğitmenler sekmesindeki tam adlarla; birden fazla kişi virgülle.")
     ws.freeze_panes = ws.cell(ILK, 4)
 
     # biçimler ve doğrulamalar
     for r in range(ILK, SON + 1):
         for k in GRUP_KOL.values():
             ws.cell(r, k).number_format = "yyyy-mm-dd"
-    liste(ws, f"D{ILK}:D{SON}", TURLER)
     for k in GRUP_KOL.values():
-        h = openpyxl.utils.get_column_letter(k + 3)
+        tc = openpyxl.utils.get_column_letter(k + 2)
+        liste(ws, f"{tc}{ILK}:{tc}{SON}", TURLER)
+        h = openpyxl.utils.get_column_letter(k + 4)
         liste(ws, f"{h}{ILK}:{h}{SON}", formul="='Eğitmenler'!$A$2:$A$500", sert=False,
               mesaj="Eğitmenler sekmesindeki adlardan seçin; birden fazlaysa virgülle yazın.")
         t = openpyxl.utils.get_column_letter(k)
@@ -135,7 +136,7 @@ def bootcamp_sekmesi(wb, baslik, bilgi, gruplar):
         dv.error = "Tarih girin: 2026-11-18"
         ws.add_data_validation(dv)
         dv.add(f"{t}{ILK}:{t}{SON}")
-    ws.conditional_formatting.add(f"A{ILK}:Q{SON}", FormulaRule(formula=[f"COUNTIF($A${ILK}:$A${SON},$A{ILK})>1"],
+    ws.conditional_formatting.add(f"A{ILK}:S{SON}", FormulaRule(formula=[f"COUNTIF($A${ILK}:$A${SON},$A{ILK})>1"],
                                                                fill=PatternFill("solid", fgColor="FDE3E5")))
     return ws
 
@@ -183,7 +184,7 @@ def da_doldur(ws, kaynak, kisiler):
         ws.cell(r, 3, c_ or "")
         tur = tur_esle.get(str(b or "").strip().lower())
         if tur:
-            ws.cell(r, 4, tur)
+            ws.cell(r, GRUP_KOL["A"] + 2, tur)
         notlar = []
         # A: ana oturum (eski A sütunundaki tarih) · B: Mentor Görüşmesi (Pzt) · C: Güçlendirme (Sal)
         for harf, ham, gun in (("A", e, None), ("B", f, 0), ("C", g, 1)):
@@ -205,9 +206,9 @@ def da_doldur(ws, kaynak, kisiler):
                 yorum(tc, "Eski Excel'de bu oturumun tarihi yazmıyordu; aynı haftanın günü olarak tahmin edildi. Doğruysa sarıyı kaldırın.")
                 sayac["tahmini_tarih"] += 1
             if harf == "C":
-                ws.cell(r, k + 2, f"Güçlendirme: {c_}" if c_ else "")
+                ws.cell(r, k + 3, f"Güçlendirme: {c_}" if c_ else "")
             kisi, sorun = adlar(ham)
-            ec = ws.cell(r, k + 3, kisi)
+            ec = ws.cell(r, k + 4, kisi)
             if sorun:
                 ec.fill = F_SARI
                 yorum(ec, sorun)
@@ -248,11 +249,11 @@ def main(kaynak, kisiler_yolu, cikti):
         ("4. Her oturumun kendi Tarih hücresi var (2026-11-18 biçiminde). O hafta yapılmayan oturumun tarihini boş bırakın.", 0),
         ("5. Saat boşsa varsayılan saat geçerli; farklıysa 19:00–22:00 yazın. Konu boşsa haftanın konusu geçerli.", 0),
         ("6. Eğitmen adları Eğitmenler sekmesindeki yazımla; birden fazla kişi virgülle (Arda Yüce, İlker Ersoy).", 0),
-        ("7. Tür sütunu yalnızca özel haftalar için (Kick-Off, Sunum, Etkinlik...). Boşsa A grubunun türü geçerli.", 0),
+        ("7. Her oturumun kendi Tür hücresi var. Boşsa grubun türü (7. satır) geçerli; o oturum farklıysa seçin: Kick-Off, Ek Ders, Office Hours, Proje, Sunum, Master Class, Etkinlik...", 0),
         ("8. Not sütunu açıklama içindir; Mentor Map oradan oturum okumaz.", 0),
-        ("9. Etkinlikler: bu bootcamp'e bağlı ücretsiz etkinlik için yeni bir satır açın, Tür = Etkinlik seçin. Tarih ve Saat A grubuna, "
-         "başlık Konu'ya, konuşmacı Eğitmen(ler) sütununa yazılır (listede olmayan dış konuşmacı da yazılabilir). "
-         "Katılım linki ve kimlerin göreceği Mentor Map tarafında ayarlanır.", 0),
+        ("9. Etkinlikler: bu bootcamp'e bağlı ücretsiz etkinlik için yeni bir hafta satırı açın (ya da o haftanın boş bir grubunu kullanın) "
+         "ve oturumun Tür hücresinde Etkinlik seçin. Başlık Konu'ya, konuşmacı Eğitmen(ler) sütununa yazılır (listede olmayan dış konuşmacı "
+         "da yazılabilir). Katılım linki ve kimlerin göreceği Mentor Map tarafında ayarlanır.", 0),
         ("", 0),
         ("Değişiklikler ne olur?", 2),
         ("• Tarih ya da saat değişirse oturum aynı kalır; ilgili eğitmenlere \"saat değişti\" bildirimi gider.", 0),
