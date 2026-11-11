@@ -1,0 +1,71 @@
+# Gerçek Excel ("Miuul Eğitimler Takvim") için içe aktarıcı config'i.
+# Excel'e dokunmadan okunur: her sekmenin yapısı burada tarif edilir, kod değişmez.
+# Saat bilgisi olmayan sekmeler default_hours alır (karar: 20:30 başlangıç; bitiş 23:00 varsayım).
+
+saatsiz: &saatsiz {start: "20:30", end: "23:00"}
+
+bootcamps:
+  # Gün sütunları başlıkta, saat başlığın üstünde ("TR 20:30 - 24:00")
+  İK:      {adapter: header_hours, year_start: 2026}
+
+  # İki gün yan yana bloklar; eğitmen sütunu yok ya da ortak
+  Fabric:  {adapter: side_by_side, year_start: 2026, default_hours: *saatsiz}
+  Vibe:    {adapter: side_by_side, year_start: 2026, default_hours: *saatsiz}   # başlıkta "Pazartesi-TR 20:30"; F ortak eğitmen
+  # name: takvim kartlarında görünen kısa ad (sekme adı "SQL" normal SQL dersi gibi okunuyordu)
+  SQL:     {adapter: side_by_side, name: AI SQL, year_start: 2026, default_hours: *saatsiz}   # Salı ve Perşembe aynı konuyu (A) paylaşır
+  GeoBA:   {adapter: side_by_side, year_start: 2026, default_hours: *saatsiz}
+
+  # Haftalık liste: tek tarih sütunu
+  DS:
+    adapter: list_rows
+    header_row: 2
+    date_col: C        # Tarihler
+    topic_col: B       # İÇERİK
+    mentor_col: D      # RECAP (eğitmen)
+    default_hours: *saatsiz
+
+  # Satır başına hafta, haftada üç oturum türü. Pazartesi ve Salı'nın aynı haftaya ait olduğu varsayımdır.
+  DA:
+    adapter: multi_rows
+    header_row: 3
+    date_col: A
+    label_col: B
+    topic_col: C
+    default_hours: *saatsiz
+    sessions:
+      - {col: E, tur: Ders, ana: true}
+      - {col: F, tur: Mentor Görüşmesi, gun: Pazartesi}
+      - {col: G, tur: Uygulama, gun: Salı, konu_on_ek: Güçlendirme}
+
+  # Her satır bir oturum (eğitmen sütunu yok)
+  BIO:     {adapter: tidy_table}
+
+  # Şu an boş sekmeler; doldurulunca yapısına göre adaptör seçilir
+  Quantum: {adapter: weekly, year_start: 2026, default_mentor: "-", default_hours: *saatsiz}
+  DL:      {adapter: side_by_side, year_start: 2026, default_hours: *saatsiz}
+
+# Veritabanındaki kisi_aliaslari tablosu bunlara eklenir. Tek kelimelik adlar ("Arda"), kitapta tek bir
+# tam karşılığı varsa kendiliğinden tamamlanır; tamamlanamayanlar EGITMEN_BELIRSIZ uyarısı alır.
+mentor_aliases: {}
+
+# Eğitmen hücresinde kişi değil yer tutucu olan değerler
+placeholder_mentors: ["-", "–", "—", "Mentor", "Tüm Ekip", "TBD", "?", "Belirlenecek"]
+
+# Geçilecek konu hücreleri (büyük/küçük harf duyarsız, trim sonrası tam değer).
+# Ayrıca İK'daki gibi A sütunu "ARA" olan ve tarihi olmayan satır yapısal kuralla atlanır.
+skip_cells: ["TATİL", "-", "ARA"]
+
+# Resmi tatiller: denk gelen oturum TATIL_GUNU uyarısı alır
+holidays:
+  2026-10-28: Cumhuriyet Bayramı arifesi
+  2026-10-29: Cumhuriyet Bayramı
+  2027-01-01: Yılbaşı
+
+# Oturum türü: sırayla aranır, kelime başında eşleşir (satır etiketi + konu).
+# Eşleşme yoksa sütunun varsayılanı: Ders sütunu → Ders, Uygulama sütunu → Uygulama.
+session_types:
+  - {keywords: [kick-off, açılış], type: Kick-Off}
+  - {keywords: [master class], type: Master Class}
+  - {keywords: [sunum], type: Sunum}
+  - {keywords: [final proje, proje çalışma, proje teslim, capstone], type: Proje}
+  - {keywords: [uygulama, workshop], type: Uygulama}

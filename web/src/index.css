@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { -webkit-tap-highlight-color: transparent; color-scheme: light; }
+  body { @apply bg-zemin font-sans text-murekkep antialiased; }
+  button:focus-visible, a:focus-visible, select:focus-visible { @apply outline outline-2 outline-offset-2 outline-yesil; }
+}
+
+@layer components {
+  .secim {
+    @apply h-10 rounded-full border border-[#D9CDC6] bg-white px-3.5 text-[13px] font-semibold text-murekkep;
+  }
+}
+
+/* FullCalendar: uygulamanın diliyle uyum */
+.mm-takvim {
+  --fc-border-color: theme(colors.cizgi);
+  --fc-today-bg-color: #F3F8F5;
+  --fc-now-indicator-color: theme(colors.mercan.DEFAULT);
+  --fc-button-bg-color: theme(colors.zemin);
+  --fc-button-border-color: transparent;
+  --fc-button-text-color: theme(colors.murekkep);
+  --fc-button-hover-bg-color: theme(colors.ray);
+  --fc-button-hover-border-color: transparent;
+  --fc-button-active-bg-color: theme(colors.yesil.DEFAULT);
+  --fc-button-active-border-color: transparent;
+  --fc-neutral-bg-color: theme(colors.zemin);
+  --fc-page-bg-color: transparent;
+  font-size: 0.8125rem;
+}
+.mm-takvim .fc .fc-toolbar-title { font-family: theme(fontFamily.baslik); font-size: 1.1rem; font-weight: 700; letter-spacing: -0.01em; }
+.mm-takvim .fc .fc-button { font-size: 0.8125rem; font-weight: 600; padding: 0.4rem 0.75rem; border-radius: 12px; box-shadow: none !important; }
+.mm-takvim .fc .fc-button-primary:disabled { opacity: 0.45; }
+.mm-takvim .fc .fc-button-group > .fc-button { border-radius: 12px; margin-right: 4px; }
+.mm-takvim .fc-event { cursor: pointer; border-radius: 8px; padding: 1px 3px; font-weight: 600; }
+.mm-takvim .fc-event.mm-iptal { text-decoration: line-through; border-style: dashed; border-width: 2px; }
+.mm-takvim .fc-event.mm-cakisma { box-shadow: 0 0 0 2px #fff, 0 0 0 4px theme(colors.mercan.DEFAULT); }
+.mm-takvim .fc-col-header-cell-cushion, .mm-takvim .fc-daygrid-day-number { color: inherit; text-decoration: none; font-weight: 600; }
+.mm-takvim .fc-timegrid-slot-label { color: theme(colors.silik); font-weight: 600; }

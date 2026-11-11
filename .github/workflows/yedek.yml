@@ -1,0 +1,26 @@
+# Günlük canlı tutma isteği (ücretsiz Supabase projesi 7 gün istek gelmezse duraklatılır) ve
+# Pazar günleri veritabanı yedeği (ücretsiz planda otomatik yedek yok).
+# Gerekli repo secret'ları: SUPABASE_DB_URL, SUPABASE_URL, SUPABASE_ANON_KEY
+name: yedek
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+
+jobs:
+  canli-tut:
+    runs-on: ubuntu-latest
+    steps:
+      - run: curl -fsS "${{ secrets.SUPABASE_URL }}/rest/v1/" -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" -o /dev/null
+
+  yedek:
+    runs-on: ubuntu-latest
+    steps:
+      - id: gun
+        run: echo "al=$([ "$(date -u +%u)" = 7 ] || [ "${{ github.event_name }}" = workflow_dispatch ] && echo 1 || echo 0)" >> "$GITHUB_OUTPUT"
+      - if: steps.gun.outputs.al == '1'
+        # pg_dump sürümü sunucudan eski olamaz; Supabase'in sürümüne uygun imaj kullanılır.
+        run: docker run --rm -v "$PWD:/out" postgres:17 pg_dump "${{ secrets.SUPABASE_DB_URL }}" --schema=public --no-owner --no-privileges -Fc -f /out/mentormap.dump
+      - if: steps.gun.outputs.al == '1'
+        uses: actions/upload-artifact@v4
+        with: { name: "mentormap-${{ github.run_id }}", path: mentormap.dump, retention-days: 90 }

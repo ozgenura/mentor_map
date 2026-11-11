@@ -1,0 +1,2986 @@
+{
+ "olusturma": "2026-11-02T22:32:16.080475+03:00",
+ "kisiler": [
+  {
+   "id": "a7909fd2-874d-5d0d-9748-4794d7cbae6c",
+   "ad": "Ayşe Kaya",
+   "eposta": "ayse.kaya@ornek.com",
+   "saat_dilimi": "Europe/Istanbul",
+   "rol": "egitmen"
+  },
+  {
+   "id": "2b71a6c7-d2e8-5739-9f01-272770eb0ce5",
+   "ad": "Burak Aydın",
+   "eposta": "burak.aydin@ornek.com",
+   "saat_dilimi": "Europe/London",
+   "rol": "egitmen"
+  },
+  {
+   "id": "ac71496c-0082-5301-ad3d-8c3ab80b2dea",
+   "ad": "Can Yıldız",
+   "eposta": "can.yildiz@ornek.com",
+   "saat_dilimi": "Europe/Berlin",
+   "rol": "egitmen"
+  },
+  {
+   "id": "b258a19b-bcaa-55d0-b40d-3aef7fda493e",
+   "ad": "Deniz Koç",
+   "eposta": "deniz.koc@ornek.com",
+   "saat_dilimi": "Europe/Istanbul",
+   "rol": "egitmen"
+  },
+  {
+   "id": "6ae2c078-5018-5fbc-a525-da288538998d",
+   "ad": "Elif Şahin",
+   "eposta": "elif.sahin@ornek.com",
+   "saat_dilimi": "Europe/Istanbul",
+   "rol": "egitmen"
+  },
+  {
+   "id": "44cfef18-d6be-5afd-a744-edff9b58a651",
+   "ad": "Emre Çelik",
+   "eposta": "emre.celik@ornek.com",
+   "saat_dilimi": "Europe/Istanbul",
+   "rol": "egitmen"
+  },
+  {
+   "id": "95d34d5d-052a-5c49-847c-085ab25a7f07",
+   "ad": "Kaan Polat",
+   "eposta": "kaan.polat@ornek.com",
+   "saat_dilimi": "Europe/Istanbul",
+   "rol": "egitmen"
+  },
+  {
+   "id": "3f0ac552-5e7b-593d-a387-c9e384e2d806",
+   "ad": "Mehmet Demir",
+   "eposta": "mehmet.demir@ornek.com",
+   "saat_dilimi": "Europe/Istanbul",
+   "rol": "egitmen"
+  },
+  {
+   "id": "23a73666-51f4-5a9e-966a-5d1aaacdd9c4",
+   "ad": "Selin Öztürk",
+   "eposta": "selin.ozturk@ornek.com",
+   "saat_dilimi": "Europe/Istanbul",
+   "rol": "egitmen"
+  },
+  {
+   "id": "f019e8f6-04bb-5bcb-b431-12a35fcb5fd8",
+   "ad": "Zeynep Arslan",
+   "eposta": "zeynep.arslan@ornek.com",
+   "saat_dilimi": "Europe/Istanbul",
+   "rol": "egitmen"
+  },
+  {
+   "id": "fa74c4ca-6d19-5c85-baaa-0b903587218e",
+   "ad": "İrem Aksoy",
+   "eposta": "irem.aksoy@ornek.com",
+   "saat_dilimi": "Europe/Istanbul",
+   "rol": "egitmen"
+  },
+  {
+   "id": "3bb99154-3ebc-5e18-90e1-297c883938f0",
+   "ad": "Yönetici (demo)",
+   "eposta": "yonetici@ornek.com",
+   "saat_dilimi": "Europe/Istanbul",
+   "rol": "yonetici"
+  }
+ ],
+ "oturumlar": [
+  {
+   "id": "34c893d4-3a88-56b5-a81f-a9b606a2e02b",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2026-09-22",
+   "baslangic": "2026-09-22T20:30:00+03:00",
+   "bitis": "2026-09-23T00:00:00+03:00",
+   "slot": "sali",
+   "tur": "Kick-Off",
+   "konu": "HR Analytics Foundations & AI Ethics",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "a7909fd2-874d-5d0d-9748-4794d7cbae6c",
+     "ad": "Ayşe Kaya",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "b5c9083a-71f3-5a7d-ba39-238c95a66aa0",
+   "bootcamp_id": "bdf2c1d5-0e81-56f2-bbda-3d0d30f5db1d",
+   "bootcamp_ad": "Quantum ML",
+   "kisa_kod": "Quantum",
+   "renk": "#2BB3C0",
+   "tarih": "2026-09-24",
+   "baslangic": "2026-09-24T20:30:00+03:00",
+   "bitis": "2026-09-24T23:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Kick-Off",
+   "konu": "Kick-Off",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-quantum",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "b258a19b-bcaa-55d0-b40d-3aef7fda493e",
+     "ad": "Deniz Koç",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "1fdd29bb-1317-5c8d-8029-91d2c7a65b0b",
+   "bootcamp_id": "bdf2c1d5-0e81-56f2-bbda-3d0d30f5db1d",
+   "bootcamp_ad": "Quantum ML",
+   "kisa_kod": "Quantum",
+   "renk": "#2BB3C0",
+   "tarih": "2026-09-29",
+   "baslangic": "2026-09-29T20:30:00+03:00",
+   "bitis": "2026-09-29T23:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Quantum için Python Giriş",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-quantum",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "b258a19b-bcaa-55d0-b40d-3aef7fda493e",
+     "ad": "Deniz Koç",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "7870276f-114c-5ac0-9ae9-e14efe110a8c",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2026-09-29",
+   "baslangic": "2026-09-29T20:30:00+03:00",
+   "bitis": "2026-09-30T00:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Getting the Data Right: Sampling & Statistics",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "a7909fd2-874d-5d0d-9748-4794d7cbae6c",
+     "ad": "Ayşe Kaya",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "a899fb99-ea4b-54fb-8692-6b624bcccab6",
+   "bootcamp_id": "bdf2c1d5-0e81-56f2-bbda-3d0d30f5db1d",
+   "bootcamp_ad": "Quantum ML",
+   "kisa_kod": "Quantum",
+   "renk": "#2BB3C0",
+   "tarih": "2026-10-01",
+   "baslangic": "2026-10-01T20:30:00+03:00",
+   "bitis": "2026-10-01T23:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Ders",
+   "konu": "Quantum için Python Giriş",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-quantum",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "b258a19b-bcaa-55d0-b40d-3aef7fda493e",
+     "ad": "Deniz Koç",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "7947491c-0669-558d-99a4-af19b97fb5c6",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2026-10-01",
+   "baslangic": "2026-10-01T20:30:00+03:00",
+   "bitis": "2026-10-01T23:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Uygulama",
+   "konu": "İstatistik-Güçlendirme",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "ac71496c-0082-5301-ad3d-8c3ab80b2dea",
+     "ad": "Can Yıldız",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "c511213b-58e1-5ba0-a42c-d0cabcf46aae",
+   "bootcamp_id": "eac2bcb6-9efb-5ee5-93d4-e713bf9f82ce",
+   "bootcamp_ad": "Data Science",
+   "kisa_kod": "DS",
+   "renk": "#0F9D6E",
+   "tarih": "2026-10-06",
+   "baslangic": "2026-10-06T19:00:00+03:00",
+   "bitis": "2026-10-06T22:00:00+03:00",
+   "slot": "sali",
+   "tur": "Kick-Off",
+   "konu": "Veri Bilimine Giriş & Program Tanıtımı",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ds",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "44cfef18-d6be-5afd-a744-edff9b58a651",
+     "ad": "Emre Çelik",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "2c8bb8c0-8a56-5a21-87d8-7d5aa7971ca5",
+   "bootcamp_id": "bdf2c1d5-0e81-56f2-bbda-3d0d30f5db1d",
+   "bootcamp_ad": "Quantum ML",
+   "kisa_kod": "Quantum",
+   "renk": "#2BB3C0",
+   "tarih": "2026-10-06",
+   "baslangic": "2026-10-06T20:30:00+03:00",
+   "bitis": "2026-10-06T23:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Kuantum Bilgisayara Giriş & Donanımlar",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-quantum",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "b258a19b-bcaa-55d0-b40d-3aef7fda493e",
+     "ad": "Deniz Koç",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "0309593d-f0df-50e9-9909-31aabdb453fc",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2026-10-06",
+   "baslangic": "2026-10-06T20:30:00+03:00",
+   "bitis": "2026-10-07T00:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "From Questions to Evidence: Statistical Tests & Surveys",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "a7909fd2-874d-5d0d-9748-4794d7cbae6c",
+     "ad": "Ayşe Kaya",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "78a4b408-0320-5705-bf51-59fd01ab2bb2",
+   "bootcamp_id": "eac2bcb6-9efb-5ee5-93d4-e713bf9f82ce",
+   "bootcamp_ad": "Data Science",
+   "kisa_kod": "DS",
+   "renk": "#0F9D6E",
+   "tarih": "2026-10-08",
+   "baslangic": "2026-10-08T19:00:00+03:00",
+   "bitis": "2026-10-08T22:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Kick-Off",
+   "konu": "Python Kurulum Atölyesi",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ds",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "3f0ac552-5e7b-593d-a387-c9e384e2d806",
+     "ad": "Mehmet Demir",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "1839d8d4-dd31-545b-ae0e-e8ba4cccead5",
+   "bootcamp_id": "bdf2c1d5-0e81-56f2-bbda-3d0d30f5db1d",
+   "bootcamp_ad": "Quantum ML",
+   "kisa_kod": "Quantum",
+   "renk": "#2BB3C0",
+   "tarih": "2026-10-08",
+   "baslangic": "2026-10-08T20:30:00+03:00",
+   "bitis": "2026-10-08T23:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Ders",
+   "konu": "ML, Scikit-Learn, Qiskit, Keras, TensorFlow, PennyLane",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-quantum",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "b258a19b-bcaa-55d0-b40d-3aef7fda493e",
+     "ad": "Deniz Koç",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "ff439902-9e6f-5a47-97b8-30a3d69a7c77",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2026-10-08",
+   "baslangic": "2026-10-08T20:30:00+03:00",
+   "bitis": "2026-10-08T23:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Uygulama",
+   "konu": "İstatistik-Güçlendirme",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "ac71496c-0082-5301-ad3d-8c3ab80b2dea",
+     "ad": "Can Yıldız",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "c6115178-7789-5936-b8f5-90d8e5ede9f4",
+   "bootcamp_id": "1c1569c5-8007-54c9-9ec6-48a39d2bc7d2",
+   "bootcamp_ad": "Biyoinformatik",
+   "kisa_kod": "BIO",
+   "renk": "#5B8DEF",
+   "tarih": "2026-10-12",
+   "baslangic": "2026-10-12T20:00:00+03:00",
+   "bitis": "2026-10-12T22:00:00+03:00",
+   "slot": "pazartesi",
+   "tur": "Kick-Off",
+   "konu": "Program tanıtımı ve süreç bilgilendirmesi",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-bio",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "95d34d5d-052a-5c49-847c-085ab25a7f07",
+     "ad": "Kaan Polat",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "1c40f666-2590-5064-909f-2fe077fb55bc",
+   "bootcamp_id": "58a2b657-9872-52d5-8de0-607820a07b04",
+   "bootcamp_ad": "Microsoft Fabric",
+   "kisa_kod": "Fabric",
+   "renk": "#E3A008",
+   "tarih": "2026-10-12",
+   "baslangic": "2026-10-12T20:30:00+03:00",
+   "bitis": "2026-10-12T23:00:00+03:00",
+   "slot": "pazartesi",
+   "tur": "Kick-Off",
+   "konu": "Kick-Off",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-fabric",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "6ae2c078-5018-5fbc-a525-da288538998d",
+     "ad": "Elif Şahin",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "e327d109-f613-5509-a7bc-afa7dbf9c22e",
+   "bootcamp_id": "eac2bcb6-9efb-5ee5-93d4-e713bf9f82ce",
+   "bootcamp_ad": "Data Science",
+   "kisa_kod": "DS",
+   "renk": "#0F9D6E",
+   "tarih": "2026-10-13",
+   "baslangic": "2026-10-13T19:00:00+03:00",
+   "bitis": "2026-10-13T22:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Python ile Veri Manipülasyonu (pandas)",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ds",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "44cfef18-d6be-5afd-a744-edff9b58a651",
+     "ad": "Emre Çelik",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "763a2a1a-5216-5935-a531-ae801a36d405",
+   "bootcamp_id": "1c1569c5-8007-54c9-9ec6-48a39d2bc7d2",
+   "bootcamp_ad": "Biyoinformatik",
+   "kisa_kod": "BIO",
+   "renk": "#5B8DEF",
+   "tarih": "2026-10-13",
+   "baslangic": "2026-10-13T20:00:00+03:00",
+   "bitis": "2026-10-13T22:30:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Omikler nedir? Genomik nedir?",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-bio",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "95d34d5d-052a-5c49-847c-085ab25a7f07",
+     "ad": "Kaan Polat",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "74410984-0685-51d6-ae73-bce4b91d5005",
+   "bootcamp_id": "bdf2c1d5-0e81-56f2-bbda-3d0d30f5db1d",
+   "bootcamp_ad": "Quantum ML",
+   "kisa_kod": "Quantum",
+   "renk": "#2BB3C0",
+   "tarih": "2026-10-13",
+   "baslangic": "2026-10-13T20:30:00+03:00",
+   "bitis": "2026-10-13T23:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Kuantum Fizik Temelleri & Algoritmalar",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-quantum",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "b258a19b-bcaa-55d0-b40d-3aef7fda493e",
+     "ad": "Deniz Koç",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "04a1a88f-8525-54e1-bb49-4b2a7c94ac0b",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2026-10-13",
+   "baslangic": "2026-10-13T20:30:00+03:00",
+   "bitis": "2026-10-14T00:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Deeper Analysis: SQL Basics & HR Data Management",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "3f0ac552-5e7b-593d-a387-c9e384e2d806",
+     "ad": "Mehmet Demir",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "30380b65-faab-5be3-b882-a069bda43830",
+   "bootcamp_id": "eac2bcb6-9efb-5ee5-93d4-e713bf9f82ce",
+   "bootcamp_ad": "Data Science",
+   "kisa_kod": "DS",
+   "renk": "#0F9D6E",
+   "tarih": "2026-10-15",
+   "baslangic": "2026-10-15T19:00:00+03:00",
+   "bitis": "2026-10-15T22:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Uygulama",
+   "konu": "Uygulama pandas-1",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ds",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "3f0ac552-5e7b-593d-a387-c9e384e2d806",
+     "ad": "Mehmet Demir",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "85292d25-2271-51f2-8600-53b37e3b360f",
+   "bootcamp_id": "1c1569c5-8007-54c9-9ec6-48a39d2bc7d2",
+   "bootcamp_ad": "Biyoinformatik",
+   "kisa_kod": "BIO",
+   "renk": "#5B8DEF",
+   "tarih": "2026-10-15",
+   "baslangic": "2026-10-15T20:00:00+03:00",
+   "bitis": "2026-10-15T22:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Ders",
+   "konu": "Omikler nedir? Genomik nedir?",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-bio",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "95d34d5d-052a-5c49-847c-085ab25a7f07",
+     "ad": "Kaan Polat",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "ce7d919b-1af7-5bcc-94f3-92229fb9180b",
+   "bootcamp_id": "bdf2c1d5-0e81-56f2-bbda-3d0d30f5db1d",
+   "bootcamp_ad": "Quantum ML",
+   "kisa_kod": "Quantum",
+   "renk": "#2BB3C0",
+   "tarih": "2026-10-15",
+   "baslangic": "2026-10-15T20:30:00+03:00",
+   "bitis": "2026-10-15T23:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Master Class",
+   "konu": "Derin Öğrenme Master Class",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-quantum",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "2b71a6c7-d2e8-5739-9f01-272770eb0ce5",
+     "ad": "Burak Aydın",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "c7421956-cb74-5d91-a4f8-71fa220f32da",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2026-10-15",
+   "baslangic": "2026-10-15T20:30:00+03:00",
+   "bitis": "2026-10-15T23:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Uygulama",
+   "konu": "Uygulama Sql-1",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "6ae2c078-5018-5fbc-a525-da288538998d",
+     "ad": "Elif Şahin",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "84afb2ab-bcf8-5158-bb0f-fa190c4a2d47",
+   "bootcamp_id": "58a2b657-9872-52d5-8de0-607820a07b04",
+   "bootcamp_ad": "Microsoft Fabric",
+   "kisa_kod": "Fabric",
+   "renk": "#E3A008",
+   "tarih": "2026-10-19",
+   "baslangic": "2026-10-19T20:30:00+03:00",
+   "bitis": "2026-10-19T23:00:00+03:00",
+   "slot": "pazartesi",
+   "tur": "Ders",
+   "konu": "BI, DWH ve Microsoft Fabric'e Giriş",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-fabric",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "6ae2c078-5018-5fbc-a525-da288538998d",
+     "ad": "Elif Şahin",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "5a7092f7-e958-5f39-85b9-0a8450163e2f",
+   "bootcamp_id": "eac2bcb6-9efb-5ee5-93d4-e713bf9f82ce",
+   "bootcamp_ad": "Data Science",
+   "kisa_kod": "DS",
+   "renk": "#0F9D6E",
+   "tarih": "2026-10-20",
+   "baslangic": "2026-10-20T19:00:00+03:00",
+   "bitis": "2026-10-20T22:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Keşifçi Veri Analizi (EDA)",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ds",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "44cfef18-d6be-5afd-a744-edff9b58a651",
+     "ad": "Emre Çelik",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "8d5a94e6-8635-5dce-86ae-f97ee27db579",
+   "bootcamp_id": "1c1569c5-8007-54c9-9ec6-48a39d2bc7d2",
+   "bootcamp_ad": "Biyoinformatik",
+   "kisa_kod": "BIO",
+   "renk": "#5B8DEF",
+   "tarih": "2026-10-20",
+   "baslangic": "2026-10-20T20:00:00+03:00",
+   "bitis": "2026-10-20T22:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "FASTQ ve kalite kontrolün gerçek anlamı",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-bio",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "a7909fd2-874d-5d0d-9748-4794d7cbae6c",
+     "ad": "Ayşe Kaya",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "73526ab8-7cb7-5cc2-900b-0fa2b35857c4",
+   "bootcamp_id": "bdf2c1d5-0e81-56f2-bbda-3d0d30f5db1d",
+   "bootcamp_ad": "Quantum ML",
+   "kisa_kod": "Quantum",
+   "renk": "#2BB3C0",
+   "tarih": "2026-10-20",
+   "baslangic": "2026-10-20T20:30:00+03:00",
+   "bitis": "2026-10-20T23:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Yapay Zeka & Makine Öğrenmesi",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-quantum",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "b258a19b-bcaa-55d0-b40d-3aef7fda493e",
+     "ad": "Deniz Koç",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "ac4bbfbc-80c9-5723-9e1e-79faa6ddfa31",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2026-10-20",
+   "baslangic": "2026-10-20T20:30:00+03:00",
+   "bitis": "2026-10-21T00:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Building Trustworthy Analytics: Advanced HR Metrics with SQL",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "a7909fd2-874d-5d0d-9748-4794d7cbae6c",
+     "ad": "Ayşe Kaya",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "cb679f80-1816-54db-8741-948dd228987e",
+   "bootcamp_id": "eac2bcb6-9efb-5ee5-93d4-e713bf9f82ce",
+   "bootcamp_ad": "Data Science",
+   "kisa_kod": "DS",
+   "renk": "#0F9D6E",
+   "tarih": "2026-10-22",
+   "baslangic": "2026-10-22T19:00:00+03:00",
+   "bitis": "2026-10-22T22:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Uygulama",
+   "konu": "Uygulama EDA",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ds",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "3f0ac552-5e7b-593d-a387-c9e384e2d806",
+     "ad": "Mehmet Demir",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "f92e387b-2d6c-5bd8-8fb1-fd216652ec9e",
+   "bootcamp_id": "1c1569c5-8007-54c9-9ec6-48a39d2bc7d2",
+   "bootcamp_ad": "Biyoinformatik",
+   "kisa_kod": "BIO",
+   "renk": "#5B8DEF",
+   "tarih": "2026-10-22",
+   "baslangic": "2026-10-22T20:00:00+03:00",
+   "bitis": "2026-10-22T22:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Ders",
+   "konu": "Genomik veri türleri ve deneysel tasarım",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-bio",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "95d34d5d-052a-5c49-847c-085ab25a7f07",
+     "ad": "Kaan Polat",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "deac8d36-229f-59db-8d87-35abbdc3b955",
+   "bootcamp_id": "58a2b657-9872-52d5-8de0-607820a07b04",
+   "bootcamp_ad": "Microsoft Fabric",
+   "kisa_kod": "Fabric",
+   "renk": "#E3A008",
+   "tarih": "2026-10-22",
+   "baslangic": "2026-10-22T20:30:00+03:00",
+   "bitis": "2026-10-22T23:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Ders",
+   "konu": "BI Modelleme Temelleri",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-fabric",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "ac71496c-0082-5301-ad3d-8c3ab80b2dea",
+     "ad": "Can Yıldız",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "eb54bff8-2a0b-50b2-bc63-d8d76581651b",
+   "bootcamp_id": "bdf2c1d5-0e81-56f2-bbda-3d0d30f5db1d",
+   "bootcamp_ad": "Quantum ML",
+   "kisa_kod": "Quantum",
+   "renk": "#2BB3C0",
+   "tarih": "2026-10-22",
+   "baslangic": "2026-10-22T20:30:00+03:00",
+   "bitis": "2026-10-22T23:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Ders",
+   "konu": "Yapay Zeka & Makine Öğrenmesi",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-quantum",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "b258a19b-bcaa-55d0-b40d-3aef7fda493e",
+     "ad": "Deniz Koç",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "87615da0-ef5e-5196-ae85-fffadf838d29",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2026-10-22",
+   "baslangic": "2026-10-22T20:30:00+03:00",
+   "bitis": "2026-10-22T23:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Uygulama",
+   "konu": "Uygulama Sql-2",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "6ae2c078-5018-5fbc-a525-da288538998d",
+     "ad": "Elif Şahin",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "fff54fcb-c040-5bf3-b8b9-ea41e24dd35c",
+   "bootcamp_id": "58a2b657-9872-52d5-8de0-607820a07b04",
+   "bootcamp_ad": "Microsoft Fabric",
+   "kisa_kod": "Fabric",
+   "renk": "#E3A008",
+   "tarih": "2026-10-26",
+   "baslangic": "2026-10-26T20:30:00+03:00",
+   "bitis": "2026-10-26T23:00:00+03:00",
+   "slot": "pazartesi",
+   "tur": "Ders",
+   "konu": "Lakehouse ve OneLake Kullanımı",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-fabric",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "6ae2c078-5018-5fbc-a525-da288538998d",
+     "ad": "Elif Şahin",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "2c2a526d-0b22-5073-8543-5d8a893702c0",
+   "bootcamp_id": "eac2bcb6-9efb-5ee5-93d4-e713bf9f82ce",
+   "bootcamp_ad": "Data Science",
+   "kisa_kod": "DS",
+   "renk": "#0F9D6E",
+   "tarih": "2026-10-27",
+   "baslangic": "2026-10-27T19:00:00+03:00",
+   "bitis": "2026-10-27T22:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Özellik Mühendisliği",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ds",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "44cfef18-d6be-5afd-a744-edff9b58a651",
+     "ad": "Emre Çelik",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "cf3eb18f-ab05-5e73-a7c1-f814c4963a8a",
+   "bootcamp_id": "1c1569c5-8007-54c9-9ec6-48a39d2bc7d2",
+   "bootcamp_ad": "Biyoinformatik",
+   "kisa_kod": "BIO",
+   "renk": "#5B8DEF",
+   "tarih": "2026-10-27",
+   "baslangic": "2026-10-27T20:00:00+03:00",
+   "bitis": "2026-10-27T22:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Alignment mantığı ve referans genom",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-bio",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "95d34d5d-052a-5c49-847c-085ab25a7f07",
+     "ad": "Kaan Polat",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "6e83b2dc-afcb-5037-9430-2806c8fcca7b",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2026-10-27",
+   "baslangic": "2026-10-27T20:30:00+03:00",
+   "bitis": "2026-10-28T00:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Telling the Story with Data: Visualization & BI Tools",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "f019e8f6-04bb-5bcb-b431-12a35fcb5fd8",
+     "ad": "Zeynep Arslan",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "65811bd7-f910-5c76-80ac-5de5210718df",
+   "bootcamp_id": "1c1569c5-8007-54c9-9ec6-48a39d2bc7d2",
+   "bootcamp_ad": "Biyoinformatik",
+   "kisa_kod": "BIO",
+   "renk": "#5B8DEF",
+   "tarih": "2026-10-28",
+   "baslangic": "2026-10-28T20:00:00+03:00",
+   "bitis": "2026-10-28T22:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Ders",
+   "konu": "FASTQ ve kalite kontrol (tekrar)",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-bio",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [
+    "GUN_UYUSMAZLIGI"
+   ],
+   "anlaticilar": [
+    {
+     "kisi_id": "95d34d5d-052a-5c49-847c-085ab25a7f07",
+     "ad": "Kaan Polat",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "c58885d8-ff7f-5e8d-ab9b-ada701f15eb1",
+   "bootcamp_id": "58a2b657-9872-52d5-8de0-607820a07b04",
+   "bootcamp_ad": "Microsoft Fabric",
+   "kisa_kod": "Fabric",
+   "renk": "#E3A008",
+   "tarih": "2026-11-02",
+   "baslangic": "2026-11-02T20:30:00+03:00",
+   "bitis": "2026-11-02T23:00:00+03:00",
+   "slot": "pazartesi",
+   "tur": "Ders",
+   "konu": "Dataflow Gen2 ile Veri Hazırlama",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-fabric",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "6ae2c078-5018-5fbc-a525-da288538998d",
+     "ad": "Elif Şahin",
+     "rol": "ana"
+    },
+    {
+     "kisi_id": "44cfef18-d6be-5afd-a744-edff9b58a651",
+     "ad": "Emre Çelik",
+     "rol": "yardimci"
+    }
+   ]
+  },
+  {
+   "id": "30c02371-cf33-5153-9682-110571499248",
+   "bootcamp_id": "eac2bcb6-9efb-5ee5-93d4-e713bf9f82ce",
+   "bootcamp_ad": "Data Science",
+   "kisa_kod": "DS",
+   "renk": "#0F9D6E",
+   "tarih": "2026-11-03",
+   "baslangic": "2026-11-03T19:00:00+03:00",
+   "bitis": "2026-11-03T22:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Denetimli Öğrenme: Regresyon",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ds",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "44cfef18-d6be-5afd-a744-edff9b58a651",
+     "ad": "Emre Çelik",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "4364a3e3-c466-5003-826c-c4ac56dab50d",
+   "bootcamp_id": "1c1569c5-8007-54c9-9ec6-48a39d2bc7d2",
+   "bootcamp_ad": "Biyoinformatik",
+   "kisa_kod": "BIO",
+   "renk": "#5B8DEF",
+   "tarih": "2026-11-03",
+   "baslangic": "2026-11-03T20:00:00+03:00",
+   "bitis": "2026-11-03T22:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "VCF okuma ve filtreleme stratejileri",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-bio",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "95d34d5d-052a-5c49-847c-085ab25a7f07",
+     "ad": "Kaan Polat",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "4de9d7ba-bc85-5139-a804-d774b4a3716e",
+   "bootcamp_id": "bdf2c1d5-0e81-56f2-bbda-3d0d30f5db1d",
+   "bootcamp_ad": "Quantum ML",
+   "kisa_kod": "Quantum",
+   "renk": "#2BB3C0",
+   "tarih": "2026-11-03",
+   "baslangic": "2026-11-03T20:30:00+03:00",
+   "bitis": "2026-11-03T23:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "ML vs QML Karşılaştırması",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-quantum",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "b258a19b-bcaa-55d0-b40d-3aef7fda493e",
+     "ad": "Deniz Koç",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "9d70770b-83c7-53ec-b555-5a7918a92233",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2026-11-03",
+   "baslangic": "2026-11-03T20:30:00+03:00",
+   "bitis": "2026-11-04T00:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Operational HR Reporting: Dashboards in Power BI",
+   "aciklama": "Power BI Desktop kurulu gelin.",
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": "https://drive.google.com/drive/folders/ornek",
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "f019e8f6-04bb-5bcb-b431-12a35fcb5fd8",
+     "ad": "Zeynep Arslan",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "add04e85-0fc9-5922-91a5-677d57d300aa",
+   "bootcamp_id": "af0dd958-10da-5e56-950e-973efe6ea375",
+   "bootcamp_ad": "GeoBA Konumsal Analitik",
+   "kisa_kod": "GeoBA",
+   "renk": "#9C7A62",
+   "tarih": "2026-11-04",
+   "baslangic": "2026-11-04T20:30:00+03:00",
+   "bitis": "2026-11-04T23:00:00+03:00",
+   "slot": "carsamba",
+   "tur": "Ders",
+   "konu": "Konumsal Veriye Giriş",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-geoba",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [
+    "EGITMEN_YOK"
+   ],
+   "anlaticilar": []
+  },
+  {
+   "id": "8fa0a9d2-605f-5c80-b9d2-e4d6b9d19e9b",
+   "bootcamp_id": "eac2bcb6-9efb-5ee5-93d4-e713bf9f82ce",
+   "bootcamp_ad": "Data Science",
+   "kisa_kod": "DS",
+   "renk": "#0F9D6E",
+   "tarih": "2026-11-05",
+   "baslangic": "2026-11-05T19:00:00+03:00",
+   "bitis": "2026-11-05T22:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Uygulama",
+   "konu": "Uygulama Regresyon",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ds",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "ac71496c-0082-5301-ad3d-8c3ab80b2dea",
+     "ad": "Can Yıldız",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "35885cd4-97d3-5f57-906d-bd3cc2288e31",
+   "bootcamp_id": "1c1569c5-8007-54c9-9ec6-48a39d2bc7d2",
+   "bootcamp_ad": "Biyoinformatik",
+   "kisa_kod": "BIO",
+   "renk": "#5B8DEF",
+   "tarih": "2026-11-05",
+   "baslangic": "2026-11-05T20:00:00+03:00",
+   "bitis": "2026-11-05T22:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Ders",
+   "konu": "Variant Calling Pipeline",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-bio",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "95d34d5d-052a-5c49-847c-085ab25a7f07",
+     "ad": "Kaan Polat",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "43627f11-1ead-514e-b079-e1fb597ce3d8",
+   "bootcamp_id": "58a2b657-9872-52d5-8de0-607820a07b04",
+   "bootcamp_ad": "Microsoft Fabric",
+   "kisa_kod": "Fabric",
+   "renk": "#E3A008",
+   "tarih": "2026-11-05",
+   "baslangic": "2026-11-05T20:30:00+03:00",
+   "bitis": "2026-11-05T23:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Ders",
+   "konu": "MSSQL Kaynağından Fact Veri Alma",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-fabric",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "ac71496c-0082-5301-ad3d-8c3ab80b2dea",
+     "ad": "Can Yıldız",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "6a7af254-57ac-53c1-9bfc-7e44205d20b6",
+   "bootcamp_id": "bdf2c1d5-0e81-56f2-bbda-3d0d30f5db1d",
+   "bootcamp_ad": "Quantum ML",
+   "kisa_kod": "Quantum",
+   "renk": "#2BB3C0",
+   "tarih": "2026-11-05",
+   "baslangic": "2026-11-05T20:30:00+03:00",
+   "bitis": "2026-11-05T23:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Uygulama",
+   "konu": "Python ile Kuantum Uygulama",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-quantum",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "b258a19b-bcaa-55d0-b40d-3aef7fda493e",
+     "ad": "Deniz Koç",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "507f3d7d-2be6-5255-aad7-7f94548a0085",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2026-11-05",
+   "baslangic": "2026-11-05T20:30:00+03:00",
+   "bitis": "2026-11-05T23:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Uygulama",
+   "konu": "Uygulama Power BI",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "f019e8f6-04bb-5bcb-b431-12a35fcb5fd8",
+     "ad": "Zeynep Arslan",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "c0541cdc-539e-5e44-af99-60d903e9d51b",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2026-11-07",
+   "baslangic": "2026-11-07T11:00:00+03:00",
+   "bitis": "2026-11-07T12:30:00+03:00",
+   "slot": "yan-seans",
+   "tur": "Yan Seans",
+   "konu": "SQL soru-cevap",
+   "aciklama": "Ödev öncesi açık soru-cevap. SQL-2 ödevindeki join sorularına odaklanacağız.",
+   "toplanti_linki": "https://meet.google.com/demo-yan-seans",
+   "materyal_linki": "https://drive.google.com/drive/folders/ornek",
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "uygulama",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "ac71496c-0082-5301-ad3d-8c3ab80b2dea",
+     "ad": "Can Yıldız",
+     "rol": "ana"
+    },
+    {
+     "kisi_id": null,
+     "ad": "Dr. Konuk Anlatıcı",
+     "rol": "konuk"
+    }
+   ]
+  },
+  {
+   "id": "5f92d129-58bf-5e66-8fb5-f5c8dd3b6187",
+   "bootcamp_id": "af0dd958-10da-5e56-950e-973efe6ea375",
+   "bootcamp_ad": "GeoBA Konumsal Analitik",
+   "kisa_kod": "GeoBA",
+   "renk": "#9C7A62",
+   "tarih": "2026-11-07",
+   "baslangic": "2026-11-07T20:30:00+03:00",
+   "bitis": "2026-11-07T23:00:00+03:00",
+   "slot": "cumartesi",
+   "tur": "Ders",
+   "konu": "QGIS Kurulum ve Arayüz",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-geoba",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [
+    "EGITMEN_YOK"
+   ],
+   "anlaticilar": []
+  },
+  {
+   "id": "bda07ec3-2d86-52fb-9080-db8d0c427d5e",
+   "bootcamp_id": "58a2b657-9872-52d5-8de0-607820a07b04",
+   "bootcamp_ad": "Microsoft Fabric",
+   "kisa_kod": "Fabric",
+   "renk": "#E3A008",
+   "tarih": "2026-11-09",
+   "baslangic": "2026-11-09T20:30:00+03:00",
+   "bitis": "2026-11-09T23:00:00+03:00",
+   "slot": "pazartesi",
+   "tur": "Ders",
+   "konu": "Spark SQL ve Parquet Dosya Mantığı",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-fabric",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "6ae2c078-5018-5fbc-a525-da288538998d",
+     "ad": "Elif Şahin",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "97996ed4-8d1e-5852-97d3-f5ce99c635d3",
+   "bootcamp_id": "eac2bcb6-9efb-5ee5-93d4-e713bf9f82ce",
+   "bootcamp_ad": "Data Science",
+   "kisa_kod": "DS",
+   "renk": "#0F9D6E",
+   "tarih": "2026-11-10",
+   "baslangic": "2026-11-10T19:00:00+03:00",
+   "bitis": "2026-11-10T22:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Denetimli Öğrenme: Sınıflandırma",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ds",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "iptal",
+   "iptal_gerekcesi": "Eğitmen rahatsız; telafi tarihi duyurulacak.",
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "44cfef18-d6be-5afd-a744-edff9b58a651",
+     "ad": "Emre Çelik",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "68cc5c84-0df9-5eca-be02-3a542f92689a",
+   "bootcamp_id": "1c1569c5-8007-54c9-9ec6-48a39d2bc7d2",
+   "bootcamp_ad": "Biyoinformatik",
+   "kisa_kod": "BIO",
+   "renk": "#5B8DEF",
+   "tarih": "2026-11-10",
+   "baslangic": "2026-11-10T20:00:00+03:00",
+   "bitis": "2026-11-10T22:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Klinik ve fonksiyonel yorumlama",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-bio",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "95d34d5d-052a-5c49-847c-085ab25a7f07",
+     "ad": "Kaan Polat",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "8a4344b0-29c1-5810-90d7-bcfa821cafab",
+   "bootcamp_id": "bdf2c1d5-0e81-56f2-bbda-3d0d30f5db1d",
+   "bootcamp_ad": "Quantum ML",
+   "kisa_kod": "Quantum",
+   "renk": "#2BB3C0",
+   "tarih": "2026-11-10",
+   "baslangic": "2026-11-10T20:30:00+03:00",
+   "bitis": "2026-11-10T23:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Quantum AI & Quantum ML",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-quantum",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "b258a19b-bcaa-55d0-b40d-3aef7fda493e",
+     "ad": "Deniz Koç",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "91bcf877-5a17-5c29-8464-c05e6325640b",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2026-11-10",
+   "baslangic": "2026-11-10T20:30:00+03:00",
+   "bitis": "2026-11-11T00:00:00+03:00",
+   "slot": "sali",
+   "tur": "Uygulama",
+   "konu": "Operational HR Reporting: Dashboards in Power BI",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "f019e8f6-04bb-5bcb-b431-12a35fcb5fd8",
+     "ad": "Zeynep Arslan",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "0d8b946a-8755-5660-8cf2-9fb80c9a18e4",
+   "bootcamp_id": "af0dd958-10da-5e56-950e-973efe6ea375",
+   "bootcamp_ad": "GeoBA Konumsal Analitik",
+   "kisa_kod": "GeoBA",
+   "renk": "#9C7A62",
+   "tarih": "2026-11-11",
+   "baslangic": "2026-11-11T20:30:00+03:00",
+   "bitis": "2026-11-11T23:00:00+03:00",
+   "slot": "carsamba",
+   "tur": "Ders",
+   "konu": "Koordinat Sistemleri ve Projeksiyonlar",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-geoba",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [
+    "EGITMEN_YOK"
+   ],
+   "anlaticilar": []
+  },
+  {
+   "id": "c32a59fd-1d6f-5bde-870f-d3ce69acc49a",
+   "bootcamp_id": "eac2bcb6-9efb-5ee5-93d4-e713bf9f82ce",
+   "bootcamp_ad": "Data Science",
+   "kisa_kod": "DS",
+   "renk": "#0F9D6E",
+   "tarih": "2026-11-12",
+   "baslangic": "2026-11-12T19:00:00+03:00",
+   "bitis": "2026-11-12T22:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Uygulama",
+   "konu": "Uygulama Sınıflandırma",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ds",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "3f0ac552-5e7b-593d-a387-c9e384e2d806",
+     "ad": "Mehmet Demir",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "dcdc3bab-26b2-5b22-ac01-f00495ee2bb4",
+   "bootcamp_id": "1c1569c5-8007-54c9-9ec6-48a39d2bc7d2",
+   "bootcamp_ad": "Biyoinformatik",
+   "kisa_kod": "BIO",
+   "renk": "#5B8DEF",
+   "tarih": "2026-11-12",
+   "baslangic": "2026-11-12T20:00:00+03:00",
+   "bitis": "2026-11-12T22:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Ders",
+   "konu": "Variant Annotation Mantığı",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-bio",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "95d34d5d-052a-5c49-847c-085ab25a7f07",
+     "ad": "Kaan Polat",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "122e1c19-6b0b-5c33-abde-0319d741548c",
+   "bootcamp_id": "58a2b657-9872-52d5-8de0-607820a07b04",
+   "bootcamp_ad": "Microsoft Fabric",
+   "kisa_kod": "Fabric",
+   "renk": "#E3A008",
+   "tarih": "2026-11-12",
+   "baslangic": "2026-11-12T20:30:00+03:00",
+   "bitis": "2026-11-12T23:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Ders",
+   "konu": "Pipeline ile Veri Orkestrasyonu",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-fabric",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "ac71496c-0082-5301-ad3d-8c3ab80b2dea",
+     "ad": "Can Yıldız",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "87a050ca-c3b5-51dc-b6ea-f96365ad24c3",
+   "bootcamp_id": "bdf2c1d5-0e81-56f2-bbda-3d0d30f5db1d",
+   "bootcamp_ad": "Quantum ML",
+   "kisa_kod": "Quantum",
+   "renk": "#2BB3C0",
+   "tarih": "2026-11-12",
+   "baslangic": "2026-11-12T20:30:00+03:00",
+   "bitis": "2026-11-12T23:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Ders",
+   "konu": "Hybrid Model Stratejisi",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-quantum",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "b258a19b-bcaa-55d0-b40d-3aef7fda493e",
+     "ad": "Deniz Koç",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "3d7f68be-1974-5b46-8c1d-27177af6750c",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2026-11-12",
+   "baslangic": "2026-11-12T20:30:00+03:00",
+   "bitis": "2026-11-12T23:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Sunum",
+   "konu": "Kitap Sunumu",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [
+    "EGITMEN_YOK"
+   ],
+   "anlaticilar": []
+  },
+  {
+   "id": "b8c0e1a1-753d-5478-a5e4-32bcfcb55793",
+   "bootcamp_id": "af0dd958-10da-5e56-950e-973efe6ea375",
+   "bootcamp_ad": "GeoBA Konumsal Analitik",
+   "kisa_kod": "GeoBA",
+   "renk": "#9C7A62",
+   "tarih": "2026-11-14",
+   "baslangic": "2026-11-14T20:30:00+03:00",
+   "bitis": "2026-11-14T23:00:00+03:00",
+   "slot": "cumartesi",
+   "tur": "Ders",
+   "konu": "Vektör Veri ile Çalışma",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-geoba",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [
+    "EGITMEN_YOK"
+   ],
+   "anlaticilar": []
+  },
+  {
+   "id": "56221661-ee8c-50e9-9379-efe0b29dd237",
+   "bootcamp_id": "58a2b657-9872-52d5-8de0-607820a07b04",
+   "bootcamp_ad": "Microsoft Fabric",
+   "kisa_kod": "Fabric",
+   "renk": "#E3A008",
+   "tarih": "2026-11-16",
+   "baslangic": "2026-11-16T20:30:00+03:00",
+   "bitis": "2026-11-16T23:00:00+03:00",
+   "slot": "pazartesi",
+   "tur": "Ders",
+   "konu": "Warehouse ve Veri Kalitesi",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-fabric",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "6ae2c078-5018-5fbc-a525-da288538998d",
+     "ad": "Elif Şahin",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "59bd577a-2659-5fc5-a6b5-c2bf0ee494f2",
+   "bootcamp_id": "eac2bcb6-9efb-5ee5-93d4-e713bf9f82ce",
+   "bootcamp_ad": "Data Science",
+   "kisa_kod": "DS",
+   "renk": "#0F9D6E",
+   "tarih": "2026-11-17",
+   "baslangic": "2026-11-17T19:00:00+03:00",
+   "bitis": "2026-11-17T22:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Model Değerlendirme & Hiperparametre",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ds",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "f019e8f6-04bb-5bcb-b431-12a35fcb5fd8",
+     "ad": "Zeynep Arslan",
+     "rol": "ana"
+    },
+    {
+     "kisi_id": "44cfef18-d6be-5afd-a744-edff9b58a651",
+     "ad": "Emre Çelik",
+     "rol": "yardimci"
+    }
+   ]
+  },
+  {
+   "id": "87515153-66a8-5080-9458-0356764e5869",
+   "bootcamp_id": "1c1569c5-8007-54c9-9ec6-48a39d2bc7d2",
+   "bootcamp_ad": "Biyoinformatik",
+   "kisa_kod": "BIO",
+   "renk": "#5B8DEF",
+   "tarih": "2026-11-17",
+   "baslangic": "2026-11-17T20:00:00+03:00",
+   "bitis": "2026-11-17T22:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Karşılaştırmalı genomik analizler",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-bio",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "95d34d5d-052a-5c49-847c-085ab25a7f07",
+     "ad": "Kaan Polat",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "1a0a03fc-6b57-517d-9b99-5b105372ee78",
+   "bootcamp_id": "bdf2c1d5-0e81-56f2-bbda-3d0d30f5db1d",
+   "bootcamp_ad": "Quantum ML",
+   "kisa_kod": "Quantum",
+   "renk": "#2BB3C0",
+   "tarih": "2026-11-17",
+   "baslangic": "2026-11-17T20:30:00+03:00",
+   "bitis": "2026-11-17T23:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Güvenlik & Risk Modelleme",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-quantum",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "b258a19b-bcaa-55d0-b40d-3aef7fda493e",
+     "ad": "Deniz Koç",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "6a16a5df-f143-51f4-8860-5b2bf0a2c91f",
+   "bootcamp_id": "af0dd958-10da-5e56-950e-973efe6ea375",
+   "bootcamp_ad": "GeoBA Konumsal Analitik",
+   "kisa_kod": "GeoBA",
+   "renk": "#9C7A62",
+   "tarih": "2026-11-18",
+   "baslangic": "2026-11-18T20:30:00+03:00",
+   "bitis": "2026-11-18T23:00:00+03:00",
+   "slot": "carsamba",
+   "tur": "Ders",
+   "konu": "Raster Veri ve Uzaktan Algılama",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-geoba",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [
+    "EGITMEN_YOK"
+   ],
+   "anlaticilar": []
+  },
+  {
+   "id": "f80778c7-aa72-54c6-950e-f7f15495c0f5",
+   "bootcamp_id": "eac2bcb6-9efb-5ee5-93d4-e713bf9f82ce",
+   "bootcamp_ad": "Data Science",
+   "kisa_kod": "DS",
+   "renk": "#0F9D6E",
+   "tarih": "2026-11-19",
+   "baslangic": "2026-11-19T19:00:00+03:00",
+   "bitis": "2026-11-19T22:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Uygulama",
+   "konu": "Uygulama Model Seçimi",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ds",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "3f0ac552-5e7b-593d-a387-c9e384e2d806",
+     "ad": "Mehmet Demir",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "4c84e6f4-a31a-56ed-b1f6-1702ea38a1c5",
+   "bootcamp_id": "1c1569c5-8007-54c9-9ec6-48a39d2bc7d2",
+   "bootcamp_ad": "Biyoinformatik",
+   "kisa_kod": "BIO",
+   "renk": "#5B8DEF",
+   "tarih": "2026-11-19",
+   "baslangic": "2026-11-19T20:00:00+03:00",
+   "bitis": "2026-11-19T22:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Ders",
+   "konu": "Popülasyon Genomiği Temelleri",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-bio",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "95d34d5d-052a-5c49-847c-085ab25a7f07",
+     "ad": "Kaan Polat",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "47b2c589-8231-5746-aafe-13a057294ea8",
+   "bootcamp_id": "58a2b657-9872-52d5-8de0-607820a07b04",
+   "bootcamp_ad": "Microsoft Fabric",
+   "kisa_kod": "Fabric",
+   "renk": "#E3A008",
+   "tarih": "2026-11-19",
+   "baslangic": "2026-11-19T20:30:00+03:00",
+   "bitis": "2026-11-19T23:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Ders",
+   "konu": "Power BI Semantic Model",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-fabric",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "ac71496c-0082-5301-ad3d-8c3ab80b2dea",
+     "ad": "Can Yıldız",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "1ed9d0af-e615-59d5-9ed6-d81b993b8993",
+   "bootcamp_id": "bdf2c1d5-0e81-56f2-bbda-3d0d30f5db1d",
+   "bootcamp_ad": "Quantum ML",
+   "kisa_kod": "Quantum",
+   "renk": "#2BB3C0",
+   "tarih": "2026-11-19",
+   "baslangic": "2026-11-19T20:30:00+03:00",
+   "bitis": "2026-11-19T23:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Sunum",
+   "konu": "Capstone Sunum Çalışması",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-quantum",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "b258a19b-bcaa-55d0-b40d-3aef7fda493e",
+     "ad": "Deniz Koç",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "7589f36c-f366-57ba-a172-c14b39707f61",
+   "bootcamp_id": "af0dd958-10da-5e56-950e-973efe6ea375",
+   "bootcamp_ad": "GeoBA Konumsal Analitik",
+   "kisa_kod": "GeoBA",
+   "renk": "#9C7A62",
+   "tarih": "2026-11-21",
+   "baslangic": "2026-11-21T20:30:00+03:00",
+   "bitis": "2026-11-21T23:00:00+03:00",
+   "slot": "cumartesi",
+   "tur": "Ders",
+   "konu": "Mekânsal Sorgular (PostGIS)",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-geoba",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [
+    "EGITMEN_YOK"
+   ],
+   "anlaticilar": []
+  },
+  {
+   "id": "c4a9533d-f8c1-577f-b723-1be2a04add39",
+   "bootcamp_id": "58a2b657-9872-52d5-8de0-607820a07b04",
+   "bootcamp_ad": "Microsoft Fabric",
+   "kisa_kod": "Fabric",
+   "renk": "#E3A008",
+   "tarih": "2026-11-23",
+   "baslangic": "2026-11-23T20:30:00+03:00",
+   "bitis": "2026-11-23T23:00:00+03:00",
+   "slot": "pazartesi",
+   "tur": "Ders",
+   "konu": "DAX Temelleri",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-fabric",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "6ae2c078-5018-5fbc-a525-da288538998d",
+     "ad": "Elif Şahin",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "7eae5526-7939-5157-bc54-a2870bdcf20f",
+   "bootcamp_id": "eac2bcb6-9efb-5ee5-93d4-e713bf9f82ce",
+   "bootcamp_ad": "Data Science",
+   "kisa_kod": "DS",
+   "renk": "#0F9D6E",
+   "tarih": "2026-11-24",
+   "baslangic": "2026-11-24T19:00:00+03:00",
+   "bitis": "2026-11-24T22:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Denetimsiz Öğrenme",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ds",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "44cfef18-d6be-5afd-a744-edff9b58a651",
+     "ad": "Emre Çelik",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "8760e7d1-0de0-5fec-803a-757c5b1571e7",
+   "bootcamp_id": "1c1569c5-8007-54c9-9ec6-48a39d2bc7d2",
+   "bootcamp_ad": "Biyoinformatik",
+   "kisa_kod": "BIO",
+   "renk": "#5B8DEF",
+   "tarih": "2026-11-24",
+   "baslangic": "2026-11-24T20:00:00+03:00",
+   "bitis": "2026-11-24T22:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Fonksiyonel yorumlama pipeline mimarisi",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-bio",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "95d34d5d-052a-5c49-847c-085ab25a7f07",
+     "ad": "Kaan Polat",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "adb12113-771e-5d44-b75e-4e24ec51e00a",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2026-11-24",
+   "baslangic": "2026-11-24T20:30:00+03:00",
+   "bitis": "2026-11-25T00:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Python for HR Analytics: Coding Fundamentals & ML Prep",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "2b71a6c7-d2e8-5739-9f01-272770eb0ce5",
+     "ad": "Burak Aydın",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "40528042-d719-5807-b370-7edbf3eb7501",
+   "bootcamp_id": "af0dd958-10da-5e56-950e-973efe6ea375",
+   "bootcamp_ad": "GeoBA Konumsal Analitik",
+   "kisa_kod": "GeoBA",
+   "renk": "#9C7A62",
+   "tarih": "2026-11-25",
+   "baslangic": "2026-11-25T20:30:00+03:00",
+   "bitis": "2026-11-25T23:00:00+03:00",
+   "slot": "carsamba",
+   "tur": "Ders",
+   "konu": "Lokasyon Analitiği: Mağaza Yeri Seçimi",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-geoba",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [
+    "EGITMEN_YOK"
+   ],
+   "anlaticilar": []
+  },
+  {
+   "id": "83aaa731-3d3a-551a-b9a5-f819c11e4648",
+   "bootcamp_id": "1c1569c5-8007-54c9-9ec6-48a39d2bc7d2",
+   "bootcamp_ad": "Biyoinformatik",
+   "kisa_kod": "BIO",
+   "renk": "#5B8DEF",
+   "tarih": "2026-11-26",
+   "baslangic": "2026-11-26T20:00:00+03:00",
+   "bitis": "2026-11-26T22:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Ders",
+   "konu": "Varyanttan Fonksiyona",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-bio",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "95d34d5d-052a-5c49-847c-085ab25a7f07",
+     "ad": "Kaan Polat",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "73423c00-3401-5240-9e17-5b22bc2daad5",
+   "bootcamp_id": "58a2b657-9872-52d5-8de0-607820a07b04",
+   "bootcamp_ad": "Microsoft Fabric",
+   "kisa_kod": "Fabric",
+   "renk": "#E3A008",
+   "tarih": "2026-11-26",
+   "baslangic": "2026-11-26T20:30:00+03:00",
+   "bitis": "2026-11-26T23:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Ders",
+   "konu": "Power BI Rapor Tasarımı ve Yayınlama",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-fabric",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "ac71496c-0082-5301-ad3d-8c3ab80b2dea",
+     "ad": "Can Yıldız",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "dfcdccea-6950-5358-bb74-4a8ee8bdff7d",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2026-11-26",
+   "baslangic": "2026-11-26T20:30:00+03:00",
+   "bitis": "2026-11-26T23:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Uygulama",
+   "konu": "Uygulama Python 1",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "fa74c4ca-6d19-5c85-baaa-0b903587218e",
+     "ad": "İrem Aksoy",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "8ef59c93-b9b9-5152-ba00-8b169307d9af",
+   "bootcamp_id": "af0dd958-10da-5e56-950e-973efe6ea375",
+   "bootcamp_ad": "GeoBA Konumsal Analitik",
+   "kisa_kod": "GeoBA",
+   "renk": "#9C7A62",
+   "tarih": "2026-11-28",
+   "baslangic": "2026-11-28T20:30:00+03:00",
+   "bitis": "2026-11-28T23:00:00+03:00",
+   "slot": "cumartesi",
+   "tur": "Ders",
+   "konu": "Power BI ile Harita Görselleri",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-geoba",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [
+    "EGITMEN_YOK"
+   ],
+   "anlaticilar": []
+  },
+  {
+   "id": "7ad0ee61-6fde-5ae8-8402-3622d188f6fc",
+   "bootcamp_id": "58a2b657-9872-52d5-8de0-607820a07b04",
+   "bootcamp_ad": "Microsoft Fabric",
+   "kisa_kod": "Fabric",
+   "renk": "#E3A008",
+   "tarih": "2026-11-30",
+   "baslangic": "2026-11-30T20:30:00+03:00",
+   "bitis": "2026-11-30T23:00:00+03:00",
+   "slot": "pazartesi",
+   "tur": "Proje",
+   "konu": "Final Proje: Uçtan Uca Fabric Projesi",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-fabric",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "6ae2c078-5018-5fbc-a525-da288538998d",
+     "ad": "Elif Şahin",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "5ea22110-1d7d-5ca4-bced-1aaea754d7b9",
+   "bootcamp_id": "eac2bcb6-9efb-5ee5-93d4-e713bf9f82ce",
+   "bootcamp_ad": "Data Science",
+   "kisa_kod": "DS",
+   "renk": "#0F9D6E",
+   "tarih": "2026-12-01",
+   "baslangic": "2026-12-01T19:00:00+03:00",
+   "bitis": "2026-12-01T22:00:00+03:00",
+   "slot": "sali",
+   "tur": "Proje",
+   "konu": "Final Proje Çalışması",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ds",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "44cfef18-d6be-5afd-a744-edff9b58a651",
+     "ad": "Emre Çelik",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "7e9ad8e1-670d-5599-a631-ab3eca47ee1d",
+   "bootcamp_id": "1c1569c5-8007-54c9-9ec6-48a39d2bc7d2",
+   "bootcamp_ad": "Biyoinformatik",
+   "kisa_kod": "BIO",
+   "renk": "#5B8DEF",
+   "tarih": "2026-12-01",
+   "baslangic": "2026-12-01T20:00:00+03:00",
+   "bitis": "2026-12-01T22:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Kanser Genomiği Perspektifi",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-bio",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "95d34d5d-052a-5c49-847c-085ab25a7f07",
+     "ad": "Kaan Polat",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "ee9ac31a-8747-5e01-b05d-34b494f12ad1",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2026-12-01",
+   "baslangic": "2026-12-01T20:30:00+03:00",
+   "bitis": "2026-12-02T00:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Predictive HR Analytics: Supervised Learning",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "2b71a6c7-d2e8-5739-9f01-272770eb0ce5",
+     "ad": "Burak Aydın",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "1250154a-12b9-5c2e-84b1-fbcc32a5d149",
+   "bootcamp_id": "af0dd958-10da-5e56-950e-973efe6ea375",
+   "bootcamp_ad": "GeoBA Konumsal Analitik",
+   "kisa_kod": "GeoBA",
+   "renk": "#9C7A62",
+   "tarih": "2026-12-02",
+   "baslangic": "2026-12-02T20:30:00+03:00",
+   "bitis": "2026-12-02T23:00:00+03:00",
+   "slot": "carsamba",
+   "tur": "Proje",
+   "konu": "Final Proje Tanıtımı",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-geoba",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [
+    "EGITMEN_YOK"
+   ],
+   "anlaticilar": []
+  },
+  {
+   "id": "9d73ca18-4430-5ece-87a7-75f0477d5f1a",
+   "bootcamp_id": "eac2bcb6-9efb-5ee5-93d4-e713bf9f82ce",
+   "bootcamp_ad": "Data Science",
+   "kisa_kod": "DS",
+   "renk": "#0F9D6E",
+   "tarih": "2026-12-03",
+   "baslangic": "2026-12-03T19:00:00+03:00",
+   "bitis": "2026-12-03T22:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Sunum",
+   "konu": "Final Sunumları",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ds",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [
+    "EGITMEN_YOK"
+   ],
+   "anlaticilar": []
+  },
+  {
+   "id": "3b309c66-215e-5eec-95b8-7ff42058d252",
+   "bootcamp_id": "1c1569c5-8007-54c9-9ec6-48a39d2bc7d2",
+   "bootcamp_ad": "Biyoinformatik",
+   "kisa_kod": "BIO",
+   "renk": "#5B8DEF",
+   "tarih": "2026-12-03",
+   "baslangic": "2026-12-03T20:00:00+03:00",
+   "bitis": "2026-12-03T22:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Ders",
+   "konu": "Klinik Genomik Vaka Analizi",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-bio",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "95d34d5d-052a-5c49-847c-085ab25a7f07",
+     "ad": "Kaan Polat",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "884ef827-e04e-519e-934f-0e9fc212ce33",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2026-12-03",
+   "baslangic": "2026-12-03T20:30:00+03:00",
+   "bitis": "2026-12-03T23:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Uygulama",
+   "konu": "Uygulama Python 2",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "fa74c4ca-6d19-5c85-baaa-0b903587218e",
+     "ad": "İrem Aksoy",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "da9c30d8-72d7-5564-8254-e32930c91cf6",
+   "bootcamp_id": "af0dd958-10da-5e56-950e-973efe6ea375",
+   "bootcamp_ad": "GeoBA Konumsal Analitik",
+   "kisa_kod": "GeoBA",
+   "renk": "#9C7A62",
+   "tarih": "2026-12-05",
+   "baslangic": "2026-12-05T20:30:00+03:00",
+   "bitis": "2026-12-05T23:00:00+03:00",
+   "slot": "cumartesi",
+   "tur": "Sunum",
+   "konu": "Final Proje Sunumları",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-geoba",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [
+    "EGITMEN_YOK"
+   ],
+   "anlaticilar": []
+  },
+  {
+   "id": "53c72e11-0685-5b1f-9858-2635a8001059",
+   "bootcamp_id": "1c1569c5-8007-54c9-9ec6-48a39d2bc7d2",
+   "bootcamp_ad": "Biyoinformatik",
+   "kisa_kod": "BIO",
+   "renk": "#5B8DEF",
+   "tarih": "2026-12-08",
+   "baslangic": "2026-12-08T20:00:00+03:00",
+   "bitis": "2026-12-08T22:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "Genomikte Gelecek ve Kariyer",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-bio",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "95d34d5d-052a-5c49-847c-085ab25a7f07",
+     "ad": "Kaan Polat",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "f8d9a387-ce6d-58ae-aff9-2b58078828a9",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2026-12-08",
+   "baslangic": "2026-12-08T20:30:00+03:00",
+   "bitis": "2026-12-09T00:00:00+03:00",
+   "slot": "sali",
+   "tur": "Ders",
+   "konu": "The Future of HR Analytics: GenAI Trends",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "2b71a6c7-d2e8-5739-9f01-272770eb0ce5",
+     "ad": "Burak Aydın",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "4bcbc9a1-53d6-52ee-91b8-42618122ab17",
+   "bootcamp_id": "1c1569c5-8007-54c9-9ec6-48a39d2bc7d2",
+   "bootcamp_ad": "Biyoinformatik",
+   "kisa_kod": "BIO",
+   "renk": "#5B8DEF",
+   "tarih": "2026-12-10",
+   "baslangic": "2026-12-10T20:00:00+03:00",
+   "bitis": "2026-12-10T22:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Ders",
+   "konu": "Baştan Sona Genomik Proje Tasarımı",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-bio",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "95d34d5d-052a-5c49-847c-085ab25a7f07",
+     "ad": "Kaan Polat",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "d43c6c89-50bb-5aaa-aa3d-3218e6da86e9",
+   "bootcamp_id": "1c1569c5-8007-54c9-9ec6-48a39d2bc7d2",
+   "bootcamp_ad": "Biyoinformatik",
+   "kisa_kod": "BIO",
+   "renk": "#5B8DEF",
+   "tarih": "2026-12-15",
+   "baslangic": "2026-12-15T20:00:00+03:00",
+   "bitis": "2026-12-15T22:00:00+03:00",
+   "slot": "sali",
+   "tur": "Proje",
+   "konu": "Final proje teslimi",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-bio",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "95d34d5d-052a-5c49-847c-085ab25a7f07",
+     "ad": "Kaan Polat",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "9914c943-ecca-508d-8d47-eba7d7479dda",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2026-12-15",
+   "baslangic": "2026-12-15T20:30:00+03:00",
+   "bitis": "2026-12-16T00:00:00+03:00",
+   "slot": "sali",
+   "tur": "Proje",
+   "konu": "Final Projeleri Hazırlık",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "23a73666-51f4-5a9e-966a-5d1aaacdd9c4",
+     "ad": "Selin Öztürk",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "b541b2ef-8461-5195-9544-ff62aac34737",
+   "bootcamp_id": "1c1569c5-8007-54c9-9ec6-48a39d2bc7d2",
+   "bootcamp_ad": "Biyoinformatik",
+   "kisa_kod": "BIO",
+   "renk": "#5B8DEF",
+   "tarih": "2026-12-17",
+   "baslangic": "2026-12-17T20:00:00+03:00",
+   "bitis": "2026-12-17T22:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Proje",
+   "konu": "Final proje teslimi",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-bio",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "95d34d5d-052a-5c49-847c-085ab25a7f07",
+     "ad": "Kaan Polat",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "51f78db1-6688-5402-ac2c-41bd6b51aefb",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2026-12-17",
+   "baslangic": "2026-12-17T20:30:00+03:00",
+   "bitis": "2026-12-17T23:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Master Class",
+   "konu": "Master Class Gen AI",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "b258a19b-bcaa-55d0-b40d-3aef7fda493e",
+     "ad": "Deniz Koç",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "50033e2c-f7e3-5c9a-ac52-7cda7ad1e7bd",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2026-12-22",
+   "baslangic": "2026-12-22T20:30:00+03:00",
+   "bitis": "2026-12-23T00:00:00+03:00",
+   "slot": "sali",
+   "tur": "Proje",
+   "konu": "Final Projeleri Geliştirme",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "23a73666-51f4-5a9e-966a-5d1aaacdd9c4",
+     "ad": "Selin Öztürk",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "a9540ab5-0967-5627-99c0-984c97f609fa",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2026-12-24",
+   "baslangic": "2026-12-24T20:30:00+03:00",
+   "bitis": "2026-12-24T23:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Proje",
+   "konu": "Proje Çalışma",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "23a73666-51f4-5a9e-966a-5d1aaacdd9c4",
+     "ad": "Selin Öztürk",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "2ef3b87d-030f-512c-8786-8f7463077b85",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2027-01-05",
+   "baslangic": "2027-01-05T20:30:00+03:00",
+   "bitis": "2027-01-06T00:00:00+03:00",
+   "slot": "sali",
+   "tur": "Proje",
+   "konu": "Final Projeleri Hikayeleştirme",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "23a73666-51f4-5a9e-966a-5d1aaacdd9c4",
+     "ad": "Selin Öztürk",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "d623ab88-cf3d-5fc7-a53c-8c62041da911",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2027-01-07",
+   "baslangic": "2027-01-07T20:30:00+03:00",
+   "bitis": "2027-01-07T23:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Proje",
+   "konu": "Proje Çalışma",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [],
+   "anlaticilar": [
+    {
+     "kisi_id": "23a73666-51f4-5a9e-966a-5d1aaacdd9c4",
+     "ad": "Selin Öztürk",
+     "rol": "ana"
+    }
+   ]
+  },
+  {
+   "id": "b97c4eed-5ae6-5a12-ab07-e09d14c6cfaa",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a",
+   "bootcamp_ad": "İK Analitiği",
+   "kisa_kod": "İK",
+   "renk": "#A897FF",
+   "tarih": "2027-01-14",
+   "baslangic": "2027-01-14T20:30:00+03:00",
+   "bitis": "2027-01-14T23:00:00+03:00",
+   "slot": "persembe",
+   "tur": "Sunum",
+   "konu": "Final Projesi",
+   "aciklama": null,
+   "toplanti_linki": "https://meet.google.com/demo-ik",
+   "materyal_linki": null,
+   "notlar": null,
+   "durum": "planli",
+   "iptal_gerekcesi": null,
+   "kaynak": "excel",
+   "uyarilar": [
+    "EGITMEN_YOK"
+   ],
+   "anlaticilar": []
+  }
+ ],
+ "yetkiler": [
+  {
+   "kisi_id": "a7909fd2-874d-5d0d-9748-4794d7cbae6c",
+   "bootcamp_id": "88efcdf4-dce6-5f6c-bf04-7268fbbd9b6a"
+  },
+  {
+   "kisi_id": "a7909fd2-874d-5d0d-9748-4794d7cbae6c",
+   "bootcamp_id": "1c1569c5-8007-54c9-9ec6-48a39d2bc7d2"
+  },
+  {
+   "kisi_id": "6ae2c078-5018-5fbc-a525-da288538998d",
+   "bootcamp_id": "58a2b657-9872-52d5-8de0-607820a07b04"
+  },
+  {
+   "kisi_id": "b258a19b-bcaa-55d0-b40d-3aef7fda493e",
+   "bootcamp_id": "bdf2c1d5-0e81-56f2-bbda-3d0d30f5db1d"
+  },
+  {
+   "kisi_id": "44cfef18-d6be-5afd-a744-edff9b58a651",
+   "bootcamp_id": "eac2bcb6-9efb-5ee5-93d4-e713bf9f82ce"
+  }
+ ],
+ "degisiklikler": [
+  {
+   "id": 1,
+   "kisi_id": "ac71496c-0082-5301-ad3d-8c3ab80b2dea",
+   "olay": "yan_seans_eklendi",
+   "oturum_id": "c0541cdc-539e-5e44-af99-60d903e9d51b",
+   "detay": {
+    "ekleyen": "Ayşe Kaya"
+   },
+   "once_saat": 2
+  },
+  {
+   "id": 2,
+   "kisi_id": "ac71496c-0082-5301-ad3d-8c3ab80b2dea",
+   "olay": "zaman_degisti",
+   "oturum_id": "122e1c19-6b0b-5c33-abde-0319d741548c",
+   "detay": {
+    "eski_baslangic": "2026-11-12T20:00:00+03:00",
+    "eski_bitis": "2026-11-12T22:30:00+03:00"
+   },
+   "once_saat": 26
+  },
+  {
+   "id": 3,
+   "kisi_id": "ac71496c-0082-5301-ad3d-8c3ab80b2dea",
+   "olay": "atandin",
+   "oturum_id": "8fa0a9d2-605f-5c80-b9d2-e4d6b9d19e9b",
+   "detay": {},
+   "once_saat": 120
+  },
+  {
+   "id": 4,
+   "kisi_id": "44cfef18-d6be-5afd-a744-edff9b58a651",
+   "olay": "iptal",
+   "oturum_id": "97996ed4-8d1e-5852-97d3-f5ce99c635d3",
+   "detay": {
+    "gerekce": "Eğitmen rahatsız; telafi tarihi duyurulacak."
+   },
+   "once_saat": 20
+  },
+  {
+   "id": 5,
+   "kisi_id": "6ae2c078-5018-5fbc-a525-da288538998d",
+   "olay": "zaman_degisti",
+   "oturum_id": "122e1c19-6b0b-5c33-abde-0319d741548c",
+   "detay": {
+    "eski_baslangic": "2026-11-12T20:00:00+03:00",
+    "eski_bitis": "2026-11-12T22:30:00+03:00"
+   },
+   "once_saat": 26
+  }
+ ]
+}

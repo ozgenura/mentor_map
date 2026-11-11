@@ -1,0 +1,21 @@
+# Dummy test config'i. default_hours bilerek YOK: saatsiz sekmelerde SAAT_YOK beklenir.
+bootcamps:
+  İK:      {adapter: header_hours, year_start: 2026}
+  DS:      {adapter: header_hours, year_start: 2026}
+  Fabric:  {adapter: side_by_side, year_start: 2026}
+  GeoBA:   {adapter: side_by_side, year_start: 2026}
+  Quantum: {adapter: weekly, year_start: 2026, default_mentor: Deniz Koç}
+  BIO:     {adapter: tidy_table}
+
+mentor_aliases:
+  "Ayşe K.": Ayşe Kaya
+  "E. Şahin": Elif Şahin
+
+skip_cells: ["TATİL", "-"]
+
+session_types:
+  - {keywords: [kick-off, açılış], type: Kick-Off}
+  - {keywords: [master class], type: Master Class}
+  - {keywords: [sunum], type: Sunum}
+  - {keywords: [final proje, proje çalışma, proje teslim, capstone], type: Proje}
+  - {keywords: [uygulama], type: Uygulama}
