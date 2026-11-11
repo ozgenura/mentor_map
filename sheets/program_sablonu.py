@@ -30,12 +30,11 @@ F_SARI = PatternFill("solid", fgColor=SARI)
 F_ACIK = PatternFill("solid", fgColor=ACIK)
 ETIKET = Font(bold=True, color=YESIL)
 INCE = Side(style="thin", color="D9CDC6")
-TURLER = ["Kick-Off", "Ders", "Uygulama", "Mentor Görüşmesi", "Proje", "Sunum", "Master Class"]
+TURLER = ["Kick-Off", "Ders", "Uygulama", "Mentor Görüşmesi", "Proje", "Sunum", "Master Class", "Etkinlik"]
 ILK = 10                      # ilk hafta satırı
 SON = 300                     # biçim ve doğrulamaların uzandığı son satır
 GRUP_KOL = {"A": 5, "B": 9, "C": 13}   # her grubun Tarih sütunu; ardından Saat, Konu, Eğitmen(ler)
 NOT_KOL = 17
-ETK_KOL = 19                  # Etkinlikler bloğunun ilk sütunu (S); haftalık tablodan bir boş sütunla ayrılır
 ETK_BASLIK = ["No", "Tarih", "Saat", "Başlık", "Açıklama", "Konuşmacı(lar)", "Dış konuşmacı", "Not"]
 ETK_GENISLIK = [6, 12, 13, 32, 36, 26, 20, 26]
 
@@ -112,34 +111,6 @@ def bootcamp_sekmesi(wb, baslik, bilgi, gruplar):
         yorum(ws.cell(9, k + 2), "Boşsa haftanın konusu geçerli.")
         yorum(ws.cell(9, k + 3), "Eğitmenler sekmesindeki tam adlarla; birden fazla kişi virgülle.")
     ws.freeze_panes = ws.cell(ILK, 4)
-
-    # Etkinlikler bloğu: bootcamp'e bağlı ücretsiz etkinlikler (satır başına bir etkinlik)
-    c = ws.cell(8, ETK_KOL, "Etkinlikler")
-    ws.merge_cells(start_row=8, start_column=ETK_KOL, end_row=8, end_column=ETK_KOL + len(ETK_BASLIK) - 1)
-    c.font, c.fill, c.alignment = BASLIK, F_KOYU, Alignment(horizontal="center")
-    yorum(c, "Bu bootcamp'e bağlı ücretsiz etkinlikler. Katılım ve kayıt linkleri ile kimlerin göreceği Mentor Map'te ayarlanır.")
-    for i, (h, w) in enumerate(zip(ETK_BASLIK, ETK_GENISLIK)):
-        hc = ws.cell(9, ETK_KOL + i, h)
-        hc.font, hc.fill = BASLIK, F_YESIL
-        ws.column_dimensions[hc.column_letter].width = w
-    ws.column_dimensions[openpyxl.utils.get_column_letter(ETK_KOL - 1)].width = 3
-    yorum(ws.cell(9, ETK_KOL), "Etkinliğin kalıcı numarası (1, 2, 3...). Tarih değişse de etkinlik aynı kalır.")
-    yorum(ws.cell(9, ETK_KOL + 2), "Boşsa varsayılan saat. Farklıysa 19:00–21:00 biçiminde.")
-    yorum(ws.cell(9, ETK_KOL + 5), "Eğitmenler sekmesindeki adlardan; birden fazlaysa virgülle.")
-    yorum(ws.cell(9, ETK_KOL + 6), "Eğitmenler listesinde olmayan konuşmacı (misafir).")
-    t = openpyxl.utils.get_column_letter(ETK_KOL + 1)
-    for r in range(ILK, SON + 1):
-        ws.cell(r, ETK_KOL + 1).number_format = "yyyy-mm-dd"
-    dv = DataValidation(type="date", operator="greaterThan", formula1="DATE(2024,1,1)", allow_blank=True)
-    dv.error = "Tarih girin: 2026-11-18"
-    ws.add_data_validation(dv)
-    dv.add(f"{t}{ILK}:{t}{SON}")
-    k = openpyxl.utils.get_column_letter(ETK_KOL + 5)
-    liste(ws, f"{k}{ILK}:{k}{SON}", formul="='Eğitmenler'!$A$2:$A$500", sert=False,
-          mesaj="Eğitmenler sekmesindeki adlardan seçin; birden fazlaysa virgülle yazın.")
-    n = openpyxl.utils.get_column_letter(ETK_KOL)
-    ws.conditional_formatting.add(f"{n}{ILK}:{openpyxl.utils.get_column_letter(ETK_KOL + 7)}{SON}", FormulaRule(
-        formula=[f"AND(${n}{ILK}<>\"\",COUNTIF(${n}${ILK}:${n}${SON},${n}{ILK})>1)"], fill=PatternFill("solid", fgColor="FDE3E5")))
 
     # biçimler ve doğrulamalar
     for r in range(ILK, SON + 1):
@@ -268,10 +239,11 @@ def main(kaynak, kisiler_yolu, cikti):
         ("4. Her oturumun kendi Tarih hücresi var (2026-11-18 biçiminde). O hafta yapılmayan oturumun tarihini boş bırakın.", 0),
         ("5. Saat boşsa varsayılan saat geçerli; farklıysa 19:00–22:00 yazın. Konu boşsa haftanın konusu geçerli.", 0),
         ("6. Eğitmen adları Eğitmenler sekmesindeki yazımla; birden fazla kişi virgülle (Arda Yüce, İlker Ersoy).", 0),
-        ("7. Tür sütunu yalnızca özel haftalar için (Kick-Off, Sunum...). Boşsa A grubunun türü geçerli.", 0),
+        ("7. Tür sütunu yalnızca özel haftalar için (Kick-Off, Sunum, Etkinlik...). Boşsa A grubunun türü geçerli.", 0),
         ("8. Not sütunu açıklama içindir; Mentor Map oradan oturum okumaz.", 0),
-        ("9. Etkinlikler: haftalık tablonun sağındaki blok, bu bootcamp'e bağlı ücretsiz etkinlikler için. Her satır bir etkinlik; "
-         "No kalıcıdır (1, 2, 3...). Katılım linki ve kimlerin göreceği Mentor Map tarafında ayarlanır.", 0),
+        ("9. Etkinlikler: bu bootcamp'e bağlı ücretsiz etkinlik için yeni bir satır açın, Tür = Etkinlik seçin. Tarih ve Saat A grubuna, "
+         "başlık Konu'ya, konuşmacı Eğitmen(ler) sütununa yazılır (listede olmayan dış konuşmacı da yazılabilir). "
+         "Katılım linki ve kimlerin göreceği Mentor Map tarafında ayarlanır.", 0),
         ("", 0),
         ("Değişiklikler ne olur?", 2),
         ("• Tarih ya da saat değişirse oturum aynı kalır; ilgili eğitmenlere \"saat değişti\" bildirimi gider.", 0),
@@ -279,7 +251,7 @@ def main(kaynak, kisiler_yolu, cikti):
         ("• Yeni dönem: sekmeyi kopyalayın, Dönem'i değiştirin, tarihleri güncelleyin.", 0),
         ("", 0),
         ("Renkler", 2),
-        ("Sarı: teyit bekleyen hücre (üzerindeki notu okuyun). Pembe: aynı hafta ya da etkinlik numarası iki kez kullanılmış.", 0),
+        ("Sarı: teyit bekleyen hücre (üzerindeki notu okuyun). Pembe: aynı hafta numarası iki kez kullanılmış.", 0),
     ]
     for metin, seviye in satirlar:
         wn.append([metin])
