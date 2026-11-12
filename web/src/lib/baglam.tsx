@@ -38,7 +38,7 @@ export type Baglam = {
   bakis: { yonetici: true; aktif: boolean; gercekAd: string; sec: (kisiId: string | null) => void } | null;
 };
 
-export type Sekme = "bugun" | "takvim" | "degisenler" | "profil";
+export type Sekme = "bugun" | "takvim" | "etkinlikler" | "degisenler" | "profil";
 
 export const BaglamCtx = createContext<Baglam | null>(null);
 

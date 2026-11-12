@@ -37,7 +37,18 @@ export interface Api {
   senkronDurumu(): Promise<SenkronDurumu | null>;
   senkronAnahtariOlustur(): Promise<string>;
   senkronAdresi(): string | null;
+  geriBildirimGonder(tur: GeriBildirimTuru, metin: string, sayfa: string): Promise<void>;
+  /** Yönetici hepsini, diğerleri kendi gönderdiklerini alır. */
+  geriBildirimler(): Promise<GeriBildirim[]>;
+  geriBildirimDurum(id: number, durum: GeriBildirimDurumu): Promise<void>;
 }
+
+export type GeriBildirimTuru = "oneri" | "sorun" | "diger";
+export type GeriBildirimDurumu = "yeni" | "inceleniyor" | "yapildi" | "kapandi";
+export type GeriBildirim = {
+  id: number; kisi_id: string | null; tur: GeriBildirimTuru; metin: string; sayfa: string | null;
+  durum: GeriBildirimDurumu; olusturma: string;
+};
 
 export type SenkronDurumu = {
   anahtar_var: boolean;
@@ -126,6 +137,16 @@ function supabaseApi(db: SupabaseClient): Api {
       }
       return ok(await db.rpc("yan_seans_ekle", { p_bootcamp_id: s.bootcamp_id, ...ortak }));
     },
+    async geriBildirimGonder(tur, metin, sayfa) {
+      ok(await db.rpc("geri_bildirim_gonder", { p_tur: tur, p_metin: metin, p_sayfa: sayfa }));
+    },
+    async geriBildirimler() {
+      return ok(await db.from("geri_bildirimler").select("id, kisi_id, tur, metin, sayfa, durum, olusturma")
+        .order("olusturma", { ascending: false }).limit(200)) as GeriBildirim[];
+    },
+    async geriBildirimDurum(id, durum) {
+      ok(await db.rpc("geri_bildirim_durum", { p_id: id, p_durum: durum }));
+    },
   };
 }
 
@@ -141,6 +162,7 @@ type Yerel = {
   duzenlemeler: Record<string, Partial<Oturum>>;    // oturum id -> değişen alanlar
   yeniSeanslar: Oturum[];
   bildirimler: YerelBildirim[];
+  geriBildirimler?: GeriBildirim[];
 };
 
 const YEREL_ANAHTAR = "mm-demo-yerel";
@@ -219,6 +241,15 @@ const demoApi: Api = {
   senkronDurumu: async () => null,
   senkronAnahtariOlustur: async () => { throw new Error("Demoda yok"); },
   senkronAdresi: () => null,
+  async geriBildirimGonder(tur, metin, sayfa) {
+    const kisi = (() => { try { return localStorage.getItem("mm-demo-kisi"); } catch { return null; } })();
+    yereliYaz({ geriBildirimler: [{ id: Date.now(), kisi_id: kisi, tur, metin, sayfa, durum: "yeni", olusturma: new Date().toISOString() },
+      ...(yerel.geriBildirimler ?? [])] });
+  },
+  geriBildirimler: async () => yerel.geriBildirimler ?? [],
+  async geriBildirimDurum(id, durum) {
+    yereliYaz({ geriBildirimler: (yerel.geriBildirimler ?? []).map((g) => (g.id === id ? { ...g, durum } : g)) });
+  },
   takvimToken: async (kisiId) => `demo-${kisiId.slice(0, 8)}`,
   tokenYenile: async () => `demo-${Math.random().toString(16).slice(2, 10)}`,
   icsAdresi: (token) => `https://<proje>.supabase.co/functions/v1/ics/${token}.ics`,

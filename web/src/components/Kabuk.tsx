@@ -3,11 +3,13 @@
 import type { ReactNode } from "react";
 import { DEMO } from "../lib/api";
 import { useBaglam, type Sekme } from "../lib/baglam";
+import { GeriBildirimDugmesi } from "./GeriBildirim";
 import { ALab, Ikon, Logo } from "./ui";
 
 const SEKMELER: { id: Sekme; ad: string; ikon: string }[] = [
   { id: "bugun", ad: "Bugün", ikon: "ev" },
   { id: "takvim", ad: "Takvim", ikon: "takvim" },
+  { id: "etkinlikler", ad: "Etkinlikler", ikon: "etkinlik" },
   { id: "degisenler", ad: "Değişenler", ikon: "zil" },
   { id: "profil", ad: "Profil", ikon: "kisi" },
 ];
@@ -51,7 +53,8 @@ export function Kabuk({ sekme, children }: { sekme: Sekme; children: ReactNode }
             </span>
           </button>
         )}
-        <ALab ters className={`px-2 ${ben ? "" : "mt-auto"}`} />
+        <GeriBildirimDugmesi sekme={sekme} ters className={`h-10 px-3 ${ben ? "-mt-5" : "mt-auto"}`} />
+        <ALab ters className="px-2" />
       </aside>
 
       <div className="min-w-0 flex-1 pb-28 lg:pb-10">
@@ -65,10 +68,10 @@ export function Kabuk({ sekme, children }: { sekme: Sekme; children: ReactNode }
       </div>
 
       <nav aria-label="Ana menü"
-        className="fixed inset-x-3 bottom-[max(12px,env(safe-area-inset-bottom))] z-30 grid h-16 grid-cols-4 items-center rounded-[22px] bg-yesil px-1.5 shadow-lg shadow-yesil/20 lg:hidden">
+        className="fixed inset-x-3 bottom-[max(12px,env(safe-area-inset-bottom))] z-30 grid h-16 grid-cols-5 items-center rounded-[22px] bg-yesil px-1.5 shadow-lg shadow-yesil/20 lg:hidden">
         {SEKMELER.map((s) => (
           <button key={s.id} onClick={() => git(s.id)} aria-current={sekme === s.id ? "page" : undefined}
-            className={`relative mx-0.5 flex h-[52px] flex-col items-center justify-center gap-0.5 rounded-2xl text-[11px] transition ${
+            className={`relative mx-0.5 flex h-[52px] flex-col items-center justify-center gap-0.5 rounded-2xl text-[10px] transition ${
               sekme === s.id ? "bg-white font-bold text-yesil" : "font-semibold text-yesil-soluk"}`}>
             <Ikon ad={s.ikon} boyut={20} />
             {s.ad}

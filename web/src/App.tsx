@@ -12,6 +12,7 @@ import { TR } from "./lib/time";
 import { DUZENLEYEN_YETKILER, type Kisi, type Oturum } from "./lib/types";
 import { Bugun } from "./pages/Bugun";
 import { Degisenler } from "./pages/Degisenler";
+import { Etkinlikler } from "./pages/Etkinlikler";
 import { Profil } from "./pages/Profil";
 import { TakvimSayfasi } from "./pages/TakvimSayfasi";
 
@@ -38,7 +39,7 @@ export default function App() {
   return <Ana api={api} eposta={kimlik.eposta} demoKisiId={kimlik.demoKisiId} />;
 }
 
-const SEKMELER: Sekme[] = ["bugun", "takvim", "degisenler", "profil"];
+const SEKMELER: Sekme[] = ["bugun", "takvim", "etkinlikler", "degisenler", "profil"];
 
 function Ana({ api, eposta, demoKisiId }: { api: Api; eposta: string | null; demoKisiId: string | null }) {
   const kisiler = useQuery({ queryKey: ["kisiler"], queryFn: api.kisiler });
@@ -152,6 +153,7 @@ function Ana({ api, eposta, demoKisiId }: { api: Api; eposta: string | null; dem
             Program yüklenemedi. İnternet bağlantınızı kontrol edip sayfayı yenileyin.
           </div>
         ) : sekme === "takvim" ? <TakvimSayfasi />
+          : sekme === "etkinlikler" ? <Etkinlikler />
           : sekme === "degisenler" ? <Degisenler />
           : sekme === "profil" ? <Profil demoSec={setDemoId} />
           : <Bugun />}

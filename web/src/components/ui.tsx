@@ -22,6 +22,8 @@ const YOLLAR: Record<string, ReactNode> = {
   iptal: <><circle cx="12" cy="12" r="9" /><path d="M8 8l8 8" /></>,
   geriAl: <><path d="M9 14L4 9l5-5" /><path d="M4 9h10a6 6 0 0 1 0 12h-2" /></>,
   abone: <><rect x="3" y="5" width="18" height="16" rx="3" /><path d="M3 10h18M12 13v5M9.5 15.5h5" /></>,
+  etkinlik: <path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z" />,
+  mesaj: <path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-5 4V6a1 1 0 0 1 1-1z" />,
 };
 
 export function Ikon({ ad, boyut = 20, className = "" }: { ad: keyof typeof YOLLAR | string; boyut?: number; className?: string }) {

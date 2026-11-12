@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { SayfaUstu } from "../components/Kabuk";
+import { GeriBildirimDugmesi, GeriBildirimListesi } from "../components/GeriBildirim";
 import { ALab, Ikon, Kart } from "../components/ui";
 import { DEMO } from "../lib/api";
 import { useBaglam } from "../lib/baglam";
@@ -61,6 +62,9 @@ export function Profil({ demoSec }: { demoSec: (id: string) => void }) {
         )}
 
         {ben && !bakis?.aktif && <Abonelik kisiId={ben.id} />}
+
+        <Kart className="p-2 lg:hidden"><GeriBildirimDugmesi sekme="profil" className="h-11 w-full px-3" /></Kart>
+        {bakis && !bakis.aktif && <GeriBildirimListesi />}
 
         {bakis && !bakis.aktif && <SheetsBaglantisi />}
 

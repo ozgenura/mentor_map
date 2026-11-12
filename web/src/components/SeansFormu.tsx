@@ -11,7 +11,7 @@ import { bugunTR, gunBasligi, saat, TR } from "../lib/time";
 import type { Oturum } from "../lib/types";
 import { Ikon } from "./ui";
 
-const TURLER = ["Yan Seans", "Ders", "Uygulama", "Master Class", "Sunum", "Mentor Görüşmesi"];
+const TURLER = ["Yan Seans", "Ders", "Ek Ders", "Uygulama", "Office Hours", "Master Class", "Sunum", "Mentor Görüşmesi", "Etkinlik"];
 
 type Anlatici = { kisi_id: string } | { konuk_ad: string };
 
