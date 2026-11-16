@@ -24,10 +24,12 @@ def senkron(db, payload):
     return db.execute("select sheets_senkron(%s::jsonb)", (json.dumps(payload),)).fetchone()[0]
 
 
-def temel(oturumlar, kisiler=None, onay=False):
+def temel(oturumlar, kisiler=None, onay=False, ana="Ayşe Kaya"):
+    # Betik sürüm 2: roller Bootcamp'ler sekmesinden (PO / ana eğitmen / asistan); Kişiler rol taşımaz.
     return {
-        "kaynak": "test", "onay": onay,
-        "bootcamplar": [{"satir": 2, "kod": "İK", "ad": "İK Analitiği", "renk": "#A897FF", "zoom": "https://zoom.us/j/1"}],
+        "kaynak": "test", "onay": onay, "betik_surumu": 2,
+        "bootcamplar": [{"satir": 2, "kod": "İK", "ad": "İK Analitiği", "renk": "#A897FF", "zoom": "https://zoom.us/j/1",
+                         "ana_egitmen": ana}],
         "kisiler": kisiler if kisiler is not None else [
             {"satir": 2, "ad": "Özge", "eposta": YONETICI, "rol": "Yönetici", "aktif": True, "ana_egitmen": ""},
             {"satir": 3, "ad": "Ayşe Kaya", "eposta": AYSE, "rol": "Eğitmen", "aktif": True, "ana_egitmen": "İK"},
@@ -140,10 +142,10 @@ def test_kisi_yeniden_adlandirma(db):
         {"satir": 2, "ad": "Özge", "eposta": YONETICI, "rol": "Yönetici", "aktif": True, "ana_egitmen": ""},
         {"satir": 3, "ad": ad, "eposta": "ata@eposta-bekleniyor.invalid", "rol": "Eğitmen", "aktif": True, "ana_egitmen": "İK"},
     ]
-    senkron(db, temel([ot(2, a, ana="Ata")], kisiler("Ata")))
+    senkron(db, temel([ot(2, a, ana="Ata")], kisiler("Ata"), ana="Ata"))
     kid = db.execute("select id from kisiler where ad = 'Ata'").fetchone()[0]
     # Kişiler'de tam ad yazıldı; Oturumlar'da bir hücre hâlâ eski adla
-    r = senkron(db, temel([ot(2, a, ana="Ata"), ot(3, b, ana="Ata Yılmaz")], kisiler("Ata Yılmaz")))
+    r = senkron(db, temel([ot(2, a, ana="Ata"), ot(3, b, ana="Ata Yılmaz")], kisiler("Ata Yılmaz"), ana="Ata Yılmaz"))
     assert r["hata_sayisi"] == 0, r["hatalar"]
     assert r["yeniden_adlandirma"] == [{"eski": "Ata", "yeni": "Ata Yılmaz"}]
     assert db.execute("select id, ad from kisiler where eposta = 'ata@eposta-bekleniyor.invalid'").fetchone() == (kid, "Ata Yılmaz")
@@ -152,7 +154,7 @@ def test_kisi_yeniden_adlandirma(db):
         assert db.execute("select kisi_id from oturum_anlaticilari where oturum_id = %s", (oid,)).fetchone()[0] == kid
     assert db.execute("select count(*) from bootcamp_yetkilileri where kisi_id = %s", (kid,)).fetchone()[0] == 1
     # tekrar gönderimde yeniden adlandırma bildirilmez
-    r = senkron(db, temel([ot(2, a, ana="Ata Yılmaz"), ot(3, b, ana="Ata Yılmaz")], kisiler("Ata Yılmaz")))
+    r = senkron(db, temel([ot(2, a, ana="Ata Yılmaz"), ot(3, b, ana="Ata Yılmaz")], kisiler("Ata Yılmaz"), ana="Ata Yılmaz"))
     assert r["yeniden_adlandirma"] == [] and r["hata_sayisi"] == 0
 
 
@@ -185,3 +187,20 @@ def test_toplu_kisi_silme_onay_ister(db):
     db.execute("rollback to savepoint s")
     p = temel([]); p["onay"] = True
     assert senkron(db, p)["pasif"] == 3
+
+
+
+def test_eski_betik_reddedilir(db):
+    p = temel([])
+    del p["betik_surumu"]
+    with pytest.raises(psycopg.errors.RaiseException, match="ESKI_BETIK"):
+        senkron(db, p)
+
+
+def test_ana_egitmen_bootcampler_sekmesinden(db):
+    senkron(db, temel([], ana="Ayşe Kaya, Can Yıldız"))
+    rows = sorted(db.execute("""select k.ad from bootcamp_yetkilileri y join kisiler k on k.id = y.kisi_id
+                                where y.yetki = 'ana_egitmen'""").fetchall())
+    assert rows == [("Ayşe Kaya",), ("Can Yıldız",)]
+    senkron(db, temel([], ana=""))
+    assert db.execute("select count(*) from bootcamp_yetkilileri where yetki = 'ana_egitmen'").fetchone()[0] == 0

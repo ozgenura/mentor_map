@@ -13,6 +13,7 @@
 
 // Kurulumda kendi Supabase projenizin adresiyle değiştirin (Project Settings → API → Project URL).
 const ADRES = 'https://SUPABASE_PROJE_REF.supabase.co/functions/v1/sheets-senkron';
+const BETIK_SURUMU = 2; // sunucu eski sürümü reddeder (sütunlar konuma göre okunuyordu)
 const SEKME = { OTURUM: 'Oturumlar', KISI: 'Kişiler', BOOTCAMP: "Bootcamp'ler", LOG: 'Senkron' };
 const SUTUN_SAYISI = 10; // Oturumlar: A..J
 const HATA_RENGI = '#FDE3E5';
@@ -76,18 +77,30 @@ function listeleriKur() {
   ot.getRange('I2:I').setDataValidation(kisi);  // Yardımcı eğitmen(ler): çoklu seçim için listeleriKurMenu notuna bakın
   const bootcampCoklu = SpreadsheetApp.newDataValidation().requireValueInRange(bc.getRange('A2:A'), true)
     .setAllowInvalid(true).build();
-  ki.getRange('E2:E').setDataValidation(bootcampCoklu); // Ana eğitmen olduğu bootcamp'ler
-  ki.getRange('C2:C').setDataValidation(SpreadsheetApp.newDataValidation()
-    .requireValueInList(['Eğitmen', 'Yönetici'], true).setAllowInvalid(true)
-    .setHelpText('Yönetici rolü yalnızca uygulamadan verilir. Asistan eğitmenlik Bootcamp\'ler sekmesindeki Asistan sütunundadır.').build());   // Rol
-  ki.getRange('G2:G').setDataValidation(SpreadsheetApp.newDataValidation()
-    .requireValueInList(['İç', 'Dış'], true).setAllowInvalid(false).build());                        // Kurum
-  bc.getRange('E2:F').setDataValidation(kisi);  // PO, Asistan(lar): Kişiler sekmesindeki adlar
+  const kurum = sutunHarfi(ki, 'kurum');
+  if (kurum) ki.getRange(kurum + '2:' + kurum).setDataValidation(SpreadsheetApp.newDataValidation()
+    .requireValueInList(['İç', 'Dış'], true).setAllowInvalid(false).build());
+  ['po', 'ana eğitmen', 'asistan'].forEach(function (b) {   // Bootcamp'ler: Kişiler sekmesindeki adlar
+    const h = sutunHarfi(bc, b);
+    if (h) bc.getRange(h + '2:' + h).setDataValidation(kisi);
+  });
+  void bootcampCoklu;
+}
+
+/** Başlığı verilen sütunun harfi (başlık küçük harf, parantezsiz); yoksa null. */
+function sutunHarfi(sayfa, baslik) {
+  const b = sayfa.getRange(1, 1, 1, sayfa.getLastColumn()).getDisplayValues()[0];
+  for (let i = 0; i < b.length; i++) {
+    if (String(b[i]).replace(/\(.*?\)/g, '').trim().toLocaleLowerCase('tr') === baslik) {
+      return String.fromCharCode(65 + i);
+    }
+  }
+  return null;
 }
 
 function listeleriKurMenu() {
   listeleriKur();
-  SpreadsheetApp.getUi().alert('Açılır listeler kuruldu.\n\nBirden fazla yardımcı eğitmen seçebilmek için bir kez: Oturumlar sekmesinde I sütununu seçin → Veri → Veri doğrulama → kurala tıklayın → "Birden çok seçime izin ver" kutusunu işaretleyin. Aynısını Kişiler sekmesinin E sütunu ve Bootcamp\'ler sekmesinin F sütunu (asistanlar) için yapın.');
+  SpreadsheetApp.getUi().alert('Açılır listeler kuruldu.\n\nBirden fazla yardımcı eğitmen seçebilmek için bir kez: Oturumlar sekmesinde I sütununu seçin → Veri → Veri doğrulama → kurala tıklayın → "Birden çok seçime izin ver" kutusunu işaretleyin. Aynısını Bootcamp\'ler sekmesinin Ana eğitmen ve Asistan sütunları için yapın.');
 }
 
 /**
@@ -104,9 +117,9 @@ function egitmenSec() {
   if (ilk < 2) { ui.alert('Başlık satırı yerine oturum satırlarını seçin.'); return; }
   const tek = secim.getColumn() === 8 && secim.getNumColumns() === 1;  // Ana eğitmen sütunu
   const sutun = tek ? 8 : 9;
-  const kisiler = satirlar(ss.getSheetByName(SEKME.KISI), 6)
-    .filter(function (x) { return x.d[0] && String(x.d[5]).toUpperCase() !== 'HAYIR'; })
-    .map(function (x) { return x.d[0]; })
+  const kisiler = basliklaOku(ss.getSheetByName(SEKME.KISI), { 'ad': 'ad', 'aktif': 'aktif' })
+    .filter(function (x) { return x.ad && String(x.aktif || '').toUpperCase() !== 'HAYIR'; })
+    .map(function (x) { return x.ad; })
     .sort(function (a, b) { return a.localeCompare(b, 'tr'); });
   const mevcut = String(sayfa.getRange(ilk, sutun).getDisplayValue()).split(',')
     .map(function (x) { return x.trim(); }).filter(String);
@@ -173,12 +186,17 @@ function gonder(onay) {
     const veri = {
       kaynak: ss.getName(),
       onay: !!onay,
-      bootcamplar: satirlar(ss.getSheetByName(SEKME.BOOTCAMP), 6).map(function (x) {
-        return { satir: x.satir, kod: x.d[0], ad: x.d[1], renk: x.d[2], zoom: x.d[3], po: x.d[4], asistan: x.d[5] };
+      betik_surumu: BETIK_SURUMU,
+      // Sütunlar başlık adıyla okunur: sırası değişse de bozulmaz. Roller yalnızca Bootcamp'ler sekmesinden gelir.
+      bootcamplar: basliklaOku(ss.getSheetByName(SEKME.BOOTCAMP), {
+        'kod': 'kod', 'ad': 'ad', 'renk': 'renk', 'varsayılan zoom linki': 'zoom',
+        'po': 'po', 'ana eğitmen': 'ana_egitmen', 'asistan': 'asistan'
       }),
-      kisiler: satirlar(ss.getSheetByName(SEKME.KISI), 7).map(function (x) {
-        return { satir: x.satir, ad: x.d[0], eposta: x.d[1], rol: x.d[2], saat_dilimi: x.d[3], ana_egitmen: x.d[4],
-                 aktif: String(x.d[5]).trim().toUpperCase() !== 'HAYIR', kurum: x.d[6] };
+      kisiler: basliklaOku(ss.getSheetByName(SEKME.KISI), {
+        'ad': 'ad', 'e-posta': 'eposta', 'saat dilimi': 'saat_dilimi', 'aktif': 'aktif', 'kurum': 'kurum'
+      }).map(function (k) {
+        k.aktif = String(k.aktif || '').trim().toUpperCase() !== 'HAYIR';
+        return k;
       }),
       oturumlar: oturumSatirlari(ss.getSheetByName(SEKME.OTURUM))
     };
@@ -201,6 +219,26 @@ function gonder(onay) {
 }
 
 /** Başlık satırından sonraki dolu satırlar: [{satir, d: [...görünen değerler]}] */
+/**
+ * Sayfayı başlık satırına göre okur. harita: { 'başlık (küçük harf, parantezsiz)': 'alan' }.
+ * Sayfada olmayan başlığın alanı hiç gönderilmez (sunucu o alana dokunmaz).
+ */
+function basliklaOku(sayfa, harita) {
+  if (!sayfa || sayfa.getLastRow() < 2) return [];
+  const sutunSayisi = sayfa.getLastColumn();
+  const basliklar = sayfa.getRange(1, 1, 1, sutunSayisi).getDisplayValues()[0].map(function (b) {
+    return String(b).replace(/\(.*?\)/g, '').trim().toLocaleLowerCase('tr');
+  });
+  const alanlar = basliklar.map(function (b) { return harita[b] || null; });
+  const sonuc = [];
+  satirlar(sayfa, sutunSayisi).forEach(function (x) {
+    const o = { satir: x.satir };
+    alanlar.forEach(function (alan, i) { if (alan) o[alan] = x.d[i]; });
+    if (Object.keys(o).length > 1) sonuc.push(o);
+  });
+  return sonuc;
+}
+
 function satirlar(sayfa, sutun) {
   if (!sayfa || sayfa.getLastRow() < 2) return [];
   const degerler = sayfa.getRange(2, 1, sayfa.getLastRow() - 1, sutun).getDisplayValues();
