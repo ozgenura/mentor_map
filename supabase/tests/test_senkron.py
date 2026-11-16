@@ -14,6 +14,12 @@ AYSE = "ayse.kaya@ornek.com"
 GUN = (dt.date.today() + dt.timedelta(days=10)).isoformat()
 
 
+@pytest.fixture(autouse=True)
+def yonetici_var(db):
+    """Yönetici sayfadan açılamaz (MM-10); testlerde veritabanında önceden açılır."""
+    db.execute("insert into kisiler (ad, eposta, rol) values ('Özge', %s, 'yonetici')", (YONETICI,))
+
+
 def senkron(db, payload):
     return db.execute("select sheets_senkron(%s::jsonb)", (json.dumps(payload),)).fetchone()[0]
 

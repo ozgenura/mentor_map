@@ -6,7 +6,7 @@ import psycopg
 import pytest
 
 from conftest import as_user
-from test_senkron import AYSE, YONETICI, ot, senkron, temel
+from test_senkron import AYSE, YONETICI, ot, senkron, temel, yonetici_var  # noqa: F401
 
 PO = "po@ornek.com"
 ASISTAN = "asistan@ornek.com"

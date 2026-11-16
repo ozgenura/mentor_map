@@ -186,7 +186,7 @@ function gonder(onay) {
     try {
       const yanit = UrlFetchApp.fetch(ADRES, {
         method: 'post', contentType: 'application/json', payload: JSON.stringify(veri),
-        headers: { 'X-Mentormap-Anahtar': anahtar }, muteHttpExceptions: true
+        headers: { 'X-Mentormap-Anahtar': anahtar, 'X-Mentormap-Tablo': ss.getId() }, muteHttpExceptions: true
       });
       kod = yanit.getResponseCode();
       try { govde = JSON.parse(yanit.getContentText()); } catch (e) { govde = { hata: yanit.getContentText().slice(0, 300) }; }

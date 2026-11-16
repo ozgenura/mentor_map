@@ -15,11 +15,21 @@ const json = (body: unknown, status = 200) =>
 Deno.serve(async (req) => {
   if (req.method !== "POST") return json({ hata: "Yalnızca POST" }, 405);
 
+  // Gövde okunmadan önce boyut denetimi (MM-16); bildirilmeyen boyut aşağıda yine denetlenir.
+  const boyut = Number(req.headers.get("content-length") ?? "0");
+  if (boyut > AZAMI_BOYUT) return json({ hata: "Gönderilen veri çok büyük" }, 413);
+
   const anahtar = req.headers.get("x-mentormap-anahtar") ?? "";
   if (!/^[0-9a-f]{64}$/.test(anahtar)) return json({ hata: "Anahtar eksik ya da hatalı" }, 401);
-  const { data: gecerli, error: e1 } = await db.rpc("senkron_anahtari_dogrula", { p_anahtar: anahtar });
+  // Anahtar ilk başarılı kullanımda bu e-tabloya bağlanır; sonra yalnızca aynı e-tablodan kabul edilir.
+  const tablo = (req.headers.get("x-mentormap-tablo") ?? "").slice(0, 200) || null;
+  const { data: sonuc, error: e1 } = await db.rpc("senkron_anahtari_denetle", { p_anahtar: anahtar, p_e_tablo: tablo });
   if (e1) return json({ hata: "Sunucu hatası" }, 500);
-  if (!gecerli) return json({ hata: "Anahtar geçersiz. Uygulamada yönetici yeni anahtar üretmiş olabilir." }, 401);
+  if (sonuc === "kilitli") return json({ hata: "Çok fazla hatalı deneme. 15 dakika sonra tekrar deneyin." }, 429);
+  if (sonuc === "baska_tablo") {
+    return json({ hata: "Bu anahtar başka bir e-tabloya bağlı. Uygulamada yönetici yeni anahtar üretmeli." }, 403);
+  }
+  if (sonuc !== "tamam") return json({ hata: "Anahtar geçersiz. Uygulamada yönetici yeni anahtar üretmiş olabilir." }, 401);
 
   const govde = await req.text();
   if (govde.length > AZAMI_BOYUT) return json({ hata: "Gönderilen veri çok büyük" }, 413);
