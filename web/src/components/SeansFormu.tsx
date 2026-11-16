@@ -9,6 +9,7 @@ import { useBaglam } from "../lib/baglam";
 import { basMs, bitMs } from "../lib/derive";
 import { bugunTR, gunBasligi, saat, TR } from "../lib/time";
 import type { Kisi, Oturum } from "../lib/types";
+import { Pencere } from "./Pencere";
 import { Ikon } from "./ui";
 
 /** 'SS:DD' aralığının süresi (dk). Bitiş başlangıçtan küçük ya da eşitse ertesi gün sayılır (MM-05). */
@@ -45,14 +46,14 @@ function Alan({ etiket, htmlFor, children, ipucu }: { etiket: string; htmlFor?: 
 
 const GIRDI = "h-11 rounded-xl border border-[#D9CDC6] bg-white px-3 text-sm outline-none focus:border-yesil focus:ring-2 focus:ring-yesil/20";
 
-function Kabuk({ baslik, alt, onKapat, onKaydet, bekliyor, hata, kaydetMetni, children }: {
+function Kabuk({ baslik, alt, onKapat, onKaydet, bekliyor, hata, kaydetMetni, kirli, children }: {
   baslik: string; alt?: string; onKapat: () => void; onKaydet: (e: React.FormEvent) => void; bekliyor: boolean;
-  hata: string | null; kaydetMetni: string; children: ReactNode;
+  hata: string | null; kaydetMetni: string; kirli: boolean; children: ReactNode;
 }) {
   return (
-    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-murekkep/50 sm:items-center sm:p-4" onClick={(e) => { e.stopPropagation(); onKapat(); }}>
-      <form onSubmit={onKaydet} onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label={baslik}
-        className="flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-[28px] bg-zemin text-murekkep sm:max-w-lg sm:rounded-[28px]">
+    <Pencere etiket={baslik} onKapat={onKapat} kirli={kirli && !bekliyor} onSubmit={onKaydet}
+      dis="fixed inset-0 z-[60] flex items-end justify-center bg-murekkep/50 sm:items-center sm:p-4"
+      className="flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-[28px] bg-zemin text-murekkep sm:max-w-lg sm:rounded-[28px]">
         <div className="flex items-start justify-between gap-3 px-5 pb-3 pt-5">
           <div>
             <h3 className="font-baslik text-xl font-bold">{baslik}</h3>
@@ -70,17 +71,17 @@ function Kabuk({ baslik, alt, onKapat, onKaydet, bekliyor, hata, kaydetMetni, ch
             </button>
           </div>
         </div>
-      </form>
-    </div>
+    </Pencere>
   );
 }
 
 export function DetayFormu({ o, onKapat }: { o: Oturum; onKapat: () => void }) {
   const { api } = useBaglam();
   const qc = useQueryClient();
-  const [d, setD] = useState({
+  const [ilk] = useState(() => ({
     aciklama: o.aciklama ?? "", toplanti_linki: hamLink(o), materyal_linki: o.materyal_linki ?? "", notlar: o.notlar ?? "",
-  });
+  }));
+  const [d, setD] = useState(ilk);
   const [bekliyor, setBekliyor] = useState(false);
   const [hata, setHata] = useState<string | null>(null);
 
@@ -101,7 +102,7 @@ export function DetayFormu({ o, onKapat }: { o: Oturum; onKapat: () => void }) {
 
   return (
     <Kabuk baslik="Oturumu düzenle" alt={`${o.kisa_kod} · ${o.konu} · ${gunBasligi(o.tarih)}`} onKapat={onKapat} onKaydet={kaydet}
-      bekliyor={bekliyor} hata={hata} kaydetMetni="Kaydet">
+      bekliyor={bekliyor} hata={hata} kaydetMetni="Kaydet" kirli={JSON.stringify(d) !== JSON.stringify(ilk)}>
       <p className="rounded-xl bg-mavi px-3 py-2.5 text-xs text-mavi-koyu">
         Tarih, saat, konu ve eğitmen Excel'den gelir; onları yönetici değiştirir. Buradaki alanlar Excel güncellemesinde ezilmez.
       </p>
@@ -146,6 +147,7 @@ export function YanSeansFormu({ o, bootcampId, onKapat, onKaydedildi }: {
     toplanti_linki: o ? hamLink(o) : "",
     anlaticilar: (o?.anlaticilar ?? []).map((a): Anlatici => (a.kisi_id ? { kisi_id: a.kisi_id } : { konuk_ad: a.ad })),
   }));
+  const [ilkSeans] = useState(() => JSON.stringify(s));
   const [secilecek, setSecilecek] = useState("");
   const [konuk, setKonuk] = useState("");
   const [bekliyor, setBekliyor] = useState(false);
@@ -194,7 +196,8 @@ export function YanSeansFormu({ o, bootcampId, onKapat, onKaydedildi }: {
 
   return (
     <Kabuk baslik={o ? "Yan seansı düzenle" : "Yan seans ekle"} alt="Saatler TR saatidir. Anlatıcılara bildirim gider."
-      onKapat={onKapat} onKaydet={kaydet} bekliyor={bekliyor} hata={hata} kaydetMetni={o ? "Kaydet" : "Seansı ekle"}>
+      onKapat={onKapat} onKaydet={kaydet} bekliyor={bekliyor} hata={hata} kaydetMetni={o ? "Kaydet" : "Seansı ekle"}
+      kirli={JSON.stringify(s) !== ilkSeans || !!konuk.trim()}>
       {!o && (
         <Alan etiket="Bootcamp" htmlFor="y-bootcamp">
           <select id="y-bootcamp" value={s.bootcamp_id} onChange={(e) => setS({ ...s, bootcamp_id: e.target.value })} className={GIRDI}>

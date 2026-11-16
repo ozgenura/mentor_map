@@ -38,6 +38,17 @@ export function useKimlik(): Kimlik {
   return k;
 }
 
+/** Çıkış: oturumu kapatır ve cihazda kalan kişisel veriyi siler (MM-12): çevrimdışı önbellek, mm-* kayıtları. */
 export async function cikis() {
   if (supabase) await supabase.auth.signOut();
+  try {
+    // Uygulama dosyalarının önbelleği kalır; yalnızca program verisinin önbelleği (vite.config.ts) silinir.
+    if ("caches" in window) await caches.delete("supabase-rest");
+  } catch { /* yoksay */ }
+  for (const depo of [localStorage, sessionStorage]) {
+    try {
+      for (const k of Object.keys(depo)) if (k.startsWith("mm-") || k.startsWith("sb-")) depo.removeItem(k);
+    } catch { /* depolama kapalı olabilir */ }
+  }
+  location.replace(location.pathname); // bellekteki sorgu önbelleği de sıfırlanır
 }

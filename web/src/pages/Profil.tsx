@@ -1,8 +1,9 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { SayfaUstu } from "../components/Kabuk";
-import { GeriBildirimDugmesi, GeriBildirimListesi } from "../components/GeriBildirim";
+import { GeriBildirimDugmesi, GeriBildirimListesi, Gonderdiklerim } from "../components/GeriBildirim";
 import { KalkanlarListesi } from "../components/Kalkanlar";
+import { Onay } from "../components/Pencere";
 import { ALab, Ikon, Kart } from "../components/ui";
 import { DEMO } from "../lib/api";
 import { useBaglam } from "../lib/baglam";
@@ -65,6 +66,7 @@ export function Profil({ demoSec }: { demoSec: (id: string) => void }) {
         {ben && !bakis?.aktif && <Abonelik kisiId={ben.id} />}
 
         <Kart className="p-2 lg:hidden"><GeriBildirimDugmesi sekme="profil" className="h-11 w-full px-3" /></Kart>
+        {!bakis && !DEMO && <Gonderdiklerim />}
         {bakis && !bakis.aktif && <GeriBildirimListesi />}
         {bakis && !bakis.aktif && <KalkanlarListesi />}
 
@@ -111,8 +113,9 @@ function Abonelik({ kisiId }: { kisiId: string }) {
       /* pano izni yoksa kullanıcı metni elle seçer */
     }
   }
+  const [yenileSor, setYenileSor] = useState(false);
   async function yenile() {
-    if (!confirm("Eski link çalışmayı bırakır; takviminize yeni linki tekrar eklemeniz gerekir. Devam edilsin mi?")) return;
+    setYenileSor(false);
     qc.setQueryData(["token", kisiId], await api.tokenYenile());
   }
 
@@ -139,8 +142,10 @@ function Abonelik({ kisiId }: { kisiId: string }) {
           </div>
           <div className="flex items-center justify-between gap-2 text-xs text-yesil-soluk">
             <span>Link sana özel, paylaşma.</span>
-            <button onClick={yenile} className="font-semibold text-mercan-zemin underline">Link sızdıysa yenile</button>
+            <button onClick={() => setYenileSor(true)} className="font-semibold text-mercan-zemin underline">Link sızdıysa yenile</button>
           </div>
+          {yenileSor && <Onay soru="Takvim linki yenilensin mi?" evet="Yenile" tehlikeli onEvet={yenile} onHayir={() => setYenileSor(false)}
+            aciklama="Eski link çalışmayı bırakır; takviminize yeni linki tekrar eklemeniz gerekir." />}
         </>
       )}
     </section>
@@ -158,8 +163,9 @@ function SheetsBaglantisi() {
   const d = durum.data;
   const adres = api.senkronAdresi();
 
+  const [uretSor, setUretSor] = useState(false);
   async function uret() {
-    if (d?.anahtar_var && !confirm("Yeni anahtar üretilince eski anahtar çalışmaz; şablondaki betiğe yenisini girmek gerekir. Devam edilsin mi?")) return;
+    setUretSor(false);
     setBekliyor(true);
     try {
       setAnahtar(await api.senkronAnahtariOlustur());
@@ -197,11 +203,13 @@ function SheetsBaglantisi() {
           </div>
         </div>
       ) : (
-        <button onClick={uret} disabled={bekliyor}
+        <button onClick={() => (d?.anahtar_var ? setUretSor(true) : uret())} disabled={bekliyor}
           className="h-10 rounded-xl border border-[#D9CDC6] text-[13px] font-semibold disabled:opacity-60">
           {d?.anahtar_var ? "Yeni anahtar üret (eskisi geçersiz olur)" : "Bağlantı anahtarı üret"}
         </button>
       )}
+      {uretSor && <Onay soru="Yeni anahtar üretilsin mi?" evet="Üret" tehlikeli onEvet={uret} onHayir={() => setUretSor(false)}
+        aciklama="Eski anahtar çalışmayı bırakır; şablondaki betiğe yenisini girmek gerekir." />}
       {adres && (
         <button onClick={() => kopyala(adres, "adres")} className="self-start text-xs font-semibold underline">
           {kopyalandi === "adres" ? "Adres kopyalandı" : "Senkron adresini kopyala"}

@@ -5,6 +5,7 @@ import { useState } from "react";
 import type { GeriBildirimDurumu, GeriBildirimTuru } from "../lib/api";
 import { useBaglam, type Sekme } from "../lib/baglam";
 import { gorece } from "../lib/time";
+import { Pencere } from "./Pencere";
 import { Ikon, Kart, Rozet, Segment } from "./ui";
 
 const TUR_ADI: Record<GeriBildirimTuru, string> = { oneri: "Öneri", sorun: "Sorun", diger: "Diğer" };
@@ -33,10 +34,10 @@ function GeriBildirimFormu({ sekme, onKapat }: { sekme: Sekme; onKapat: () => vo
     onSuccess: () => qc.invalidateQueries({ queryKey: ["geri-bildirimler"] }),
   });
   return (
-    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-murekkep/50 sm:items-center sm:p-4" onClick={onKapat}>
-      <form role="dialog" aria-modal="true" aria-label="Öneri / sorun bildir" onClick={(e) => e.stopPropagation()}
-        onSubmit={(e) => { e.preventDefault(); if (metin.trim()) gonder.mutate(); }}
-        className="flex w-full flex-col gap-4 rounded-t-[28px] bg-zemin p-5 text-murekkep sm:max-w-lg sm:rounded-[28px]">
+    <Pencere etiket="Öneri / sorun bildir" onKapat={onKapat} kirli={!!metin.trim() && !gonder.isSuccess}
+      onSubmit={(e) => { e.preventDefault(); if (metin.trim()) gonder.mutate(); }}
+      dis="fixed inset-0 z-[60] flex items-end justify-center bg-murekkep/50 sm:items-center sm:p-4"
+      className="flex w-full flex-col gap-4 rounded-t-[28px] bg-zemin p-5 text-murekkep sm:max-w-lg sm:rounded-[28px]">
         <div className="flex items-start justify-between gap-3">
           <div>
             <h3 className="font-baslik text-xl font-bold">Öneri / sorun bildir</h3>
@@ -66,8 +67,7 @@ function GeriBildirimFormu({ sekme, onKapat }: { sekme: Sekme; onKapat: () => vo
             </button>
           </>
         )}
-      </form>
-    </div>
+    </Pencere>
   );
 }
 
@@ -110,6 +110,30 @@ export function GeriBildirimListesi() {
           ))}
         </ul>
       )}
+    </Kart>
+  );
+}
+
+/** Eğitmen: kendi gönderdiği geri bildirimler ve durumları (MM-45). RLS yalnızca kendininkini döndürür. */
+export function Gonderdiklerim() {
+  const { api } = useBaglam();
+  const q = useQuery({ queryKey: ["geri-bildirimler"], queryFn: api.geriBildirimler });
+  const list = q.data ?? [];
+  if (!list.length) return null;
+  return (
+    <Kart className="flex flex-col gap-2 p-4">
+      <h2 className="font-baslik text-lg font-bold">Gönderdiklerim</h2>
+      <ul className="flex flex-col divide-y divide-cizgi">
+        {list.map((g) => (
+          <li key={g.id} className="flex flex-col gap-1 py-2.5">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-soluk">
+              <Rozet tur={g.durum === "yapildi" ? "yeni" : "gri"}>{DURUM_ADI[g.durum]}</Rozet>
+              <span>{TUR_ADI[g.tur]} · {gorece(g.olusturma)}</span>
+            </div>
+            <p className="line-clamp-3 whitespace-pre-wrap text-sm">{g.metin}</p>
+          </li>
+        ))}
+      </ul>
     </Kart>
   );
 }

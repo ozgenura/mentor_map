@@ -1,48 +1,44 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { DEMO } from "../lib/api";
 import { gosterim, useBaglam } from "../lib/baglam";
 import { kalan, sureSaatMetni, TATILLER, yaziRengi, guvenliLink } from "../lib/derive";
 import { gunBasligi } from "../lib/time";
 import type { Oturum } from "../lib/types";
 import { DetayFormu, YanSeansFormu } from "./SeansFormu";
+import { Pencere } from "./Pencere";
 import { Ikon, Rozet } from "./ui";
 
 const ROL: Record<string, string> = { ana: "", yardimci: "yardımcı", konuk: "konuk" };
 
+/** Detaydaki rozet: kişinin bu bootcamp'teki gerçek yetkisi (MM-42). */
+export function yetkiAdi(yonetici: boolean, yetkiler: string[]): string {
+  if (yonetici) return "Yönetici";
+  if (yetkiler.includes("po")) return "PO";
+  return "Ana eğitmen";
+}
+
 /** Oturum detayı: mobilde tam ekran sayfa, geniş ekranda sağdan açılan panel. */
 export function OturumDetay({ o, onKapat }: { o: Oturum; onKapat: () => void }) {
-  const { tz, saatModu, anaEgitmenMi, cakisanlar, ben, kisiler } = useBaglam();
+  const { tz, saatModu, anaEgitmenMi, cakisanlar, ben, kisiler, yetkilerim } = useBaglam();
   const disEgitmen = new Set(kisiler.filter((k) => k.dis_egitmen).map((k) => k.id));
   const [iptalAcik, setIptalAcik] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
   const g = gosterim(o, tz, saatModu);
   const iptal = o.durum === "iptal";
   const yonetebilir = anaEgitmenMi(o.bootcamp_id);
   const yazi = yaziRengi(o.renk);
 
-  useEffect(() => {
-    const f = (e: KeyboardEvent) => e.key === "Escape" && !iptalAcik && onKapat();
-    document.addEventListener("keydown", f);
-    ref.current?.focus();
-    const eski = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", f);
-      document.body.style.overflow = eski;
-    };
-  }, [onKapat, iptalAcik]);
-
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-murekkep/40" onClick={onKapat}>
-      <div ref={ref} role="dialog" aria-modal="true" aria-label={o.konu || o.tur} tabIndex={-1} onClick={(e) => e.stopPropagation()}
-        className="h-full w-full overflow-y-auto bg-zemin outline-none lg:max-w-md lg:shadow-2xl">
+    <Pencere etiket={o.konu || o.tur} onKapat={onKapat} dis="fixed inset-0 z-50 flex justify-end bg-murekkep/40"
+      className="h-full w-full overflow-y-auto bg-zemin lg:max-w-md lg:shadow-2xl">
         <div className="flex flex-col gap-4 rounded-b-[32px] px-5 pb-6 pt-4" style={{ background: o.renk, color: yazi }}>
           <div className="flex items-center justify-between">
             <button onClick={onKapat} aria-label="Kapat" className="flex h-11 w-11 items-center justify-center rounded-[14px] bg-white/50">
               <Ikon ad="sol" boyut={20} />
             </button>
-            {yonetebilir && <span className="rounded-full bg-mercan-zemin px-2.5 py-1.5 text-[11px] font-bold uppercase tracking-wide text-mercan-koyu">Ana eğitmen</span>}
+            {yonetebilir && <span className="rounded-full bg-mercan-zemin px-2.5 py-1.5 text-[11px] font-bold uppercase tracking-wide text-mercan-koyu">
+              {yetkiAdi(ben?.rol === "yonetici", yetkilerim.filter((y) => y.bootcamp_id === o.bootcamp_id).map((y) => y.yetki ?? "ana_egitmen"))}
+            </span>}
           </div>
           <div className="flex flex-wrap gap-1.5">
             <span className="rounded-full bg-white/50 px-2.5 py-1 text-xs font-semibold">{o.bootcamp_ad}</span>
@@ -114,9 +110,8 @@ export function OturumDetay({ o, onKapat }: { o: Oturum; onKapat: () => void }) 
 
           {yonetebilir && <Yonetim o={o} iptalAc={() => setIptalAcik(true)} />}
         </div>
-      </div>
       {iptalAcik && <IptalPenceresi o={o} onKapat={() => setIptalAcik(false)} />}
-    </div>
+    </Pencere>
   );
 }
 
@@ -145,7 +140,7 @@ function Yonetim({ o, iptalAc }: { o: Oturum; iptalAc: () => void }) {
     <section className="flex flex-col gap-3 rounded-kart bg-yesil p-4 text-white">
       <div className="flex items-baseline justify-between gap-2">
         <h3 className="font-baslik text-base font-bold">Bu oturumu yönet</h3>
-        <span className="text-xs text-yesil-soluk">Sadece ana eğitmen görür</span>
+        <span className="text-xs text-yesil-soluk">Yalnızca düzenleme yetkisi olanlar görür</span>
       </div>
       <div className="grid grid-cols-2 gap-2">
         <button onClick={() => setForm("duzenle")} className="h-11 rounded-[14px] bg-white text-sm font-bold text-yesil">Düzenle</button>
@@ -197,9 +192,9 @@ function IptalPenceresi({ o, onKapat }: { o: Oturum; onKapat: () => void }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-murekkep/50 sm:items-center sm:p-4" onClick={(e) => { e.stopPropagation(); onKapat(); }}>
-      <form onSubmit={onayla} onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label="Oturumu iptal et"
-        className="flex w-full flex-col gap-3 rounded-t-[28px] bg-white p-5 text-murekkep pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:max-w-md sm:rounded-[28px]">
+    <Pencere etiket="Oturumu iptal et" onKapat={onKapat} onSubmit={onayla} kirli={!!gerekce.trim() && !bekliyor}
+      dis="fixed inset-0 z-[60] flex items-end justify-center bg-murekkep/50 sm:items-center sm:p-4"
+      className="flex w-full flex-col gap-3 rounded-t-[28px] bg-white p-5 text-murekkep pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:max-w-md sm:rounded-[28px]">
         <h3 className="font-baslik text-xl font-bold">Oturumu iptal et</h3>
         <p className="text-sm text-soluk">{o.kisa_kod} · {o.konu} · {gunBasligi(o.tarih)}</p>
         <label htmlFor="gerekce" className="text-sm font-semibold">Gerekçe</label>
@@ -214,7 +209,6 @@ function IptalPenceresi({ o, onKapat }: { o: Oturum; onKapat: () => void }) {
             {bekliyor ? "Bekleyin…" : "İptal et"}
           </button>
         </div>
-      </form>
-    </div>
+    </Pencere>
   );
 }
