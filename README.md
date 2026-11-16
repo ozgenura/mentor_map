@@ -1,7 +1,7 @@
 # Mentor Map
 
 Eğitmenlerin bootcamp programını gördüğü ve yönettiği dahili takvim. Ürün ve teknik kararlar:
-[Mentor Map — Ürün ve Teknik Doküman](https://claude.ai/artifact/1M2b4HuEVdfjTdkC4jZNqQ).
+[docs/mimari-plan.md](docs/mimari-plan.md).
 
 | Klasör | İçerik |
 | --- | --- |
