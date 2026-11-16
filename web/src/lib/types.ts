@@ -16,7 +16,11 @@ export type Oturum = {
   tur: string;
   konu: string;
   aciklama: string | null;
-  toplanti_linki: string | null;
+  toplanti_linki: string | null; // oturumun linki, yoksa bootcamp'in varsayılanı (görüntü için)
+  /** Oturuma özel link (ham); formlar bunu düzenler. Eski demo verisinde yok. */
+  oturum_toplanti_linki?: string | null;
+  varsayilan_toplanti_linki?: string | null;
+  excelden_kalkti?: boolean;
   materyal_linki: string | null;
   notlar: string | null;
   durum: "planli" | "iptal";

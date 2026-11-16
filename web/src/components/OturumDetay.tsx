@@ -161,7 +161,7 @@ function Yonetim({ o, iptalAc }: { o: Oturum; iptalAc: () => void }) {
         <button onClick={iptalAc} className="h-11 rounded-[14px] border border-mercan text-sm font-bold text-mercan-zemin">Oturumu iptal et</button>
       )}
       <span className="text-xs text-yesil-soluk">
-        {DEMO ? "Demoda yaptığın değişiklikler yalnızca bu tarayıcıda görünür." : "Değişiklikler anlatıcılara e-postayla bildirilir ve takvimlerine yansır."}
+        {DEMO ? "Demoda yaptığın değişiklikler yalnızca bu tarayıcıda görünür." : "Değişiklikler anlatıcıların Değişenler ekranında görünür ve takvim aboneliklerine yansır."}
       </span>
       {form === "duzenle" && (yanSeans
         ? <YanSeansFormu o={o} onKapat={() => setForm(null)} />
@@ -206,7 +206,7 @@ function IptalPenceresi({ o, onKapat }: { o: Oturum; onKapat: () => void }) {
         <textarea id="gerekce" required autoFocus rows={3} value={gerekce} onChange={(e) => setGerekce(e.target.value)}
           placeholder="Örn. eğitmen rahatsız; telafi tarihi duyurulacak"
           className="rounded-xl border border-[#D9CDC6] px-3 py-2 text-sm outline-none focus:border-yesil focus:ring-2 focus:ring-yesil/20" />
-        <p className="text-xs text-soluk">Anlatıcılara e-posta gider, oturum takvimlerinden düşer. İstersen sonra geri alabilirsin.</p>
+        <p className="text-xs text-soluk">Anlatıcılar bunu Değişenler ekranında görür, oturum takvim aboneliklerinde iptal olarak görünür. İstersen sonra geri alabilirsin.</p>
         {hata && <p role="alert" className="text-sm text-mercan-yazi">{hata}</p>}
         <div className="mt-1 grid grid-cols-2 gap-2">
           <button type="button" onClick={onKapat} className="h-11 rounded-[14px] border border-[#D9CDC6] text-sm font-semibold">Vazgeç</button>

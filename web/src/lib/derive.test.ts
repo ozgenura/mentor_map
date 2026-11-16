@@ -88,3 +88,27 @@ describe("benimMi (roller)", () => {
     expect(anlattigiMi(ders, "k2")).toBe(false);
   });
 });
+
+import { kisiEtiketi, seansSuresiDk } from "../components/SeansFormu";
+import { bugunTR } from "./time";
+import { vi } from "vitest";
+
+describe("Faz 0", () => {
+  it("gece yarısını geçen seans süresi (MM-05)", () => {
+    expect(seansSuresiDk("20:30", "00:00")).toBe(210);
+    expect(seansSuresiDk("23:00", "01:00")).toBe(120);
+    expect(seansSuresiDk("19:00", "22:00")).toBe(180);
+    expect(seansSuresiDk("20:00", "19:00")).toBe(23 * 60);
+  });
+  it("anlatıcı listesinde herkes, rolüyle (MM-06)", () => {
+    expect(kisiEtiketi({ id: "1", ad: "Özge", eposta: "", saat_dilimi: "Europe/Istanbul", rol: "yonetici" })).toBe("Özge (yönetici)");
+    expect(kisiEtiketi({ id: "2", ad: "Dora", eposta: "", saat_dilimi: "Europe/Istanbul", rol: "egitmen", dis_egitmen: true })).toBe("Dora (dış)");
+    expect(kisiEtiketi({ id: "3", ad: "Can", eposta: "", saat_dilimi: "Europe/Istanbul", rol: "egitmen" })).toBe("Can");
+  });
+  it("TR saatiyle 01:00'de bugün, UTC'deki dün değildir (MM-08)", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-11-16T22:30:00Z")); // TR 17 Kasım 01:30
+    expect(bugunTR()).toBe("2026-11-17");
+    vi.useRealTimers();
+  });
+});

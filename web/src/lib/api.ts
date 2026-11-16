@@ -1,6 +1,7 @@
 // Veri katmanı. Canlıda Supabase; VITE_DEMO=1 iken public/demo-data.json (yerel geliştirme ve deneme sürümü).
 
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { gunEkle } from "./time";
 import type { BildirimOlayi, Degisiklik, Kisi, Oturum, Yetki } from "./types";
 
 /** Ana eğitmenin düzenleyebildiği, Excel'de olmayan alanlar */
@@ -23,6 +24,9 @@ export type YanSeans = {
 export interface Api {
   mod: "supabase" | "demo";
   oturumlar(): Promise<Oturum[]>;
+  /** Yönetici: şablondan kalkan oturumlar. */
+  kalkanlar(): Promise<Oturum[]>;
+  kalkanSil(id: string): Promise<void>;
   kisiler(): Promise<Kisi[]>;
   yetkiler(): Promise<Yetki[]>;
   degisiklikler(kisiId: string): Promise<Degisiklik[]>;
@@ -70,6 +74,20 @@ function sinir(): string {
   return new Date(Date.now() - GECMIS_GUN * 864e5).toISOString().slice(0, 10);
 }
 
+const SAYFA = 1000;
+
+/** Supabase bir istekte en çok 1000 satır döndürür: hepsi gelene kadar sayfa sayfa çeker. */
+async function tumSayfalar<T>(
+  sayfa: (bas: number, son: number) => PromiseLike<{ data: T[] | null; error: { message: string } | null }>,
+): Promise<T[]> {
+  const hepsi: T[] = [];
+  for (let bas = 0; ; bas += SAYFA) {
+    const parca = ok(await sayfa(bas, bas + SAYFA - 1));
+    hepsi.push(...parca);
+    if (parca.length < SAYFA) return hepsi;
+  }
+}
+
 function ok<T>(r: { data: T | null; error: { message: string } | null }): T {
   if (r.error) throw new Error(r.error.message);
   return r.data as T;
@@ -79,7 +97,16 @@ function supabaseApi(db: SupabaseClient): Api {
   return {
     mod: "supabase",
     async oturumlar() {
-      return ok(await db.from("oturum_gorunumu").select("*").gte("tarih", sinir()).order("tarih").order("baslangic"));
+      // Şablondan kalkan oturumlar gösterilmez (MM-01); yönetici ayrı listede görür (kalkanlar). Sayfa sayfa çekilir (MM-04).
+      return tumSayfalar((bas, son) => db.from("oturum_gorunumu").select("*").gte("tarih", sinir()).eq("excelden_kalkti", false)
+        .order("tarih").order("baslangic").order("id").range(bas, son));
+    },
+    async kalkanlar() {
+      return ok(await db.from("oturum_gorunumu").select("*").eq("excelden_kalkti", true)
+        .order("tarih", { ascending: false }).limit(200));
+    },
+    async kalkanSil(id) {
+      ok(await db.from("oturumlar").delete().eq("id", id).eq("excelden_kalkti", true));
     },
     async kisiler() {
       return ok(await db.from("kisiler").select("id, ad, eposta, saat_dilimi, rol, dis_egitmen").eq("aktif", true).order("ad"));
@@ -227,6 +254,8 @@ async function bildir(oturumId: string, olay: BildirimOlayi, detay: Record<strin
 const demoApi: Api = {
   mod: "demo",
   oturumlar: demoOturumlar,
+  kalkanlar: async () => [],
+  kalkanSil: async () => {},
   kisiler: async () => (await demoVeri()).kisiler,
   yetkiler: async () => (await demoVeri()).yetkiler,
   async degisiklikler(kisiId) {
@@ -278,7 +307,8 @@ const demoApi: Api = {
       ? { kisi_id: a.kisi_id, ad: adlar.get(a.kisi_id) ?? "?", rol: (i === 0 ? "ana" : "yardimci") as "ana" | "yardimci" }
       : { kisi_id: null, ad: a.konuk_ad.trim(), rol: "konuk" as const });
     const alanlar: Partial<Oturum> = {
-      tarih: s.tarih, baslangic: trIso(s.tarih, s.baslangic), bitis: trIso(s.tarih, s.bitis), tur: s.tur,
+      tarih: s.tarih, baslangic: trIso(s.tarih, s.baslangic),
+      bitis: trIso(s.bitis <= s.baslangic ? gunEkle(s.tarih, 1) : s.tarih, s.bitis), tur: s.tur,
       konu: s.konu.trim(), aciklama: s.aciklama.trim() || null, toplanti_linki: s.toplanti_linki.trim() || null, anlaticilar,
     };
     if (s.id) {

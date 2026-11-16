@@ -8,7 +8,7 @@ import { api, DEMO, type Api } from "./lib/api";
 import { BaglamCtx, type Baglam, type SaatModu, type Sekme } from "./lib/baglam";
 import { cikis, useKimlik } from "./lib/kimlik";
 import { anlattigiMi, benimMi, cakisanIdler, cakismalar, siradaki } from "./lib/derive";
-import { TR } from "./lib/time";
+import { bugunTR, TR } from "./lib/time";
 import { DUZENLEYEN_YETKILER, type Kisi, type Oturum } from "./lib/types";
 import { Bugun } from "./pages/Bugun";
 import { Degisenler } from "./pages/Degisenler";
@@ -131,7 +131,7 @@ function Ana({ api, eposta, demoKisiId }: { api: Api; eposta: string | null; dem
     cakismalar: cs, cakisanlar: cakisanIdler(cs),
     degisiklikler: degisiklikler.data ?? [],
     yeniDegisiklik: (degisiklikler.data ?? []).filter((d) => Date.parse(d.olusturma) > sonGorulme).length
-      + cs.filter((c) => c.a.tarih >= new Date().toISOString().slice(0, 10)).length,
+      + cs.filter((c) => c.a.tarih >= bugunTR()).length,
     sonGorulme, okunduSay,
     sonGuncelleme: sonGuncelleme.data ?? null,
     git,

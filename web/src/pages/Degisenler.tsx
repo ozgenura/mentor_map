@@ -3,7 +3,7 @@ import { SayfaUstu } from "../components/Kabuk";
 import { Bos, Ikon, Rozet } from "../components/ui";
 import { useBaglam } from "../lib/baglam";
 import { cakismaKarti, degisiklikKarti, type DegisiklikKarti } from "../lib/degisiklik";
-import { bugunTR, gunBasligi } from "../lib/time";
+import { bugunTR, gun, gunBasligi } from "../lib/time";
 
 export function Degisenler() {
   const { degisiklikler, cakismalar, tum, tz, saatModu, sonGorulme, okunduSay } = useBaglam();
@@ -21,7 +21,7 @@ export function Degisenler() {
   return (
     <>
       <SayfaUstu baslik="Ne değişti"
-        ust={sonGorulme ? `Son okuduğun: ${gunBasligi(new Date(sonGorulme + 3 * 36e5).toISOString().slice(0, 10))}` : undefined}
+        ust={sonGorulme ? `Son okuduğun: ${gunBasligi(gun(new Date(sonGorulme).toISOString()))}` : undefined}
         sag={yeni.length > 0 && (
           <button onClick={okunduSay} className="h-9 rounded-full border border-[#D9CDC6] bg-white px-3 text-xs font-semibold">Hepsini okundu say</button>
         )} />

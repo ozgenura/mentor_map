@@ -71,8 +71,8 @@ def test_token_yalnizca_sahibine_gorunur(db, seed):
     with as_user(db, CAN):
         rows = db.execute("select kisi_id from takvim_tokenlari").fetchall()
     assert rows == [(seed[CAN],)]
-    with as_user(db, YONETICI):
-        assert _count(db, "select count(*) from takvim_tokenlari") == 4
+    with as_user(db, YONETICI):  # yönetici de yalnızca kendininkini görür (MM-17)
+        assert _count(db, "select count(*) from takvim_tokenlari") == 1
 
 
 # ---------------------------------------------------------------- iptal
@@ -177,11 +177,22 @@ def test_yan_seans_anlaticisiz_eklenemez(db, seed):
             db.execute("select yan_seans_ekle(%s, %s, '18:00', '19:00', 'x', '[]'::jsonb)", (seed["ik"], GUN))
 
 
-def test_yan_seans_bitis_baslangictan_once_olamaz(db, seed):
+def test_yan_seans_12_saatten_uzun_olamaz(db, seed):
+    # 20:00 -> 19:00 ertesi gün sayılır (23 saat): reddedilir (MM-05)
     with as_user(db, AYSE):
         with pytest.raises(psycopg.errors.InvalidParameterValue):
             db.execute("select yan_seans_ekle(%s, %s, '20:00', '19:00', 'x', %s::jsonb)",
                        (seed["ik"], GUN, f'[{{"kisi_id": "{seed[AYSE]}"}}]'))
+
+
+@pytest.mark.parametrize("bas,bit,saat", [("20:30", "00:00", 3.5), ("23:00", "01:00", 2), ("20:30", "24:00", 3.5)])
+def test_yan_seans_gece_yarisini_gecebilir(db, seed, bas, bit, saat):
+    with as_user(db, AYSE):
+        oid = db.execute("select yan_seans_ekle(%s, %s, %s, %s, 'Gece', %s::jsonb)",
+                         (seed["ik"], GUN, bas, bit, f'[{{"kisi_id": "{seed[AYSE]}"}}]')).fetchone()[0]
+    sure = db.execute("select extract(epoch from bitis - baslangic) / 3600, tarih from oturumlar where id = %s",
+                      (oid,)).fetchone()
+    assert float(sure[0]) == saat and sure[1] == GUN
 
 
 def test_egitmen_yalnizca_kendi_bildirimlerini_gorur(db, seed):
@@ -227,3 +238,39 @@ def test_token_yenilenir_ve_baskasininki_yenilenemez(db, seed):
         assert yeni != eski and len(yeni) == 64
         with pytest.raises(psycopg.errors.InsufficientPrivilege):
             db.execute("select takvim_token_yenile(%s)", (seed[AYSE],))
+
+
+def test_yonetici_baskasinin_linkini_goremez_ama_yenileyebilir(db, seed):
+    eski = db.execute("select token from takvim_tokenlari where kisi_id = %s", (seed[CAN],)).fetchone()[0]
+    with as_user(db, YONETICI):
+        assert db.execute("select count(*) from takvim_tokenlari where kisi_id = %s", (seed[CAN],)).fetchone()[0] == 0
+        assert db.execute("select takvim_token_yenile(%s)", (seed[CAN],)).fetchone()[0] is None
+    assert db.execute("select token from takvim_tokenlari where kisi_id = %s", (seed[CAN],)).fetchone()[0] != eski
+
+
+def test_takvim_aboneligi_kalkani_iptal_verir_asistani_kapsar(db, seed):
+    tok = db.execute("select token from takvim_tokenlari where kisi_id = %s", (seed[AYSE],)).fetchone()[0]
+    db.execute("update oturumlar set excelden_kalkti = true where id = %s", (seed["ik_oturum"],))
+    o = db.execute("select takvim_oturumlari(%s)", (tok,)).fetchone()[0]
+    assert o["ad"] == "Ayşe Kaya"
+    [x] = o["oturumlar"]
+    assert (x["durum"], x["iptal_gerekcesi"]) == ("iptal", "Programdan kaldırıldı")
+    # Can DS'te asistan: DS oturumunu zaten anlatıyor; İK'da asistan yapılınca İK oturumu da gelir.
+    db.execute("insert into bootcamp_yetkilileri (bootcamp_id, kisi_id, yetki) values (%s, %s, 'asistan')", (seed["ik"], seed[CAN]))
+    tok_can = db.execute("select token from takvim_tokenlari where kisi_id = %s", (seed[CAN],)).fetchone()[0]
+    ids = {x["id"] for x in db.execute("select takvim_oturumlari(%s)", (tok_can,)).fetchone()[0]["oturumlar"]}
+    assert ids == {str(seed["ik_oturum"]), str(seed["ds_oturum"])}
+    assert db.execute("select takvim_oturumlari('yok')").fetchone()[0] is None
+
+
+def test_istemci_takvim_rpc_cagiramaz(db, seed):
+    with as_user(db, YONETICI):
+        with pytest.raises(psycopg.errors.InsufficientPrivilege):
+            db.execute("select takvim_oturumlari('x')")
+
+
+def test_gorunum_ham_linki_ayrica_verir(db, seed):
+    db.execute("update bootcamp set varsayilan_toplanti_linki = 'https://zoom.us/j/1' where id = %s", (seed["ik"],))
+    r = db.execute("select toplanti_linki, oturum_toplanti_linki, varsayilan_toplanti_linki from oturum_gorunumu where id = %s",
+                   (seed["ik_oturum"],)).fetchone()
+    assert r == ("https://zoom.us/j/1", None, "https://zoom.us/j/1")

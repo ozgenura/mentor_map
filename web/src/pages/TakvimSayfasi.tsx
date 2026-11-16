@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { YanSeansFormu } from "../components/SeansFormu";
+import { kisiEtiketi, YanSeansFormu } from "../components/SeansFormu";
 import { SayfaUstu } from "../components/Kabuk";
 import { AyGorunumu, ipucu } from "../components/AyGorunumu";
 import { Harita } from "../components/Harita";
@@ -103,7 +103,7 @@ export function TakvimSayfasi() {
           {kapsam === "hepsi" && (
             <select aria-label="Eğitmen" value={egitmen} onChange={(e) => setEgitmen(e.target.value)} className="secim">
               <option value="">Tüm eğitmenler</option>
-              {kisiler.filter((k) => k.rol === "egitmen").map((k) => <option key={k.id} value={k.id}>{k.ad}{k.dis_egitmen ? " (dış)" : ""}</option>)}
+              {kisiler.map((k) => <option key={k.id} value={k.id}>{kisiEtiketi(k)}</option>)}
             </select>
           )}
         </div>
@@ -231,7 +231,7 @@ function Cizelge({ oturumlar }: { oturumlar: Oturum[] }) {
       </div>
       {saatliler.some((o) => o.durum === "planli" && cakisanlar.has(o.id)) && (
         <div className="flex items-center gap-2 rounded-xl bg-mercan-acik px-3 py-2.5 text-xs font-semibold text-mercan-koyu">
-          <Ikon ad="uyari" boyut={16} /> Bu gün çakışan oturumların var. Operasyona bildirildi.
+          <Ikon ad="uyari" boyut={16} /> Bu gün çakışan oturumların var. Operasyona haber vermeyi unutma.
         </div>
       )}
     </div>

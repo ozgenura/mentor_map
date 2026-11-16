@@ -8,8 +8,26 @@ import type { YanSeans } from "../lib/api";
 import { useBaglam } from "../lib/baglam";
 import { basMs, bitMs } from "../lib/derive";
 import { bugunTR, gunBasligi, saat, TR } from "../lib/time";
-import type { Oturum } from "../lib/types";
+import type { Kisi, Oturum } from "../lib/types";
 import { Ikon } from "./ui";
+
+/** 'SS:DD' aralığının süresi (dk). Bitiş başlangıçtan küçük ya da eşitse ertesi gün sayılır (MM-05). */
+export function seansSuresiDk(bas: string, bit: string): number {
+  const dk = (x: string) => { const [h, m] = x.split(":").map(Number); return h * 60 + m; };
+  const fark = dk(bit) - dk(bas);
+  return fark > 0 ? fark : fark + 24 * 60;
+}
+
+/** Anlatıcı listelerinde kişi adı ve rolü (MM-06: herkes anlatıcı olabilir). */
+export function kisiEtiketi(k: Kisi): string {
+  const ek = [k.rol === "yonetici" ? "yönetici" : k.rol === "asistan" ? "asistan" : "", k.dis_egitmen ? "dış" : ""].filter(Boolean);
+  return ek.length ? `${k.ad} (${ek.join(", ")})` : k.ad;
+}
+
+/** Oturumun kendi linki; bootcamp'in varsayılan linki forma kopyalanmaz (MM-03). Eski demo verisinde ham alan yok. */
+function hamLink(o: Oturum): string {
+  return (o.oturum_toplanti_linki !== undefined ? o.oturum_toplanti_linki : o.toplanti_linki) ?? "";
+}
 
 const TURLER = ["Yan Seans", "Ders", "Ek Ders", "Uygulama", "Office Hours", "Master Class", "Sunum", "Mentor Görüşmesi", "Etkinlik"];
 
@@ -61,7 +79,7 @@ export function DetayFormu({ o, onKapat }: { o: Oturum; onKapat: () => void }) {
   const { api } = useBaglam();
   const qc = useQueryClient();
   const [d, setD] = useState({
-    aciklama: o.aciklama ?? "", toplanti_linki: o.toplanti_linki ?? "", materyal_linki: o.materyal_linki ?? "", notlar: o.notlar ?? "",
+    aciklama: o.aciklama ?? "", toplanti_linki: hamLink(o), materyal_linki: o.materyal_linki ?? "", notlar: o.notlar ?? "",
   });
   const [bekliyor, setBekliyor] = useState(false);
   const [hata, setHata] = useState<string | null>(null);
@@ -87,7 +105,8 @@ export function DetayFormu({ o, onKapat }: { o: Oturum; onKapat: () => void }) {
       <p className="rounded-xl bg-mavi px-3 py-2.5 text-xs text-mavi-koyu">
         Tarih, saat, konu ve eğitmen Excel'den gelir; onları yönetici değiştirir. Buradaki alanlar Excel güncellemesinde ezilmez.
       </p>
-      <Alan etiket="Toplantı linki" htmlFor="f-link">
+      <Alan etiket="Toplantı linki" htmlFor="f-link"
+        ipucu={o.varsayilan_toplanti_linki ? `Boş bırakılırsa bootcamp'in linki kullanılır: ${o.varsayilan_toplanti_linki}` : undefined}>
         <input id="f-link" type="url" inputMode="url" placeholder="https://meet.google.com/…" value={d.toplanti_linki}
           onChange={(e) => setD({ ...d, toplanti_linki: e.target.value })} className={GIRDI} />
       </Alan>
@@ -95,7 +114,7 @@ export function DetayFormu({ o, onKapat }: { o: Oturum; onKapat: () => void }) {
         <input id="f-materyal" type="url" inputMode="url" placeholder="https://drive.google.com/…" value={d.materyal_linki}
           onChange={(e) => setD({ ...d, materyal_linki: e.target.value })} className={GIRDI} />
       </Alan>
-      <Alan etiket="Açıklama" htmlFor="f-aciklama" ipucu="Katılımcıların ve anlatıcıların göreceği kısa bilgi.">
+      <Alan etiket="Açıklama" htmlFor="f-aciklama" ipucu="Anlatıcıların ve eğitmenlerin göreceği kısa bilgi.">
         <textarea id="f-aciklama" rows={3} value={d.aciklama} onChange={(e) => setD({ ...d, aciklama: e.target.value })}
           className={`${GIRDI} h-auto py-2`} />
       </Alan>
@@ -124,7 +143,7 @@ export function YanSeansFormu({ o, bootcampId, onKapat, onKaydedildi }: {
     tur: o?.tur ?? "Yan Seans",
     konu: o?.konu ?? "",
     aciklama: o?.aciklama ?? "",
-    toplanti_linki: o?.toplanti_linki ?? "",
+    toplanti_linki: o ? hamLink(o) : "",
     anlaticilar: (o?.anlaticilar ?? []).map((a): Anlatici => (a.kisi_id ? { kisi_id: a.kisi_id } : { konuk_ad: a.ad })),
   }));
   const [secilecek, setSecilecek] = useState("");
@@ -139,7 +158,7 @@ export function YanSeansFormu({ o, bootcampId, onKapat, onKaydedildi }: {
   const cakismalar = useMemo(() => {
     if (!s.tarih || !s.baslangic || !s.bitis) return [];
     const bas = Date.parse(`${s.tarih}T${s.baslangic}:00+03:00`);
-    const bit = Date.parse(`${s.tarih}T${s.bitis}:00+03:00`);
+    const bit = bas + seansSuresiDk(s.baslangic, s.bitis) * 6e4;
     return tum.filter((x) => x.id !== o?.id && x.durum === "planli" && x.tarih === s.tarih
       && x.anlaticilar.some((a) => a.kisi_id && seciliKisiler.includes(a.kisi_id))
       && (!x.baslangic || (basMs(x) < bit && bas < bitMs(x))));
@@ -158,7 +177,7 @@ export function YanSeansFormu({ o, bootcampId, onKapat, onKaydedildi }: {
     e.preventDefault();
     if (!s.konu.trim()) return setHata("Konu zorunlu.");
     if (!s.anlaticilar.length) return setHata("En az bir anlatıcı seçin.");
-    if (s.bitis <= s.baslangic) return setHata("Bitiş saati başlangıçtan sonra olmalı.");
+    if (seansSuresiDk(s.baslangic, s.bitis) > 12 * 60) return setHata("Seans en çok 12 saat sürebilir.");
     setBekliyor(true);
     setHata(null);
     try {
@@ -197,7 +216,7 @@ export function YanSeansFormu({ o, bootcampId, onKapat, onKaydedildi }: {
           <Alan etiket="Başlangıç" htmlFor="y-bas">
             <input id="y-bas" type="time" required value={s.baslangic} onChange={(e) => setS({ ...s, baslangic: e.target.value })} className={GIRDI} />
           </Alan>
-          <Alan etiket="Bitiş" htmlFor="y-bit">
+          <Alan etiket="Bitiş" htmlFor="y-bit" ipucu={s.bitis && s.baslangic && s.bitis <= s.baslangic ? "Ertesi gün biter." : undefined}>
             <input id="y-bit" type="time" required value={s.bitis} onChange={(e) => setS({ ...s, bitis: e.target.value })} className={GIRDI} />
           </Alan>
         </div>
@@ -222,7 +241,7 @@ export function YanSeansFormu({ o, bootcampId, onKapat, onKaydedildi }: {
         )}
         <select aria-label="Eğitmen ekle" value={secilecek} onChange={(e) => ekleKisi(e.target.value)} className={GIRDI}>
           <option value="">+ Kayıtlı eğitmen ekle</option>
-          {kisiler.filter((k) => k.rol === "egitmen" && !seciliKisiler.includes(k.id)).map((k) => <option key={k.id} value={k.id}>{k.ad}{k.dis_egitmen ? " (dış)" : ""}</option>)}
+          {kisiler.filter((k) => !seciliKisiler.includes(k.id)).map((k) => <option key={k.id} value={k.id}>{kisiEtiketi(k)}</option>)}
         </select>
         <div className="flex gap-2">
           <input aria-label="Konuk anlatıcı adı" value={konuk} onChange={(e) => setKonuk(e.target.value)} placeholder="Konuk anlatıcı adı"
@@ -244,7 +263,8 @@ export function YanSeansFormu({ o, bootcampId, onKapat, onKaydedildi }: {
         </div>
       )}
 
-      <Alan etiket="Toplantı linki" htmlFor="y-link">
+      <Alan etiket="Toplantı linki" htmlFor="y-link"
+        ipucu={o?.varsayilan_toplanti_linki ? `Boş bırakılırsa bootcamp'in linki kullanılır: ${o.varsayilan_toplanti_linki}` : undefined}>
         <input id="y-link" type="url" inputMode="url" placeholder="https://meet.google.com/…" value={s.toplanti_linki}
           onChange={(e) => setS({ ...s, toplanti_linki: e.target.value })} className={GIRDI} />
       </Alan>
