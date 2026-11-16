@@ -73,6 +73,7 @@ export function Profil({ demoSec }: { demoSec: (id: string) => void }) {
         {bakis && !bakis.aktif && <KalkanlarListesi />}
 
         {bakis && !bakis.aktif && <SheetsBaglantisi />}
+        {bakis && !bakis.aktif && <SheetsBaglantisi sablon />}
 
         <Kart className="flex items-center justify-between gap-3 p-4 text-sm">
           <span className="text-soluk">Program son güncelleme</span>
@@ -155,23 +156,25 @@ function Abonelik({ kisiId }: { kisiId: string }) {
 }
 
 /** Yönetici: Google Sheets şablonunun bağlantı anahtarı ve son senkron. Anahtar yalnızca üretildiği anda görünür. */
-function SheetsBaglantisi() {
+/** Yönetici: Google Sheets bağlantı anahtarı. sablon: kurum program şablonu (PO'ların doldurduğu dosya). */
+function SheetsBaglantisi({ sablon = false }: { sablon?: boolean }) {
   const { api } = useBaglam();
   const qc = useQueryClient();
-  const durum = useQuery({ queryKey: ["senkron"], queryFn: api.senkronDurumu, refetchInterval: 60_000 });
+  const anahtarKey = sablon ? "sablon-senkron" : "senkron";
+  const durum = useQuery({ queryKey: [anahtarKey], queryFn: sablon ? api.sablonDurumu : api.senkronDurumu, refetchInterval: 60_000 });
   const [anahtar, setAnahtar] = useState<string | null>(null);
   const [bekliyor, setBekliyor] = useState(false);
   const [kopyalandi, setKopyalandi] = useState<string | null>(null);
   const d = durum.data;
-  const adres = api.senkronAdresi();
+  const adres = sablon ? null : api.senkronAdresi();
 
   const [uretSor, setUretSor] = useState(false);
   async function uret() {
     setUretSor(false);
     setBekliyor(true);
     try {
-      setAnahtar(await api.senkronAnahtariOlustur());
-      qc.invalidateQueries({ queryKey: ["senkron"] });
+      setAnahtar(await (sablon ? api.sablonAnahtariOlustur() : api.senkronAnahtariOlustur()));
+      qc.invalidateQueries({ queryKey: [anahtarKey] });
     } finally {
       setBekliyor(false);
     }
@@ -183,12 +186,17 @@ function SheetsBaglantisi() {
   return (
     <Kart className="flex flex-col gap-3 p-4">
       <div className="flex items-center justify-between gap-2">
-        <span className="text-sm font-semibold">Google Sheets bağlantısı</span>
+        <span className="text-sm font-semibold">{sablon ? "Program şablonu bağlantısı" : "Mentor Map Program bağlantısı"}</span>
         <span className={`rounded-full px-2 py-0.5 text-[11px] font-bold ${d?.son_senkron ? "bg-nane text-nane-koyu" : "bg-cizgi text-soluk"}`}>
           {d?.son_senkron ? `Son senkron ${gorece(d.son_senkron)}` : "Henüz senkron yok"}
         </span>
       </div>
-      {d?.son_ozet && (
+      {sablon && (
+        <span className="text-xs text-soluk">
+          PO'ların doldurduğu kurum şablonu. Şablonda Mentor Map → Önizle ile hiçbir şey yazmadan sonucu görebilir, Gönder ile aktarırsınız.
+        </span>
+      )}
+      {!sablon && d?.son_ozet && (
         <span className="text-xs text-soluk">
           Son gönderim: {d.son_ozet.yeni} yeni, {d.son_ozet.guncellenen} güncellenen, {d.son_ozet.kalkan} kalkan
           {d.son_ozet.hata_sayisi ? `, ${d.son_ozet.hata_sayisi} hatalı satır (şablondaki Senkron sekmesinde)` : ""}.

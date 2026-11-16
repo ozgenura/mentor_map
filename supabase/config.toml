@@ -23,3 +23,6 @@ verify_jwt = false
 # Google Sheets şablonundaki Apps Script çağırır; koruma X-Mentormap-Anahtar başlığından gelir.
 [functions.sheets-senkron]
 verify_jwt = false
+
+[functions.sablon-senkron]
+verify_jwt = false

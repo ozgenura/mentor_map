@@ -41,6 +41,9 @@ export interface Api {
   senkronDurumu(): Promise<SenkronDurumu | null>;
   senkronAnahtariOlustur(): Promise<string>;
   senkronAdresi(): string | null;
+  /** Kurum program şablonu bağlantısı (yönetici). */
+  sablonDurumu(): Promise<SenkronDurumu | null>;
+  sablonAnahtariOlustur(): Promise<string>;
   geriBildirimGonder(tur: GeriBildirimTuru, metin: string, sayfa: string): Promise<void>;
   /** Yönetici hepsini, diğerleri kendi gönderdiklerini alır. */
   geriBildirimler(): Promise<GeriBildirim[]>;
@@ -130,6 +133,12 @@ function supabaseApi(db: SupabaseClient): Api {
     },
     senkronAdresi() {
       return `${URL_}/functions/v1/sheets-senkron`;
+    },
+    async sablonDurumu() {
+      return ok(await db.rpc("sablon_durumu")) as SenkronDurumu | null;
+    },
+    async sablonAnahtariOlustur() {
+      return ok(await db.rpc("sablon_anahtari_olustur")) as string;
     },
     async takvimToken(kisiId) {
       const r = ok(await db.from("takvim_tokenlari").select("token").eq("kisi_id", kisiId).maybeSingle());
@@ -271,6 +280,8 @@ const demoApi: Api = {
   senkronDurumu: async () => null,
   senkronAnahtariOlustur: async () => { throw new Error("Demoda yok"); },
   senkronAdresi: () => null,
+  sablonDurumu: async () => null,
+  sablonAnahtariOlustur: async () => { throw new Error("Demoda yok"); },
   async geriBildirimGonder(tur, metin, sayfa) {
     const kisi = (() => { try { return localStorage.getItem("mm-demo-kisi"); } catch { return null; } })();
     yereliYaz({ geriBildirimler: [{ id: Date.now(), kisi_id: kisi, tur, metin, sayfa, durum: "yeni", olusturma: new Date().toISOString() },
