@@ -21,6 +21,8 @@ export type Oturum = {
   oturum_toplanti_linki?: string | null;
   varsayilan_toplanti_linki?: string | null;
   excelden_kalkti?: boolean;
+  /** Dönem (DA11). Geçici dönemde kodun kendisidir (DA). */
+  donem_kod?: string | null;
   materyal_linki: string | null;
   notlar: string | null;
   durum: "planli" | "iptal";

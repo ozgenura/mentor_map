@@ -40,6 +40,9 @@ export function OturumDetay({ o, onKapat }: { o: Oturum; onKapat: () => void }) 
           </div>
           <div className="flex flex-wrap gap-1.5">
             <span className="rounded-full bg-white/50 px-2.5 py-1 text-xs font-semibold">{o.bootcamp_ad}</span>
+            {o.donem_kod && o.donem_kod !== o.kisa_kod && (
+              <span className="rounded-full bg-white/50 px-2.5 py-1 text-xs font-semibold">{o.donem_kod}</span>
+            )}
             <span className="rounded-full bg-white/50 px-2.5 py-1 text-xs font-semibold">{o.tur}</span>
             {o.kaynak === "uygulama" && <span className="rounded-full bg-white px-2.5 py-1 text-xs font-bold text-yesil">Uygulamadan eklendi</span>}
           </div>
