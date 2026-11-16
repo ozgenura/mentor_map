@@ -1,26 +1,70 @@
 # Günlük canlı tutma isteği (ücretsiz Supabase projesi 7 gün istek gelmezse duraklatılır) ve
-# Pazar günleri veritabanı yedeği (ücretsiz planda otomatik yedek yok).
-# Gerekli repo secret'ları: SUPABASE_DB_URL, SUPABASE_URL, SUPABASE_ANON_KEY
+# Pazar günleri şifreli veritabanı yedeği (ücretsiz planda otomatik yedek yok).
+#
+# Depo herkese açık: yedek ŞİFRESİZ hiçbir zaman yüklenmez. Döküm, YEDEK_PAROLASI ile AES256 simetrik
+# olarak şifrelenir; parola yoksa iş durur. Geri yükleme: docs/yedek.md.
+#
+# Gerekli repo secret'ları: SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_DB_URL, YEDEK_PAROLASI
 name: yedek
 on:
   schedule:
     - cron: "17 3 * * *"
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   canli-tut:
     runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
     steps:
-      - run: curl -fsS "${{ secrets.SUPABASE_URL }}/rest/v1/" -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" -o /dev/null
+      - name: Supabase'e istek
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "::error::SUPABASE_URL ya da SUPABASE_ANON_KEY secret'ı tanımlı değil"; exit 1
+          fi
+          curl -fsS "$SUPABASE_URL/rest/v1/" -H "apikey: $SUPABASE_ANON_KEY" -o /dev/null
 
   yedek:
     runs-on: ubuntu-latest
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      YEDEK_PAROLASI: ${{ secrets.YEDEK_PAROLASI }}
     steps:
-      - id: gun
-        run: echo "al=$([ "$(date -u +%u)" = 7 ] || [ "${{ github.event_name }}" = workflow_dispatch ] && echo 1 || echo 0)" >> "$GITHUB_OUTPUT"
-      - if: steps.gun.outputs.al == '1'
-        # pg_dump sürümü sunucudan eski olamaz; Supabase'in sürümüne uygun imaj kullanılır.
-        run: docker run --rm -v "$PWD:/out" postgres:17 pg_dump "${{ secrets.SUPABASE_DB_URL }}" --schema=public --no-owner --no-privileges -Fc -f /out/mentormap.dump
-      - if: steps.gun.outputs.al == '1'
+      - name: Bugün yedek günü mü
+        id: gun
+        run: |
+          if [ "$(date -u +%u)" = 7 ] || [ "${{ github.event_name }}" = workflow_dispatch ]; then
+            echo "al=1" >> "$GITHUB_OUTPUT"
+          else
+            echo "al=0" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Secret denetimi
+        if: steps.gun.outputs.al == '1'
+        run: |
+          if [ -z "$SUPABASE_DB_URL" ] || [ -z "$YEDEK_PAROLASI" ]; then
+            echo "::error::SUPABASE_DB_URL ya da YEDEK_PAROLASI secret'ı tanımlı değil; şifresiz yedek alınmaz"; exit 1
+          fi
+      - name: Döküm al ve şifrele
+        if: steps.gun.outputs.al == '1'
+        run: |
+          set -euo pipefail
+          # pg_dump sürümü sunucudan eski olamaz; Supabase'in sürümüne uygun imaj kullanılır.
+          # Adres komut satırında görünmesin diye ortam değişkeniyle verilir.
+          docker run --rm -e PGURL="$SUPABASE_DB_URL" -v "$PWD:/out" postgres:17 \
+            sh -c 'pg_dump "$PGURL" --schema=public --no-owner -Fc -f /out/mentormap.dump'
+          printf '%s' "$YEDEK_PAROLASI" | gpg --batch --yes --quiet --pinentry-mode loopback --passphrase-fd 0 \
+            --symmetric --cipher-algo AES256 -o mentormap.dump.gpg mentormap.dump
+          shred -u mentormap.dump
+          ls -l mentormap.dump.gpg
+      - name: Şifreli yedeği yükle
+        if: steps.gun.outputs.al == '1'
         uses: actions/upload-artifact@v4
-        with: { name: "mentormap-${{ github.run_id }}", path: mentormap.dump, retention-days: 90 }
+        with:
+          name: mentormap-${{ github.run_id }}
+          path: mentormap.dump.gpg
+          retention-days: 90
+          if-no-files-found: error
