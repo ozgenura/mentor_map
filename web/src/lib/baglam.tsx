@@ -17,11 +17,11 @@ export type Baglam = {
   tz: string;
   saatModu: SaatModu;
   setSaatModu: (m: SaatModu) => void;
-  /** Bootcamp'te düzenleme yetkisi: yönetici, ana eğitmen ya da PO. */
-  anaEgitmenMi: (bootcampId: string) => boolean;
+  /** Bootcamp'te düzenleme yetkisi: admin ya da PO. */
+  duzenleyebilirMi: (bootcampId: string) => boolean;
   /** Kişinin bootcamp yetkileri (ana eğitmen, PO, asistan). */
   yetkilerim: Yetki[];
-  /** Asistan ya da PO olduğu bootcamp'ler: tüm oturumları kişinin takviminde görünür. */
+  /** PO, ana eğitmen ya da asistan olduğu bootcamp'ler: tüm oturumları kişinin takviminde görünür. */
   sorumlu: ReadonlySet<string>;
   /** Oturum kişinin takviminde mi (anlatıyor ya da bootcamp'ten sorumlu). */
   banaMi: (o: Oturum) => boolean;

@@ -1,4 +1,4 @@
-// Ana eğitmenin formları:
+// PO ve admin formları:
 // - "detay": resmi (Excel'den gelen) oturumun Excel'de olmayan alanları: açıklama, linkler, not.
 // - "yanSeans": yan seans ekleme ya da düzenleme (tarih, saat, konu, anlatıcılar dahil).
 
@@ -21,7 +21,7 @@ export function seansSuresiDk(bas: string, bit: string): number {
 
 /** Anlatıcı listelerinde kişi adı ve rolü (MM-06: herkes anlatıcı olabilir). */
 export function kisiEtiketi(k: Kisi): string {
-  const ek = [k.rol === "yonetici" ? "yönetici" : k.rol === "asistan" ? "asistan" : "", k.dis_egitmen ? "dış" : ""].filter(Boolean);
+  const ek = [k.rol === "yonetici" ? "admin" : "", k.dis_egitmen ? "dış" : ""].filter(Boolean);
   return ek.length ? `${k.ad} (${ek.join(", ")})` : k.ad;
 }
 
@@ -130,10 +130,10 @@ export function DetayFormu({ o, onKapat }: { o: Oturum; onKapat: () => void }) {
 export function YanSeansFormu({ o, bootcampId, onKapat, onKaydedildi }: {
   o?: Oturum; bootcampId?: string; onKapat: () => void; onKaydedildi?: (id: string) => void;
 }) {
-  const { api, tum, kisiler, anaEgitmenMi } = useBaglam();
+  const { api, tum, kisiler, duzenleyebilirMi } = useBaglam();
   const qc = useQueryClient();
-  const bootcamplar = useMemo(() => [...new Map(tum.filter((x) => anaEgitmenMi(x.bootcamp_id))
-    .map((x) => [x.bootcamp_id, x.bootcamp_ad])).entries()], [tum, anaEgitmenMi]);
+  const bootcamplar = useMemo(() => [...new Map(tum.filter((x) => duzenleyebilirMi(x.bootcamp_id))
+    .map((x) => [x.bootcamp_id, x.bootcamp_ad])).entries()], [tum, duzenleyebilirMi]);
 
   const [s, setS] = useState<YanSeans>(() => ({
     id: o?.id,
@@ -230,7 +230,7 @@ export function YanSeansFormu({ o, bootcampId, onKapat, onKaydedildi }: {
         </select>
       </Alan>
 
-      <Alan etiket="Anlatıcılar" ipucu="İlk eklenen ana anlatıcıdır. Ana eğitmenin kendisinin anlatması gerekmez.">
+      <Alan etiket="Anlatıcılar" ipucu="İlk eklenen ana anlatıcıdır. Mentor Map kullanıcısı olan konuk da listeden seçilebilir.">
         {s.anlaticilar.length > 0 && (
           <div className="flex flex-wrap gap-1.5">
             {s.anlaticilar.map((a, i) => (

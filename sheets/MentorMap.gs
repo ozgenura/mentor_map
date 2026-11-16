@@ -78,7 +78,8 @@ function listeleriKur() {
     .setAllowInvalid(true).build();
   ki.getRange('E2:E').setDataValidation(bootcampCoklu); // Ana eğitmen olduğu bootcamp'ler
   ki.getRange('C2:C').setDataValidation(SpreadsheetApp.newDataValidation()
-    .requireValueInList(['Eğitmen', 'Asistan', 'Yönetici'], true).setAllowInvalid(false).build());   // Rol
+    .requireValueInList(['Eğitmen', 'Yönetici'], true).setAllowInvalid(true)
+    .setHelpText('Yönetici rolü yalnızca uygulamadan verilir. Asistan eğitmenlik Bootcamp\'ler sekmesindeki Asistan sütunundadır.').build());   // Rol
   ki.getRange('G2:G').setDataValidation(SpreadsheetApp.newDataValidation()
     .requireValueInList(['İç', 'Dış'], true).setAllowInvalid(false).build());                        // Kurum
   bc.getRange('E2:F').setDataValidation(kisi);  // PO, Asistan(lar): Kişiler sekmesindeki adlar

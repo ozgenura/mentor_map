@@ -101,7 +101,7 @@ describe("Faz 0", () => {
     expect(seansSuresiDk("20:00", "19:00")).toBe(23 * 60);
   });
   it("anlatıcı listesinde herkes, rolüyle (MM-06)", () => {
-    expect(kisiEtiketi({ id: "1", ad: "Özge", eposta: "", saat_dilimi: "Europe/Istanbul", rol: "yonetici" })).toBe("Özge (yönetici)");
+    expect(kisiEtiketi({ id: "1", ad: "Özge", eposta: "", saat_dilimi: "Europe/Istanbul", rol: "yonetici" })).toBe("Özge (admin)");
     expect(kisiEtiketi({ id: "2", ad: "Dora", eposta: "", saat_dilimi: "Europe/Istanbul", rol: "egitmen", dis_egitmen: true })).toBe("Dora (dış)");
     expect(kisiEtiketi({ id: "3", ad: "Can", eposta: "", saat_dilimi: "Europe/Istanbul", rol: "egitmen" })).toBe("Can");
   });
@@ -110,5 +110,15 @@ describe("Faz 0", () => {
     vi.setSystemTime(new Date("2026-11-16T22:30:00Z")); // TR 17 Kasım 01:30
     expect(bugunTR()).toBe("2026-11-17");
     vi.useRealTimers();
+  });
+});
+
+import { yetkiAdi } from "../components/OturumDetay";
+
+describe("rol modeli", () => {
+  it("rozet yalnızca admin ya da PO", () => {
+    expect(yetkiAdi(true, [])).toBe("Admin");
+    expect(yetkiAdi(false, ["po"])).toBe("PO");
+    expect(yetkiAdi(true, ["po"])).toBe("PO");
   });
 });

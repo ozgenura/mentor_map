@@ -37,7 +37,8 @@ def test_rol_kurum_ve_yetkiler_senkronlanir(db):
     r = kur(db)
     assert r["hata_sayisi"] == 0
     roller = dict(db.execute("select ad, rol::text from kisiler").fetchall())
-    assert roller["Asu Sel"] == "asistan" and roller["Pelin Ova"] == "egitmen"
+    # asistanlık bootcamp yetkisidir; genel rol yalnızca yönetici / üye (egitmen)
+    assert roller["Asu Sel"] == "egitmen" and roller["Pelin Ova"] == "egitmen"
     dis = dict(db.execute("select ad, dis_egitmen from kisiler").fetchall())
     assert dis["Dora Dış"] is True and dis["Ayşe Kaya"] is False
     assert yetkiler(db) == [("Asu Sel", "asistan"), ("Ayşe Kaya", "ana_egitmen"), ("Pelin Ova", "po")]
@@ -93,3 +94,16 @@ def test_asistan_sayfadan_cikinca_pasife_alinir(db):
 def test_dis_mi_turkce_yazimlar(db):
     vals = db.execute("select _dis_mi('Dış'), _dis_mi('DIŞ'), _dis_mi('dis'), _dis_mi('İç'), _dis_mi(null)").fetchone()
     assert vals == (True, True, True, False, False)
+
+
+
+def test_kayitli_konuk_kisi_olarak_baglanir(db):
+    oid = str(uuid.uuid4())
+    kur(db, oturumlar=[ot(2, oid, konuk="Dora Dış, Misafir Hoca")])
+    rows = sorted(db.execute("""select coalesce(k.ad, a.konuk_ad), a.rol::text, a.kisi_id is not null
+                                from oturum_anlaticilari a left join kisiler k on k.id = a.kisi_id
+                                where a.oturum_id = %s""", (oid,)).fetchall())
+    assert rows == [("Ayşe Kaya", "ana", True), ("Dora Dış", "konuk", True), ("Misafir Hoca", "konuk", False)]
+    # konuk çıkarılınca bağ da kalkar
+    kur(db, oturumlar=[ot(2, oid)])
+    assert db.execute("select count(*) from oturum_anlaticilari where oturum_id = %s and rol = 'konuk'", (oid,)).fetchone()[0] == 0

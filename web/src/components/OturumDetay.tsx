@@ -11,21 +11,19 @@ import { Ikon, Rozet } from "./ui";
 
 const ROL: Record<string, string> = { ana: "", yardimci: "yardımcı", konuk: "konuk" };
 
-/** Detaydaki rozet: kişinin bu bootcamp'teki gerçek yetkisi (MM-42). */
+/** Detaydaki rozet: düzenleme yetkisinin kaynağı (MM-42). Yalnızca admin ve PO düzenler. */
 export function yetkiAdi(yonetici: boolean, yetkiler: string[]): string {
-  if (yonetici) return "Yönetici";
-  if (yetkiler.includes("po")) return "PO";
-  return "Ana eğitmen";
+  return yonetici && !yetkiler.includes("po") ? "Admin" : "PO";
 }
 
 /** Oturum detayı: mobilde tam ekran sayfa, geniş ekranda sağdan açılan panel. */
 export function OturumDetay({ o, onKapat }: { o: Oturum; onKapat: () => void }) {
-  const { tz, saatModu, anaEgitmenMi, cakisanlar, ben, kisiler, yetkilerim } = useBaglam();
+  const { tz, saatModu, duzenleyebilirMi, cakisanlar, ben, kisiler, yetkilerim } = useBaglam();
   const disEgitmen = new Set(kisiler.filter((k) => k.dis_egitmen).map((k) => k.id));
   const [iptalAcik, setIptalAcik] = useState(false);
   const g = gosterim(o, tz, saatModu);
   const iptal = o.durum === "iptal";
-  const yonetebilir = anaEgitmenMi(o.bootcamp_id);
+  const yonetebilir = duzenleyebilirMi(o.bootcamp_id);
   const yazi = yaziRengi(o.renk);
 
   return (

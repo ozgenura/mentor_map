@@ -257,7 +257,8 @@ const demoApi: Api = {
   kalkanlar: async () => [],
   kalkanSil: async () => {},
   kisiler: async () => (await demoVeri()).kisiler,
-  yetkiler: async () => (await demoVeri()).yetkiler,
+  // Eski demo verisinde yetki türü yok; o kişiler demoda düzenleyebilsin diye PO sayılır.
+  yetkiler: async () => (await demoVeri()).yetkiler.map((y) => ({ ...y, yetki: y.yetki ?? "po" })),
   async degisiklikler(kisiId) {
     const simdi = Date.now();
     const sabit = (await demoVeri()).degisiklikler

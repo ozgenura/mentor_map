@@ -8,7 +8,7 @@ import pytest
 from conftest import as_user
 
 YONETICI = "ozge@ornek.com"
-AYSE = "ayse.kaya@ornek.com"      # İK ana eğitmeni
+AYSE = "ayse.kaya@ornek.com"      # İK PO'su (düzenleme yetkisi PO'da; rol modeli 16 Kasım)
 CAN = "can.yildiz@ornek.com"      # eğitmen
 PASIF = "eski@ornek.com"
 YABANCI = "kimse@ornek.com"
@@ -26,7 +26,7 @@ def seed(db):
                         (ad, eposta, rol, aktif)).fetchone()[0]
     ik = q("insert into bootcamp (ad, kisa_kod) values ('İK Analitiği', 'İK') returning id").fetchone()[0]
     ds = q("insert into bootcamp (ad, kisa_kod) values ('Data Science', 'DS') returning id").fetchone()[0]
-    q("insert into bootcamp_yetkilileri (bootcamp_id, kisi_id) values (%s, %s)", (ik, ids[AYSE]))
+    q("insert into bootcamp_yetkilileri (bootcamp_id, kisi_id, yetki) values (%s, %s, 'po')", (ik, ids[AYSE]))
 
     def oturum(bootcamp, anahtar, bas, bit, kisi):
         oid = q("""insert into oturumlar (bootcamp_id, tarih, baslangic, bitis, slot, tur, konu, kaynak, dis_anahtar)
@@ -274,3 +274,26 @@ def test_gorunum_ham_linki_ayrica_verir(db, seed):
     r = db.execute("select toplanti_linki, oturum_toplanti_linki, varsayilan_toplanti_linki from oturum_gorunumu where id = %s",
                    (seed["ik_oturum"],)).fetchone()
     assert r == ("https://zoom.us/j/1", None, "https://zoom.us/j/1")
+
+
+
+# ---------------------------------------------------------------- rol modeli (16 Kasım)
+
+
+def test_ana_egitmen_duzenleyemez(db, seed):
+    db.execute("insert into bootcamp_yetkilileri (bootcamp_id, kisi_id, yetki) values (%s, %s, 'ana_egitmen')",
+               (seed["ik"], seed[CAN]))
+    with as_user(db, CAN):
+        assert db.execute("select ana_egitmen_mi(%s)", (seed["ik"],)).fetchone()[0] is False
+        with pytest.raises(psycopg.errors.InsufficientPrivilege):
+            db.execute("select oturum_iptal(%s, 'hasta')", (seed["ik_oturum"],))
+
+
+def test_ana_egitmen_ve_asistan_aboneliginde_bootcampin_tumu(db, seed):
+    for yetki in ("ana_egitmen", "asistan"):
+        db.execute("delete from bootcamp_yetkilileri where kisi_id = %s", (seed[CAN],))
+        db.execute("insert into bootcamp_yetkilileri (bootcamp_id, kisi_id, yetki) values (%s, %s, %s)",
+                   (seed["ik"], seed[CAN], yetki))
+        tok = db.execute("select token from takvim_tokenlari where kisi_id = %s", (seed[CAN],)).fetchone()[0]
+        ids = {x["id"] for x in db.execute("select takvim_oturumlari(%s)", (tok,)).fetchone()[0]["oturumlar"]}
+        assert str(seed["ik_oturum"]) in ids, yetki

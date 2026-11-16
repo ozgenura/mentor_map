@@ -114,8 +114,8 @@ function Ana({ api, eposta, demoKisiId }: { api: Api; eposta: string | null; dem
 
   const tum = oturumlar.data ?? [];
   const yetkilerim = useMemo(() => (yetkiler.data ?? []).filter((y) => y.kisi_id === ben?.id), [yetkiler.data, ben]);
-  const sorumlu = useMemo(() => new Set(yetkilerim.filter((y) => y.yetki === "asistan" || y.yetki === "po").map((y) => y.bootcamp_id)),
-    [yetkilerim]);
+  // PO, ana eğitmen ve asistan bootcamp'in tüm oturumlarını kendi takviminde görür (rol modeli, 16 Kasım).
+  const sorumlu = useMemo(() => new Set(yetkilerim.map((y) => y.bootcamp_id)), [yetkilerim]);
   const banaMi = useCallback((o: Oturum) => benimMi(o, ben?.id, sorumlu), [ben, sorumlu]);
   const benimler = useMemo(() => tum.filter(banaMi), [tum, banaMi]);
   // Çakışma yalnızca anlattığı oturumlar arasında: asistanın takip ettiği iki bootcamp aynı saatte olabilir.
@@ -124,7 +124,7 @@ function Ana({ api, eposta, demoKisiId }: { api: Api; eposta: string | null; dem
   const baglam: Baglam = {
     api, tum, benimler, kisiler: kisiler.data ?? [], ben,
     tz: ben?.saat_dilimi ?? TR, saatModu, setSaatModu,
-    anaEgitmenMi: (bid) => ben?.rol === "yonetici"
+    duzenleyebilirMi: (bid) => ben?.rol === "yonetici"
       || yetkilerim.some((y) => y.bootcamp_id === bid && DUZENLEYEN_YETKILER.includes(y.yetki ?? "ana_egitmen")),
     yetkilerim, sorumlu, banaMi,
     sec: (o) => setSeciliId(o.id),

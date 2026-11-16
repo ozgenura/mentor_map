@@ -56,10 +56,11 @@ def test_yoneticinin_rolu_ve_aktifligi_sayfadan_degismez(db):
     assert kisi(db, "Özge")[1:] == ("yonetici", True)
 
 
-def test_egitmen_asistan_gecisi_serbest(db):
+def test_rol_hucresi_asistanlik_vermez(db):
+    # asistanlık bootcamp başına (Bootcamp'ler sekmesi); Kişiler'deki Rol hücresi genel rolü değiştirmez
     kur(db)
     senkron(db, temel([], kisiler=kisiler(Can_Yıldız={"rol": "Asistan"})))
-    assert kisi(db, "Can Yıldız")[1] == "asistan"
+    assert kisi(db, "Can Yıldız")[1] == "egitmen"
 
 
 def anahtar(db):

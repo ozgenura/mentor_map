@@ -15,7 +15,7 @@ export function Profil({ demoSec }: { demoSec: (id: string) => void }) {
   const bootcampAdi = new Map(tum.map((o) => [o.bootcamp_id, o.bootcamp_ad]));
   const yetkiListesi = (t: string) => yetkilerim.filter((y) => (y.yetki ?? "ana_egitmen") === t)
     .map((y) => bootcampAdi.get(y.bootcamp_id)).filter(Boolean).join(", ");
-  const rolAdi = ben?.rol === "yonetici" ? "Yönetici" : ben?.rol === "asistan" ? "Asistan" : "Eğitmen";
+
   return (
     <>
       <SayfaUstu baslik="Profil" />
@@ -31,7 +31,7 @@ export function Profil({ demoSec }: { demoSec: (id: string) => void }) {
             </select>
             <span className="text-xs text-soluk">
               {kisiler.some((k) => k.ad === "Can Yıldız")
-                ? "Berlin'deki eğitmeni görmek için Can Yıldız'ı, ana eğitmen araçları (iptal) için Fabric'in ana eğitmeni Elif Şahin'i seç. Veriler uydurmadır;"
+                ? "Berlin'deki eğitmeni görmek için Can Yıldız'ı, düzenleme araçları (iptal) için Fabric'in PO'su Elif Şahin'i seç. Veriler uydurmadır;"
                 : "Programdaki herhangi bir eğitmeni seçebilirsin. İptal gibi yönetim araçlarını denemek için \"Yönetici (demo)\"yu seç;"}
               {" "}yaptığın iptaller yalnızca bu tarayıcıda görünür.
             </span>
@@ -56,10 +56,12 @@ export function Profil({ demoSec }: { demoSec: (id: string) => void }) {
             <Satir etiket="Ad">{ben.ad}</Satir>
             <Satir etiket="E-posta">{ben.eposta}</Satir>
             <Satir etiket="Saat dilimi">{tz === TR ? "Türkiye (TR)" : `${sehir(tz)} · saatler TR ile birlikte gösterilir`}</Satir>
-            <Satir etiket="Rol">{rolAdi}{ben.dis_egitmen ? " · dış eğitmen" : ""}</Satir>
-            {yetkiListesi("ana_egitmen") && <Satir etiket="Ana eğitmen">{yetkiListesi("ana_egitmen")}</Satir>}
+            {(ben.rol === "yonetici" || ben.dis_egitmen) && (
+              <Satir etiket="Rol">{[ben.rol === "yonetici" && "Admin", ben.dis_egitmen && "Dış eğitmen"].filter(Boolean).join(" · ")}</Satir>
+            )}
             {yetkiListesi("po") && <Satir etiket="Product owner">{yetkiListesi("po")}</Satir>}
-            {yetkiListesi("asistan") && <Satir etiket="Asistan">{yetkiListesi("asistan")}</Satir>}
+            {yetkiListesi("ana_egitmen") && <Satir etiket="Ana eğitmen">{yetkiListesi("ana_egitmen")}</Satir>}
+            {yetkiListesi("asistan") && <Satir etiket="Asistan eğitmen">{yetkiListesi("asistan")}</Satir>}
           </Kart>
         )}
 

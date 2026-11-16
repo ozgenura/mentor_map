@@ -35,6 +35,7 @@ export type Kisi = {
   ad: string;
   eposta: string;
   saat_dilimi: string;
+  /** Genel rol: yönetici (admin) ya da üye. "asistan" eski kayıtlardan; artık bootcamp yetkisidir. */
   rol: "egitmen" | "asistan" | "yonetici";
   /** Miuul dışından eğitmen */
   dis_egitmen?: boolean;
@@ -53,7 +54,7 @@ export type Degisiklik = {
   olusturma: string; // ISO
 };
 
-/** Bootcamp'e özel yetki. ana_egitmen ve po düzenler; asistan yalnızca takip eder. Eski kayıtlarda yetki yoksa ana_egitmen. */
+/** Bootcamp'e özel yetki. Yalnızca PO düzenler; ana eğitmen ve asistan bootcamp'in tümünü görür. Eski kayıtlarda yetki yoksa ana_egitmen. */
 export type YetkiTuru = "ana_egitmen" | "po" | "asistan";
 export type Yetki = { bootcamp_id: string; kisi_id: string; yetki?: YetkiTuru };
-export const DUZENLEYEN_YETKILER: YetkiTuru[] = ["ana_egitmen", "po"];
+export const DUZENLEYEN_YETKILER: YetkiTuru[] = ["po"];

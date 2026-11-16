@@ -40,10 +40,10 @@ function haftaEtiketi(bas: string) {
 }
 
 export function TakvimSayfasi() {
-  const { tum, ben, kisiler, anaEgitmenMi, sec, banaMi, sorumlu } = useBaglam();
+  const { tum, ben, kisiler, duzenleyebilirMi, sec, banaMi, sorumlu } = useBaglam();
   const qc = useQueryClient();
   const [yeniSeans, setYeniSeans] = useState(false);
-  const yonetebilir = useMemo(() => tum.some((o) => anaEgitmenMi(o.bootcamp_id)), [tum, anaEgitmenMi]);
+  const yonetebilir = useMemo(() => tum.some((o) => duzenleyebilirMi(o.bootcamp_id)), [tum, duzenleyebilirMi]);
   const [gorunum, setGorunum] = useState<Gorunum>(() => istenenGorunum() ?? (genisEkran() ? "hafta" : "gun"));
   const [kapsam, setKapsam] = useState<Kapsam>(ben ? "ben" : "hepsi");
   const [bootcamp, setBootcamp] = useState("");
@@ -82,7 +82,7 @@ export function TakvimSayfasi() {
         </div>
       } />
       {yeniSeans && (
-        <YanSeansFormu bootcampId={tum.find((o) => o.kisa_kod === bootcamp && anaEgitmenMi(o.bootcamp_id))?.bootcamp_id}
+        <YanSeansFormu bootcampId={tum.find((o) => o.kisa_kod === bootcamp && duzenleyebilirMi(o.bootcamp_id))?.bootcamp_id}
           onKapat={() => setYeniSeans(false)}
           onKaydedildi={(id) => setTimeout(() => {
             const y = qc.getQueryData<Oturum[]>(["oturumlar"])?.find((x) => x.id === id);
