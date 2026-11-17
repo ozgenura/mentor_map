@@ -178,3 +178,20 @@ def test_korumalar_po_epostalari(kurulu):
                   select b.id, k.id, 'po' from bootcamp b, kisiler k where b.kisa_kod = 'İK' and k.ad = 'Ayşe Kaya'""")
     k = db.execute("select sablon_korumalari()").fetchone()[0]
     assert k["bootcamplar"]["İK"] == [AYSE] and YONETICI in k["yoneticiler"]
+
+
+def test_durum_ve_ek_oturumlar_doner(kurulu):
+    db = kurulu
+    a, b = oturum(hafta=1), oturum(hafta=2)
+    sablon(db, [sekme([a, b])])
+    db.execute("update oturumlar set durum = 'iptal', iptal_gerekcesi = 'hasta', toplanti_linki = 'https://zoom.us/j/9' where id = %s", (a["id"],))
+    db.execute("""insert into bootcamp_yetkilileri (bootcamp_id, kisi_id, yetki)
+                  select b.id, k.id, 'po' from bootcamp b, kisiler k where b.kisa_kod = 'İK' and k.ad = 'Ayşe Kaya'""")
+    with as_user(db, AYSE):
+        db.execute("""select yan_seans_ekle((select id from bootcamp where kisa_kod = 'İK'), %s, '19:00', '20:00', 'Office hours',
+                      jsonb_build_array(jsonb_build_object('kisi_id', (select id from kisiler where ad = 'Ayşe Kaya'))), 'Office Hours')""", (GUN,))
+    r = sablon(db, [sekme([a, b])], onizleme=True)  # "Durumu yenile"
+    assert r["durumlar"] == [{"id": a["id"], "grup": "A", "iptal": True, "gerekce": "hasta",
+                              "link": "https://zoom.us/j/9", "materyal": None}]
+    [ek] = r["ek_oturumlar"]
+    assert ek["sekme"] == "İK" and [(x["konu"], x["saat"], x["anlaticilar"]) for x in ek["oturumlar"]] == [("Office hours", "19:00–20:00", "Ayşe Kaya")]
