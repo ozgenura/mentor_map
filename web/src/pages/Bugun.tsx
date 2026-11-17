@@ -27,7 +27,7 @@ export function Bugun() {
   const sira = siradaki(kaynak);
   const ozet = haftaOzeti(kaynak);
   const sonrakiOzet = haftaOzeti(kaynak, gunEkle(haftaBasi(bugunTR()), 7));
-  const yaklasan = siraliOturumlar(kaynak).filter((o) => o.id !== sira?.id && bitMs(o) > Date.now()).slice(0, 5);
+  const yaklasan = siraliOturumlar(kaynak).filter((o) => bitMs(o) > Date.now()).slice(0, 5);
   const ilkAd = ben?.ad.split(" ")[0];
 
   const kartlar = useMemo(() => {
@@ -87,7 +87,7 @@ export function Bugun() {
               <div className="flex flex-col gap-2">
                 {yaklasan.map((o) => <YaklasanSatir key={o.id} o={o} />)}
               </div>
-            ) : <Bos>Başka yaklaşan oturum yok.</Bos>}
+            ) : <Bos>Yaklaşan oturum yok.</Bos>}
           </section>
         </div>
       </div>
