@@ -14,6 +14,7 @@ import { Bugun } from "./pages/Bugun";
 import { Degisenler } from "./pages/Degisenler";
 import { Etkinlikler } from "./pages/Etkinlikler";
 import { Profil } from "./pages/Profil";
+import { Program } from "./pages/Program";
 import { TakvimSayfasi } from "./pages/TakvimSayfasi";
 
 function oku(k: string): string | null {
@@ -39,7 +40,7 @@ export default function App() {
   return <Ana api={api} eposta={kimlik.eposta} demoKisiId={kimlik.demoKisiId} />;
 }
 
-const SEKMELER: Sekme[] = ["bugun", "takvim", "etkinlikler", "degisenler", "profil"];
+const SEKMELER: Sekme[] = ["bugun", "takvim", "etkinlikler", "program", "degisenler", "profil"];
 
 function Ana({ api, eposta, demoKisiId }: { api: Api; eposta: string | null; demoKisiId: string | null }) {
   const kisiler = useQuery({ queryKey: ["kisiler"], queryFn: api.kisiler });
@@ -135,6 +136,7 @@ function Ana({ api, eposta, demoKisiId }: { api: Api; eposta: string | null; dem
     sonGorulme, okunduSay,
     sonGuncelleme: sonGuncelleme.data ?? null,
     git,
+    programPaneli: ben?.rol === "yonetici" || yetkilerim.some((y) => DUZENLEYEN_YETKILER.includes(y.yetki ?? "ana_egitmen")),
     bakis: !DEMO && gercekBen?.rol === "yonetici"
       ? { yonetici: true, aktif: !!ben && ben.id !== gercekBen.id, gercekAd: gercekBen.ad, sec: setBakisId }
       : null,
@@ -154,6 +156,7 @@ function Ana({ api, eposta, demoKisiId }: { api: Api; eposta: string | null; dem
           </div>
         ) : sekme === "takvim" ? <TakvimSayfasi />
           : sekme === "etkinlikler" ? <Etkinlikler />
+          : sekme === "program" && baglam.programPaneli ? <Program />
           : sekme === "degisenler" ? <Degisenler />
           : sekme === "profil" ? <Profil demoSec={setDemoId} />
           : <Bugun />}

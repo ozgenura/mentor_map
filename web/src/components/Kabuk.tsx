@@ -10,6 +10,7 @@ const SEKMELER: { id: Sekme; ad: string; ikon: string }[] = [
   { id: "bugun", ad: "Bugün", ikon: "ev" },
   { id: "takvim", ad: "Takvim", ikon: "takvim" },
   { id: "etkinlikler", ad: "Etkinlikler", ikon: "etkinlik" },
+  { id: "program", ad: "Program", ikon: "dosya" },
   { id: "degisenler", ad: "Değişenler", ikon: "zil" },
   { id: "profil", ad: "Profil", ikon: "kisi" },
 ];
@@ -19,7 +20,8 @@ function basHarfler(ad: string) {
 }
 
 export function Kabuk({ sekme, children }: { sekme: Sekme; children: ReactNode }) {
-  const { git, yeniDegisiklik, ben, tz, bakis } = useBaglam();
+  const { git, yeniDegisiklik, ben, tz, bakis, programPaneli } = useBaglam();
+  const sekmeler = SEKMELER.filter((s) => s.id !== "program" || programPaneli);
   return (
     <div className="min-h-dvh bg-zemin text-murekkep lg:flex">
       <aside className="hidden w-64 shrink-0 flex-col gap-7 bg-yesil px-4 py-6 text-white lg:sticky lg:top-0 lg:flex lg:h-dvh">
@@ -28,7 +30,7 @@ export function Kabuk({ sekme, children }: { sekme: Sekme; children: ReactNode }
           {DEMO && <span className="rounded bg-white/15 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide">Demo</span>}
         </div>
         <nav aria-label="Ana menü" className="flex flex-col gap-1">
-          {SEKMELER.map((s) => (
+          {sekmeler.map((s) => (
             <button key={s.id} onClick={() => git(s.id)} aria-current={sekme === s.id ? "page" : undefined}
               className={`flex h-11 items-center gap-3 rounded-xl px-3 text-sm font-semibold transition ${
                 sekme === s.id ? "bg-white text-yesil" : "text-yesil-yazi hover:bg-yesil-acik"}`}>
@@ -68,8 +70,9 @@ export function Kabuk({ sekme, children }: { sekme: Sekme; children: ReactNode }
       </div>
 
       <nav aria-label="Ana menü"
-        className="fixed inset-x-3 bottom-[max(12px,env(safe-area-inset-bottom))] z-30 grid h-16 grid-cols-5 items-center rounded-[22px] bg-yesil px-1.5 shadow-lg shadow-yesil/20 lg:hidden">
-        {SEKMELER.map((s) => (
+        style={{ gridTemplateColumns: `repeat(${sekmeler.length}, minmax(0, 1fr))` }}
+        className="fixed inset-x-3 bottom-[max(12px,env(safe-area-inset-bottom))] z-30 grid h-16 items-center rounded-[22px] bg-yesil px-1.5 shadow-lg shadow-yesil/20 lg:hidden">
+        {sekmeler.map((s) => (
           <button key={s.id} onClick={() => git(s.id)} aria-current={sekme === s.id ? "page" : undefined}
             className={`relative mx-0.5 flex h-[52px] flex-col items-center justify-center gap-0.5 rounded-2xl text-[10px] transition ${
               sekme === s.id ? "bg-white font-bold text-yesil" : "font-semibold text-yesil-soluk"}`}>
