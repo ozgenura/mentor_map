@@ -77,3 +77,22 @@ export function haftalar(os: Oturum[]): Hafta[] {
   }
   return out;
 }
+
+export type DikkatGrubu = { neden: Dikkat["neden"]; kalemler: Dikkat[]; enYakin: string; acil: boolean; varsayilanLinkYok: boolean };
+
+const ONCELIK: Dikkat["neden"][] = ["cakisma", "egitmen_yok", "link_yok"];
+
+/** Dikkat listesini sorun türüne göre gruplar: çakışma, eğitmen, link sırasıyla; içeride tarih sırası korunur.
+ *  acil: grupta önümüzdeki 7 gün içinde bir oturum var. varsayilanLinkYok: linksiz oturumların bootcamp varsayılanı da boş. */
+export function dikkatGruplari(ds: Dikkat[], simdi = Date.now()): DikkatGrubu[] {
+  const sinir = simdi + 7 * 864e5;
+  return ONCELIK.map((neden) => {
+    const kalemler = ds.filter((d) => d.neden === neden);
+    return {
+      neden, kalemler,
+      enYakin: kalemler[0]?.o.tarih ?? "",
+      acil: kalemler.some((d) => basMs(d.o) < sinir),
+      varsayilanLinkYok: neden === "link_yok" && kalemler.length > 0 && kalemler.every((d) => !d.o.varsayilan_toplanti_linki),
+    };
+  }).filter((g) => g.kalemler.length);
+}

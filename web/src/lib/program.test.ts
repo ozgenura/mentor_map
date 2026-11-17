@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { bootcampOturumlari, dikkatListesi, haftalar, programOzeti } from "./program";
+import { bootcampOturumlari, dikkatGruplari, dikkatListesi, haftalar, programOzeti } from "./program";
 import type { Oturum } from "./types";
 
 const SIMDI = Date.parse("2026-11-17T12:00:00+03:00");
@@ -42,5 +42,19 @@ describe("PO paneli", () => {
   it("haftalar Pazartesi'den başlar", () => {
     const h = haftalar([o({ tarih: "2026-11-16" }), o({ tarih: "2026-11-19" }), o({ tarih: "2026-11-23" })]);
     expect(h.map((x) => [x.bas, x.oturumlar.length])).toEqual([["2026-11-16", 2], ["2026-11-23", 1]]);
+  });
+});
+
+describe("dikkat grupları", () => {
+  it("türe göre öncelik sırası, en yakın tarih, 7 gün içinde olan acil", () => {
+    const yakin = o({ tarih: "2026-11-19", anlaticilar: [] });
+    const uzak = o({ tarih: "2026-12-10", toplanti_linki: null, varsayilan_toplanti_linki: null });
+    const ds = [{ o: yakin, neden: "egitmen_yok" as const }, { o: uzak, neden: "link_yok" as const },
+      { o: uzak, neden: "cakisma" as const, detay: "x" }];
+    expect(dikkatGruplari(ds, SIMDI).map((g) => [g.neden, g.kalemler.length, g.enYakin, g.acil, g.varsayilanLinkYok])).toEqual([
+      ["cakisma", 1, "2026-12-10", false, false],
+      ["egitmen_yok", 1, "2026-11-19", true, false],
+      ["link_yok", 1, "2026-12-10", false, true],
+    ]);
   });
 });

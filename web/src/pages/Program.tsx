@@ -8,7 +8,7 @@ import { YanSeansFormu } from "../components/SeansFormu";
 import { Baslik, Bos, Ikon, Kart, Rozet, Segment } from "../components/ui";
 import { gosterim, useBaglam } from "../lib/baglam";
 import { bitMs } from "../lib/derive";
-import { bootcampOturumlari, dikkatListesi, haftalar, programOzeti, type Dikkat } from "../lib/program";
+import { bootcampOturumlari, dikkatGruplari, dikkatListesi, haftalar, programOzeti, type Dikkat, type DikkatGrubu } from "../lib/program";
 import { gunBasligi } from "../lib/time";
 import type { Oturum } from "../lib/types";
 import { SaatSecici } from "./Bugun";
@@ -46,6 +46,7 @@ export function Program() {
   const os = useMemo(() => (b ? bootcampOturumlari(tum, b.id) : []), [tum, b]);
   const ozet = useMemo(() => programOzeti(os), [os]);
   const dikkat = useMemo(() => dikkatListesi(os, tum), [os, tum]);
+  const gruplar = useMemo(() => dikkatGruplari(dikkat), [dikkat]);
   const gosterilen = useMemo(() => haftalar(kapsam === "tumu" ? os : os.filter((o) => bitMs(o) > Date.now())), [os, kapsam]);
 
   if (!b) return (
@@ -91,19 +92,9 @@ export function Program() {
 
         <section className="flex flex-col gap-3">
           <Baslik>Dikkat isteyenler</Baslik>
-          {dikkat.length ? (
+          {gruplar.length ? (
             <Kart className="divide-y divide-cizgi">
-              {dikkat.map((d) => (
-                <button key={`${d.o.id}-${d.neden}-${d.detay ?? ""}`} onClick={() => sec(d.o)}
-                  className="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-zemin">
-                  <Ikon ad="uyari" boyut={18} className="shrink-0 text-mercan-koyu" />
-                  <span className="flex min-w-0 flex-1 flex-col">
-                    <span className="text-sm font-semibold">{NEDEN[d.neden]}{d.detay ? ` · ${d.detay}` : ""}</span>
-                    <span className="truncate text-xs text-soluk">{gunBasligi(d.o.tarih)} · {d.o.konu || d.o.tur}</span>
-                  </span>
-                  <Ikon ad="sag" boyut={16} className="shrink-0 text-soluk" />
-                </button>
-              ))}
+              {gruplar.map((g) => <DikkatGrubuSatiri key={`${b.id}-${g.neden}`} bootcampId={b.id} g={g} />)}
             </Kart>
           ) : <Bos>Yaklaşan oturumlarda eksik yok: hepsinin eğitmeni ve linki var, çakışma yok.</Bos>}
         </section>
@@ -126,6 +117,55 @@ export function Program() {
         </section>
       </div>
     </>
+  );
+}
+
+function acikOku(k: string): boolean | null {
+  try { const v = sessionStorage.getItem(k); return v === null ? null : v === "1"; } catch { return null; }
+}
+
+/** Sorun türü başlığı (kapalı: adet ve en yakın tarih); açılınca oturumlar alt alta. Açıklık bu oturum boyunca hatırlanır. */
+function DikkatGrubuSatiri({ g, bootcampId }: { g: DikkatGrubu; bootcampId: string }) {
+  const { sec, ben } = useBaglam();
+  const anahtar = `mm-dikkat-${bootcampId}-${g.neden}`;
+  const [acik, setAcik] = useState(() => acikOku(anahtar) ?? g.acil);
+  const degistir = () => {
+    setAcik((x) => {
+      try { sessionStorage.setItem(anahtar, x ? "0" : "1"); } catch { /* yoksay */ }
+      return !x;
+    });
+  };
+  return (
+    <div>
+      <button onClick={degistir} aria-expanded={acik} className="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-zemin">
+        <Ikon ad="uyari" boyut={18} className="shrink-0 text-mercan-koyu" />
+        <span className="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2">
+          <span className="text-sm font-semibold">{NEDEN[g.neden]}</span>
+          <span className="text-xs text-soluk">{g.kalemler.length} oturum · en yakını {kisaTarih(g.enYakin)}</span>
+        </span>
+        {g.acil && !acik && <Rozet tur="iptal">7 gün içinde</Rozet>}
+        <Ikon ad="sag" boyut={16} className={`shrink-0 text-soluk transition ${acik ? "rotate-90" : ""}`} />
+      </button>
+      {acik && (
+        <div className="flex flex-col pb-2">
+          {g.varsayilanLinkYok && (
+            <p className="mx-4 mb-1 rounded-xl bg-zemin px-3 py-2 text-xs text-soluk">
+              Bootcamp'in varsayılan Zoom linki yok. {ben?.rol === "yonetici" ? "Eklerseniz" : "Yönetici eklerse"} hepsine uygulanır.
+            </p>
+          )}
+          {g.kalemler.map((d) => (
+            <button key={`${d.o.id}-${d.detay ?? ""}`} onClick={() => sec(d.o)}
+              className="flex w-full items-center gap-3 py-2 pl-[46px] pr-4 text-left hover:bg-zemin">
+              <span className="flex min-w-0 flex-1 flex-col">
+                <span className="truncate text-sm">{gunBasligi(d.o.tarih)} · {d.o.konu || d.o.tur}</span>
+                {d.detay && <span className="truncate text-xs text-soluk">{d.detay}</span>}
+              </span>
+              <Ikon ad="sag" boyut={14} className="shrink-0 text-soluk" />
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 
