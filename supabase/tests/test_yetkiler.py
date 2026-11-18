@@ -270,7 +270,7 @@ def test_istemci_takvim_rpc_cagiramaz(db, seed):
 
 
 def test_gorunum_ham_linki_ayrica_verir(db, seed):
-    db.execute("update bootcamp set varsayilan_toplanti_linki = 'https://zoom.us/j/1' where id = %s", (seed["ik"],))
+    db.execute("update donem set zoom_linki = 'https://zoom.us/j/1' where id = (select donem_id from oturumlar where id = %s)", (seed["ik_oturum"],))
     r = db.execute("select toplanti_linki, oturum_toplanti_linki, varsayilan_toplanti_linki from oturum_gorunumu where id = %s",
                    (seed["ik_oturum"],)).fetchone()
     assert r == ("https://zoom.us/j/1", None, "https://zoom.us/j/1")

@@ -30,6 +30,11 @@ function hamLink(o: Oturum): string {
   return (o.oturum_toplanti_linki !== undefined ? o.oturum_toplanti_linki : o.toplanti_linki) ?? "";
 }
 
+/** Oturuma özel materyal linki (dönemin linki değil): form bunu düzenler. */
+function hamMateryal(o: Oturum): string {
+  return (o.oturum_materyal_linki !== undefined ? o.oturum_materyal_linki : o.materyal_linki) ?? "";
+}
+
 const TURLER = ["Yan Seans", "Ders", "Ek Ders", "Uygulama", "Office Hours", "Master Class", "Sunum", "Mentor Görüşmesi", "Etkinlik"];
 
 type Anlatici = { kisi_id: string } | { konuk_ad: string };
@@ -79,7 +84,7 @@ export function DetayFormu({ o, onKapat }: { o: Oturum; onKapat: () => void }) {
   const { api } = useBaglam();
   const qc = useQueryClient();
   const [ilk] = useState(() => ({
-    aciklama: o.aciklama ?? "", toplanti_linki: hamLink(o), materyal_linki: o.materyal_linki ?? "", notlar: o.notlar ?? "",
+    aciklama: o.aciklama ?? "", toplanti_linki: hamLink(o), materyal_linki: hamMateryal(o), notlar: o.notlar ?? "",
   }));
   const [d, setD] = useState(ilk);
   const [bekliyor, setBekliyor] = useState(false);
@@ -107,11 +112,12 @@ export function DetayFormu({ o, onKapat }: { o: Oturum; onKapat: () => void }) {
         Tarih, saat, konu ve eğitmen program dosyasından gelir; değişiklik orada yapılır. Buradaki alanlar program güncellemesinde korunur.
       </p>
       <Alan etiket="Toplantı linki" htmlFor="f-link"
-        ipucu={o.varsayilan_toplanti_linki ? `Boş bırakılırsa bootcamp'in linki kullanılır: ${o.varsayilan_toplanti_linki}` : undefined}>
+        ipucu={o.varsayilan_toplanti_linki ? `Boş bırakılırsa dönemin Zoom linki kullanılır: ${o.varsayilan_toplanti_linki}` : undefined}>
         <input id="f-link" type="url" inputMode="url" placeholder="https://meet.google.com/…" value={d.toplanti_linki}
           onChange={(e) => setD({ ...d, toplanti_linki: e.target.value })} className={GIRDI} />
       </Alan>
-      <Alan etiket="Materyal linki" htmlFor="f-materyal">
+      <Alan etiket="Materyal linki" htmlFor="f-materyal"
+        ipucu={o.varsayilan_materyal_linki ? `Boş bırakılırsa dönemin materyal linki kullanılır: ${o.varsayilan_materyal_linki}` : undefined}>
         <input id="f-materyal" type="url" inputMode="url" placeholder="https://drive.google.com/…" value={d.materyal_linki}
           onChange={(e) => setD({ ...d, materyal_linki: e.target.value })} className={GIRDI} />
       </Alan>
@@ -267,7 +273,7 @@ export function YanSeansFormu({ o, bootcampId, onKapat, onKaydedildi }: {
       )}
 
       <Alan etiket="Toplantı linki" htmlFor="y-link"
-        ipucu={o?.varsayilan_toplanti_linki ? `Boş bırakılırsa bootcamp'in linki kullanılır: ${o.varsayilan_toplanti_linki}` : undefined}>
+        ipucu={o?.varsayilan_toplanti_linki ? `Boş bırakılırsa dönemin Zoom linki kullanılır: ${o.varsayilan_toplanti_linki}` : undefined}>
         <input id="y-link" type="url" inputMode="url" placeholder="https://meet.google.com/…" value={s.toplanti_linki}
           onChange={(e) => setS({ ...s, toplanti_linki: e.target.value })} className={GIRDI} />
       </Alan>

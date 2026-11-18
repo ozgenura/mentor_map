@@ -126,7 +126,7 @@ function acikOku(k: string): boolean | null {
 
 /** Sorun türü başlığı (kapalı: adet ve en yakın tarih); açılınca oturumlar alt alta. Açıklık bu oturum boyunca hatırlanır. */
 function DikkatGrubuSatiri({ g, bootcampId }: { g: DikkatGrubu; bootcampId: string }) {
-  const { sec, ben } = useBaglam();
+  const { sec } = useBaglam();
   const anahtar = `mm-dikkat-${bootcampId}-${g.neden}`;
   const [acik, setAcik] = useState(() => acikOku(anahtar) ?? g.acil);
   const degistir = () => {
@@ -150,7 +150,7 @@ function DikkatGrubuSatiri({ g, bootcampId }: { g: DikkatGrubu; bootcampId: stri
         <div className="flex flex-col pb-2">
           {g.varsayilanLinkYok && (
             <p className="mx-4 mb-1 rounded-xl bg-zemin px-3 py-2 text-xs text-soluk">
-              Bootcamp'in varsayılan Zoom linki yok. {ben?.rol === "yonetici" ? "Eklerseniz" : "Yönetici eklerse"} hepsine uygulanır.
+              Bu dönemin Zoom linki yok. Program şablonunda bootcamp sekmesine (B5) eklenirse hepsine uygulanır.
             </p>
           )}
           {g.kalemler.map((d) => (

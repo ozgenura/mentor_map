@@ -8,11 +8,12 @@
  * Gönder ve "Durumu yenile", uygulamada tutulan bilgileri (iptal, toplantı/materyal linki) "Mentor Map durumu"
  * sütununa, uygulamadan eklenen oturumları sekmenin altındaki "Ek oturumlar (Mentor Map)" bölümüne salt okunur yazar.
  * Her bootcamp sekmesindeki her oturum grubunun kalıcı kimliği gizli T, U, V sütunlarında; Genel'de I sütununda.
+ * Her bootcamp sekmesinin üstünde dönemin Zoom linki (B5) ve materyal linki (B6) durur; yeni dönemde yenisi yazılır.
  * Gönderen kişi Google hesabından tanınır: yönetici her sekmeyi, PO yalnızca kendi bootcamp'ini gönderebilir.
  */
 
 const ADRES = 'https://SUPABASE_PROJE_REF.supabase.co/functions/v1/sablon-senkron';
-const BETIK_SURUMU = 2;
+const BETIK_SURUMU = 3;
 const ILK_SATIR = 10;                                  // bootcamp sekmelerinde ilk hafta satırı
 const GRUPLAR = [['A', 4], ['B', 9], ['C', 14]];        // grup harfi, Tarih sütunu (D, I, N); ardından Saat, Tür, Konu, Eğitmen(ler)
 const ID_SUTUN = { A: 20, B: 21, C: 22 };               // T, U, V
@@ -127,7 +128,14 @@ function oku() {
       });
     }
     if (yazildi) SpreadsheetApp.flush();
-    sekmeler.push({ sekme: sh.getName(), kod: String(gor[1][1]).trim(), donem: String(gor[2][1]).trim(), oturumlar: oturumlar });
+    const sekme = { sekme: sh.getName(), kod: String(gor[1][1]).trim(), donem: String(gor[2][1]).trim(), oturumlar: oturumlar };
+    // Dönemin linkleri: üst bilgide "Zoom linki" ve "Materyal linki" satırları (B5, B6). Satır yoksa gönderilmez.
+    for (let i = 3; i < ILK_SATIR - 2; i++) {
+      const etiket = String(gor[i][0]).trim().toLocaleLowerCase('tr');
+      if (etiket.indexOf('zoom') >= 0) sekme.zoom = String(gor[i][1]).trim();
+      else if (etiket.indexOf('materyal') >= 0) sekme.materyal = String(gor[i][1]).trim();
+    }
+    sekmeler.push(sekme);
   });
   return { sekmeler: sekmeler, hucre: hucre };
 }

@@ -195,3 +195,28 @@ def test_durum_ve_ek_oturumlar_doner(kurulu):
                               "link": "https://zoom.us/j/9", "materyal": None}]
     [ek] = r["ek_oturumlar"]
     assert ek["sekme"] == "İK" and [(x["konu"], x["saat"], x["anlaticilar"]) for x in ek["oturumlar"]] == [("Office hours", "19:00–20:00", "Ayşe Kaya")]
+
+
+def test_donem_linkleri_sablondan(kurulu):
+    """Zoom ve materyal linki dönem başına şablondan (B5, B6); oturuma özel link öncelikli; yeni dönem ayrı link."""
+    db = kurulu
+    a, b = oturum(hafta=1), oturum(hafta=2)
+    sablon(db, [sekme([a, b], zoom="https://zoom.us/j/3", materyal="https://drive.google.com/ik3")])
+    db.execute("update oturumlar set materyal_linki = 'https://ozel.example/x' where id = %s", (b["id"],))
+    g = lambda oid: db.execute("select toplanti_linki, materyal_linki, oturum_materyal_linki, varsayilan_materyal_linki "
+                               "from oturum_gorunumu where id = %s", (oid,)).fetchone()
+    assert g(a["id"]) == ("https://zoom.us/j/3", "https://drive.google.com/ik3", None, "https://drive.google.com/ik3")
+    assert g(b["id"])[1:3] == ("https://ozel.example/x", "https://ozel.example/x")
+
+    # hatalı link kaydedilmez, öbürü yazılır; anahtar yoksa (eski betik) dokunulmaz
+    r = sablon(db, [sekme([a, b], zoom="javascript:alert(1)", materyal="")])
+    assert [h["satir"] for h in r["hatalar"]] == [5]
+    assert g(a["id"])[:2] == ("https://zoom.us/j/3", None)
+    sablon(db, [sekme([a, b])])
+    assert g(a["id"])[0] == "https://zoom.us/j/3"
+
+    # yeni dönem: kendi linki; eski dönemin oturumları eski linkte kalır
+    c = oturum(hafta=1, tarih="2027-03-01")
+    sablon(db, [sekme([c], donem="İK4", zoom="https://zoom.us/j/4")])
+    assert g(c["id"])[0] == "https://zoom.us/j/4"
+    assert g(a["id"])[0] == "https://zoom.us/j/3"

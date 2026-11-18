@@ -49,7 +49,7 @@ def test_ilk_senkron_ve_degisiklik(db):
     r = senkron(db, temel([ot(2, a), ot(3, b, konu="Python", yardimci="Can Yıldız", konuk="Dış Konuk")]))
     assert (r["yeni"], r["hata_sayisi"]) == (2, 0)
     g = db.execute("select toplanti_linki, anlaticilar from oturum_gorunumu where id = %s", (b,)).fetchone()
-    assert g[0] == "https://zoom.us/j/1"  # bootcamp'in varsayılan linki
+    assert g[0] is None  # Zoom linki artık dönem başına şablondan gelir; Map sayfası okumaz
     assert sorted((x["ad"], x["rol"]) for x in g[1]) == [("Ayşe Kaya", "ana"), ("Can Yıldız", "yardimci"), ("Dış Konuk", "konuk")]
     assert db.execute("select count(*) from bootcamp_yetkilileri").fetchone()[0] == 1
 
@@ -131,9 +131,10 @@ def test_tehlikeli_linkler_reddedilir(db):
         db.execute("rollback to savepoint s")
     db.execute("update oturumlar set toplanti_linki = 'https://zoom.us/j/123?pwd=abc' where id = %s", (a,))
     p = temel([ot(2, a)])
-    p["bootcamplar"][0]["zoom"] = "javascript:alert(1)"
+    p["bootcamplar"][0]["zoom"] = "javascript:alert(1)"  # Map'teki eski sütun yok sayılır
     r = senkron(db, p)
-    assert [h["mesaj"] for h in r["hatalar"]] == ["Zoom linki https:// ile başlamalı ve boşluk içermemeli"]
+    assert r["hatalar"] == []
+    assert db.execute("select varsayilan_toplanti_linki from oturum_gorunumu where id = %s", (a,)).fetchone()[0] is None
 
 
 def test_kisi_yeniden_adlandirma(db):

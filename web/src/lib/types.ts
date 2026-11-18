@@ -19,7 +19,11 @@ export type Oturum = {
   toplanti_linki: string | null; // oturumun linki, yoksa bootcamp'in varsayılanı (görüntü için)
   /** Oturuma özel link (ham); formlar bunu düzenler. Eski demo verisinde yok. */
   oturum_toplanti_linki?: string | null;
+  /** Dönemin Zoom linki (program şablonundan). */
   varsayilan_toplanti_linki?: string | null;
+  /** Oturuma özel materyal linki (ham) ve dönemin materyal linki; materyal_linki ikisinden gösterileni verir. */
+  oturum_materyal_linki?: string | null;
+  varsayilan_materyal_linki?: string | null;
   excelden_kalkti?: boolean;
   /** Dönem (DA11). Geçici dönemde kodun kendisidir (DA). */
   donem_kod?: string | null;
