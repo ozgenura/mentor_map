@@ -8,8 +8,10 @@ SAKLA = 5
 dist, adres = sys.argv[1], sys.argv[2].rstrip("/")
 
 def al(yol):
+    # Cloudflare varsayılan Python istemcisini engeller (1010): tarayıcı olmayan ama tanımlı bir User-Agent.
+    istek = urllib.request.Request(adres + yol, headers={"User-Agent": "mentor-map-deploy/1.0"})
     try:
-        with urllib.request.urlopen(adres + yol, timeout=30) as r:
+        with urllib.request.urlopen(istek, timeout=30) as r:
             return r.status, r.headers.get("content-type", ""), r.read()
     except urllib.error.HTTPError as e:
         return e.code, "", b""
@@ -21,9 +23,11 @@ yeni = varliklar(open(os.path.join(dist, "index.html"), encoding="utf-8").read()
 durum, tip, govde = al("/varlik-gecmisi.json")
 gecmis = json.loads(govde) if durum == 200 and "json" in tip else []
 if not gecmis:  # ilk kullanım: canlıdaki index.html'in dosyaları
-    _, _, html = al("/")
+    durum, _, html = al("/")
+    if durum != 200:
+        sys.exit(f"canlı sürüm okunamadı ({durum}); yayın durduruldu")
     gecmis = [varliklar(html.decode("utf-8", "replace"))]
-gecmis = [yeni] + [s for s in gecmis if s != yeni][: SAKLA - 1]
+gecmis = [yeni] + [s for s in gecmis if s and s != yeni][: SAKLA - 1]
 
 eklenen = 0
 for y in sorted({y for s in gecmis[1:] for y in s}):
