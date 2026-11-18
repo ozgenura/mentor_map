@@ -104,7 +104,7 @@ export function DetayFormu({ o, onKapat }: { o: Oturum; onKapat: () => void }) {
     <Kabuk baslik="Oturumu düzenle" alt={`${o.kisa_kod} · ${o.konu} · ${gunBasligi(o.tarih)}`} onKapat={onKapat} onKaydet={kaydet}
       bekliyor={bekliyor} hata={hata} kaydetMetni="Kaydet" kirli={JSON.stringify(d) !== JSON.stringify(ilk)}>
       <p className="rounded-xl bg-mavi px-3 py-2.5 text-xs text-mavi-koyu">
-        Tarih, saat, konu ve eğitmen Excel'den gelir; onları yönetici değiştirir. Buradaki alanlar Excel güncellemesinde ezilmez.
+        Tarih, saat, konu ve eğitmen program dosyasından gelir; değişiklik orada yapılır. Buradaki alanlar program güncellemesinde korunur.
       </p>
       <Alan etiket="Toplantı linki" htmlFor="f-link"
         ipucu={o.varsayilan_toplanti_linki ? `Boş bırakılırsa bootcamp'in linki kullanılır: ${o.varsayilan_toplanti_linki}` : undefined}>

@@ -31,10 +31,15 @@ export function gun(iso: string, tz: string = TR): string {
   return `${p.year}-${p.month}-${p.day}`;
 }
 
-/** TR duvar saati (ofsetsiz ISO): FullCalendar'ın TR saatini olduğu gibi çizmesi için. */
-export function trDuvar(iso: string): string {
-  const p = parts(iso, TR);
+/** Verilen saat diliminin duvar saati (ofsetsiz ISO): FullCalendar'ın o saati olduğu gibi çizmesi için. */
+export function duvar(iso: string, tz: string = TR): string {
+  const p = parts(iso, tz);
   return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}:${p.second}`;
+}
+
+/** TR duvar saati. */
+export function trDuvar(iso: string): string {
+  return duvar(iso, TR);
 }
 
 type Aralikli = { tarih: string; baslangic: string | null; bitis: string | null };

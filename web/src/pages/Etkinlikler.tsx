@@ -35,8 +35,7 @@ export function Etkinlikler() {
         </div>
         {g.yaklasan.length ? <Gruplar gruplar={g.yaklasan} /> : (
           <Bos>
-            Yaklaşan etkinlik yok. Etkinlikler program dosyasında Tür = Etkinlik seçilerek eklenir;
-            bir bootcamp'e bağlı değilse Genel olarak yazılır.
+            Yaklaşan etkinlik yok.
           </Bos>
         )}
         {g.gecmis.length > 0 && (

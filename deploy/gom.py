@@ -27,6 +27,8 @@ export default {{
     const url = new URL(req.url);
     let yol = decodeURIComponent(url.pathname);
     if (yol.endsWith("/")) yol += "index.html";
+    // Eksik varlık (eski sürümün dosyası) HTML ile değil 404 ile döner: tarayıcı JS yerine HTML çalıştırmaya kalkmaz.
+    if (!F[yol] && yol.startsWith("/assets/")) return new Response("Not Found", {{ status: 404, headers: {{ "cache-control": "no-store" }} }});
     if (!F[yol]) yol = "/index.html";
     const uzun = yol.startsWith("/assets/");
     if (req.method !== "GET" && req.method !== "HEAD") return new Response("Method Not Allowed", {{ status: 405, headers: {{ allow: "GET, HEAD" }} }});

@@ -6,6 +6,7 @@ Statik dosyalar tek bir Worker modülüne gömülür; Cloudflare'in ayrı statik
 ```bash
 cd web && cp ../path/demo-data-gercek.json public/demo-data.json   # gerçek veriyle demo
 VITE_DEMO=1 npx vite build --outDir ../deploy/dist --emptyOutDir
-cd ../deploy && python3 gom.py dist worker.js
+cd ../deploy && python3 onceki_varliklar.py dist https://<canlı adres>   # eski sürümün dosyaları da kalsın
+python3 gom.py dist worker.js
 CLOUDFLARE_API_TOKEN=... CLOUDFLARE_ACCOUNT_ID=... npx wrangler deploy
 ```

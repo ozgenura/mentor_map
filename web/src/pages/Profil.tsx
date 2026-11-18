@@ -199,7 +199,7 @@ function SheetsBaglantisi({ sablon = false }: { sablon?: boolean }) {
       {!sablon && d?.son_ozet && (
         <span className="text-xs text-soluk">
           Son gönderim: {d.son_ozet.yeni} yeni, {d.son_ozet.guncellenen} güncellenen, {d.son_ozet.kalkan} kalkan
-          {d.son_ozet.hata_sayisi ? `, ${d.son_ozet.hata_sayisi} hatalı satır (şablondaki Senkron sekmesinde)` : ""}.
+          {d.son_ozet.hata_sayisi ? `, ${d.son_ozet.hata_sayisi} hatalı satır (sayfadaki Senkron sekmesinde)` : ""}.
         </span>
       )}
       {anahtar ? (
