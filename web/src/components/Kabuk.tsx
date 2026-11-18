@@ -56,7 +56,7 @@ export function Kabuk({ sekme, children }: { sekme: Sekme; children: ReactNode }
           </button>
         )}
         <GeriBildirimDugmesi sekme={sekme} ters className={`h-10 px-3 ${ben ? "-mt-5" : "mt-auto"}`} />
-        <ALab ters className="px-2" />
+        <ALab ters className="px-3" />
       </aside>
 
       <div className="min-w-0 flex-1 pb-28 lg:pb-10">
