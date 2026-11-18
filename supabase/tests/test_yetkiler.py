@@ -297,3 +297,15 @@ def test_ana_egitmen_ve_asistan_aboneliginde_bootcampin_tumu(db, seed):
         tok = db.execute("select token from takvim_tokenlari where kisi_id = %s", (seed[CAN],)).fetchone()[0]
         ids = {x["id"] for x in db.execute("select takvim_oturumlari(%s)", (tok,)).fetchone()[0]["oturumlar"]}
         assert str(seed["ik_oturum"]) in ids, yetki
+
+
+def test_baskasinin_gozunden_bakma_yalnizca_yoneticiye(db, seed):
+    """Değişenler akışı kişiye özel: PO ve eğitmen başkasınınkini okuyamaz; yönetici "kimin gözünden" için okur."""
+    db.execute("insert into bildirim_kuyrugu (kisi_id, olay, oturum_id, detay) values (%s, 'atandin', %s, '{}'), (%s, 'atandin', %s, '{}')",
+               (seed[AYSE], seed["ik_oturum"], seed[CAN], seed["ds_oturum"]))
+    for kim, kendi in [(AYSE, seed[AYSE]), (CAN, seed[CAN])]:
+        with as_user(db, kim):
+            assert {r[0] for r in db.execute("select kisi_id from bildirim_kuyrugu").fetchall()} == {kendi}
+            assert db.execute("select yonetici_mi()").fetchone()[0] is False
+    with as_user(db, YONETICI):
+        assert _count(db, "select count(*) from bildirim_kuyrugu") == 2

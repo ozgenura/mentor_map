@@ -248,7 +248,7 @@ function Cizelge({ oturumlar }: { oturumlar: Oturum[] }) {
       </div>
       {saatliler.some((o) => o.durum === "planli" && cakisanlar.has(o.id)) && (
         <div className="flex items-center gap-2 rounded-xl bg-mercan-acik px-3 py-2.5 text-xs font-semibold text-mercan-koyu">
-          <Ikon ad="uyari" boyut={16} /> Bu gün çakışan oturumların var. Operasyona haber vermeyi unutma.
+          <Ikon ad="uyari" boyut={16} /> Bu gün aynı saatte iki oturumun var. Programı düzenleyen PO'ya haber ver.
         </div>
       )}
     </div>

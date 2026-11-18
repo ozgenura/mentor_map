@@ -3,10 +3,10 @@ import { supabase } from "../lib/api";
 import { ALab, Logo } from "./ui";
 
 function hataMesaji(m: string): string {
-  if (/kayıtlı değil|signups not allowed|user not found|before user created/i.test(m)) return "Bu e-posta Mentor Map'te kayıtlı değil. Operasyon ekibine yazın.";
-  if (/expired|invalid/i.test(m)) return "Kod hatalı ya da süresi dolmuş. Yeni kod isteyin.";
-  if (/rate limit|too many/i.test(m)) return "Çok fazla deneme yapıldı. Birkaç dakika sonra tekrar deneyin.";
-  return "Bir sorun oluştu. Tekrar deneyin.";
+  if (/kayıtlı değil|signups not allowed|user not found|before user created/i.test(m)) return "Bu e-posta Mentor Map'te kayıtlı değil. Yöneticiye yaz.";
+  if (/expired|invalid/i.test(m)) return "Kod hatalı ya da süresi dolmuş. Yeni kod iste.";
+  if (/rate limit|too many/i.test(m)) return "Çok fazla deneme yapıldı. Birkaç dakika sonra tekrar dene.";
+  return "Bir sorun oluştu. Tekrar dene.";
 }
 
 export function Giris() {
@@ -65,7 +65,7 @@ export function Giris() {
           )}
           {hata && <p role="alert" className="text-sm text-mercan-yazi">{hata}</p>}
           <button type="submit" disabled={bekliyor} className="mt-1 h-12 rounded-2xl bg-yesil text-sm font-bold text-white disabled:opacity-60">
-            {bekliyor ? "Bekleyin…" : adim === "eposta" ? "Kod gönder" : "Giriş yap"}
+            {bekliyor ? "Bekle…" : adim === "eposta" ? "Kod gönder" : "Giriş yap"}
           </button>
         </form>
       </div>

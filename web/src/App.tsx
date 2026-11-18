@@ -155,7 +155,7 @@ function Ana({ api, eposta, demoKisiId }: { api: Api; eposta: string | null; dem
           <Tam>Program yükleniyor…</Tam>
         ) : oturumlar.isError ? (
           <div role="alert" className="m-5 rounded-kart bg-mercan-acik p-4 text-sm text-mercan-koyu">
-            Program yüklenemedi. İnternet bağlantınızı kontrol edip sayfayı yenileyin.
+            Program yüklenemedi. İnternet bağlantını kontrol edip sayfayı yenile.
           </div>
         ) : sekme === "takvim" ? <TakvimSayfasi />
           : sekme === "etkinlikler" ? <Etkinlikler />
@@ -175,7 +175,7 @@ function KayitsizEposta({ eposta }: { eposta: string | null }) {
       <Logo className="mb-6" />
       <p className="max-w-sm text-center">
         <strong className="block text-murekkep">{eposta}</strong>
-        bu e-posta eğitmen listesinde yok ya da pasif. Yöneticiyle iletişime geçin.
+        bu e-posta eğitmen listesinde yok ya da pasif. Yöneticiye yaz.
       </p>
       <button onClick={cikis} className="mt-4 h-11 rounded-2xl border border-[#D9CDC6] bg-white px-4 text-sm font-semibold">Çıkış yap</button>
     </Tam>

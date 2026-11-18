@@ -6,7 +6,7 @@
  *
  * Kullanım: Mentor Map → Önizle (hiçbir şey yazmaz, nelerin değişeceğini gösterir) → Gönder.
  * Gönder ve "Durumu yenile", uygulamada tutulan bilgileri (iptal, toplantı/materyal linki) "Mentor Map durumu"
- * sütununa, uygulamadan eklenen oturumları sekmenin altındaki "Ek oturumlar (Mentor Map)" bölümüne salt okunur yazar.
+ * sütununa, uygulamadan eklenen oturumları sekmenin altındaki "Eklenen seanslar (Mentor Map)" bölümüne salt okunur yazar.
  * Her bootcamp sekmesindeki her oturum grubunun kalıcı kimliği gizli T, U, V sütunlarında; Genel'de I sütununda.
  * Her bootcamp sekmesinin üstünde dönemin Zoom linki (B5) ve materyal linki (B6) durur; yeni dönemde yenisi yazılır.
  * Gönderen kişi Google hesabından tanınır: yönetici her sekmeyi, PO yalnızca kendi bootcamp'ini gönderebilir.
@@ -20,7 +20,8 @@ const ID_SUTUN = { A: 20, B: 21, C: 22 };               // T, U, V
 const GENEL = { ad: 'Genel', baslik: 5, ilk: 6, id: 9 }; // No, Tarih, Saat, Başlık, Açıklama, Konuşmacı(lar), Dış konuşmacı, Not | I: ID
 const ATLA = ['Nasıl doldurulur', 'Eğitmenler'];
 const DURUM_SUTUN = { bootcamp: 23, genel: 10 };          // W; Genel'de J
-const EK_ISARET = 'Ek oturumlar (Mentor Map)';             // A sütununda; okuyucu bu satırdan sonrasını okumaz
+const EK_ISARET = 'Eklenen seanslar (Mentor Map)';         // A sütununda; okuyucu bu satırdan sonrasını okumaz
+const EK_ISARET_ESKI = ['Ek oturumlar (Mentor Map)'];      // önceki betiğin yazdığı ad da tanınır
 
 function onOpen() {
   SpreadsheetApp.getUi().createMenu('Mentor Map')
@@ -74,7 +75,10 @@ function veriSonu(sh, ilk) {
   const son = sh.getLastRow();
   if (son < ilk) return son;
   const a = sh.getRange(ilk, 1, son - ilk + 1, 1).getDisplayValues();
-  for (let i = 0; i < a.length; i++) if (String(a[i][0]).trim() === EK_ISARET) return ilk + i - 1;
+  for (let i = 0; i < a.length; i++) {
+    const v = String(a[i][0]).trim();
+    if (v === EK_ISARET || EK_ISARET_ESKI.indexOf(v) >= 0) return ilk + i - 1;
+  }
   return son;
 }
 
@@ -216,7 +220,7 @@ function gonder(onizleme, onay, durumYaz) {
   if (durumYaz && onizleme) {
     ui.alert('Durum yenilendi', (s.durumlar || []).length + ' oturumun durumu ve ' +
       (s.ek_oturumlar || []).reduce(function (t, e) { return t + e.oturumlar.length; }, 0) +
-      ' ek oturum yazıldı. Program Mentor Map\'e gönderilmedi.', ui.ButtonSet.OK);
+      ' eklenen seans yazıldı. Program Mentor Map\'e gönderilmedi.', ui.ButtonSet.OK);
     return;
   }
   ui.alert(onizleme ? 'Önizleme (hiçbir şey yazılmadı)' : 'Gönderildi', ozetMetni(s), ui.ButtonSet.OK);
@@ -290,7 +294,7 @@ function ekBolumuYaz(sh, veriSon, genislik, oturumlar) {
   aralik.setValues(satirlar).setBackground('#f3f4f6').setFontColor('#374151');
   sh.getRange(bas, 1).setFontWeight('bold');
   sh.getRange(bas + 1, 1, 1, 6).setFontWeight('bold');
-  salt(sh, sh.getRange(veriSon + 1, 1, satirlar.length + 2, 7), 'ek oturumlar');
+  salt(sh, sh.getRange(veriSon + 1, 1, satirlar.length + 2, 7), 'eklenen seanslar');
 }
 
 function ozetMetni(s) {

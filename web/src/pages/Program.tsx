@@ -189,7 +189,7 @@ function Satir({ o, dikkat }: { o: Oturum; dikkat: boolean }) {
       </span>
       <span className="hidden truncate text-[13px] lg:block">{o.anlaticilar.map((a) => a.ad).join(", ") || <span className="text-mercan-koyu">Eğitmen atanmamış</span>}</span>
       <span className="flex items-center gap-1.5">
-        {o.kaynak === "uygulama" && <Rozet tur="saat">Ek</Rozet>}
+        {o.kaynak === "uygulama" && <Rozet tur="saat">Eklenen</Rozet>}
         {iptal && <Rozet tur="iptal">İptal</Rozet>}
         {!iptal && dikkat && <Ikon ad="uyari" boyut={16} className="text-mercan-koyu" />}
       </span>

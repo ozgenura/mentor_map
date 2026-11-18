@@ -121,7 +121,7 @@ export function DetayFormu({ o, onKapat }: { o: Oturum; onKapat: () => void }) {
         <input id="f-materyal" type="url" inputMode="url" placeholder="https://drive.google.com/…" value={d.materyal_linki}
           onChange={(e) => setD({ ...d, materyal_linki: e.target.value })} className={GIRDI} />
       </Alan>
-      <Alan etiket="Açıklama" htmlFor="f-aciklama" ipucu="Anlatıcıların ve eğitmenlerin göreceği kısa bilgi.">
+      <Alan etiket="Açıklama" htmlFor="f-aciklama" ipucu="Eğitmenlerin göreceği kısa bilgi.">
         <textarea id="f-aciklama" rows={3} value={d.aciklama} onChange={(e) => setD({ ...d, aciklama: e.target.value })}
           className={`${GIRDI} h-auto py-2`} />
       </Alan>
@@ -184,7 +184,7 @@ export function YanSeansFormu({ o, bootcampId, onKapat, onKaydedildi }: {
   async function kaydet(e: React.FormEvent) {
     e.preventDefault();
     if (!s.konu.trim()) return setHata("Konu zorunlu.");
-    if (!s.anlaticilar.length) return setHata("En az bir anlatıcı seçin.");
+    if (!s.anlaticilar.length) return setHata("En az bir eğitmen seç.");
     if (seansSuresiDk(s.baslangic, s.bitis) > 12 * 60) return setHata("Seans en çok 12 saat sürebilir.");
     setBekliyor(true);
     setHata(null);
@@ -201,7 +201,7 @@ export function YanSeansFormu({ o, bootcampId, onKapat, onKaydedildi }: {
   }
 
   return (
-    <Kabuk baslik={o ? "Yan seansı düzenle" : "Yan seans ekle"} alt="Saatler TR saatidir. Anlatıcılara bildirim gider."
+    <Kabuk baslik={o ? "Seansı düzenle" : "Seans ekle"} alt="Saatleri Türkiye saatiyle gir; herkes takviminde kendi saatiyle görür. Eğitmenlere bildirim gider."
       onKapat={onKapat} onKaydet={kaydet} bekliyor={bekliyor} hata={hata} kaydetMetni={o ? "Kaydet" : "Seansı ekle"}
       kirli={JSON.stringify(s) !== ilkSeans || !!konuk.trim()}>
       {!o && (
@@ -236,7 +236,7 @@ export function YanSeansFormu({ o, bootcampId, onKapat, onKaydedildi }: {
         </select>
       </Alan>
 
-      <Alan etiket="Anlatıcılar" ipucu="İlk eklenen ana anlatıcıdır. Mentor Map kullanıcısı olan konuk da listeden seçilebilir.">
+      <Alan etiket="Eğitmenler" ipucu="İlk eklenen ana eğitmendir. Mentor Map kullanıcısı olan konuk da listeden seçilebilir.">
         {s.anlaticilar.length > 0 && (
           <div className="flex flex-wrap gap-1.5">
             {s.anlaticilar.map((a, i) => (
@@ -253,7 +253,7 @@ export function YanSeansFormu({ o, bootcampId, onKapat, onKaydedildi }: {
           {kisiler.filter((k) => !seciliKisiler.includes(k.id)).map((k) => <option key={k.id} value={k.id}>{kisiEtiketi(k)}</option>)}
         </select>
         <div className="flex gap-2">
-          <input aria-label="Konuk anlatıcı adı" value={konuk} onChange={(e) => setKonuk(e.target.value)} placeholder="Konuk anlatıcı adı"
+          <input aria-label="Konuk eğitmen adı" value={konuk} onChange={(e) => setKonuk(e.target.value)} placeholder="Konuk eğitmen adı"
             onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); ekleKonuk(); } }} className={`${GIRDI} min-w-0 flex-1`} />
           <button type="button" onClick={ekleKonuk} className="h-11 shrink-0 rounded-xl bg-white px-3 text-[13px] font-semibold">Konuk ekle</button>
         </div>

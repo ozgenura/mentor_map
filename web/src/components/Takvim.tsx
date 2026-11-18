@@ -122,7 +122,7 @@ export function Takvim({ oturumlar, onGunSec }: { oturumlar: Oturum[]; onGunSec:
         }}
       />
       <p className="mt-2 px-1 text-[11px] text-soluk">
-        Kartta bootcamp · anlatıcının baş harfleri ve ders adı yazar; tam bilgi için üzerine gel ya da dokun.
+        Kartta bootcamp · eğitmenin baş harfleri ve ders adı yazar; tam bilgi için üzerine gel ya da dokun.
         Kırmızı çerçeve çakışma, soluk kart geçmiş oturum demektir.
       </p>
     </div>

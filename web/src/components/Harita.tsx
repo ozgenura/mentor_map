@@ -59,7 +59,7 @@ export function Harita({ oturumlar, vurgu, vurguVar, vurguAd }: Props) {
       {vurguVar && (
         <p className="rounded-2xl bg-white px-4 py-3 text-[13px] leading-snug">
           {sen ? "Yer aldığın" : <><strong className="font-semibold">{isaret.ad}</strong> adlı eğitmenin yer aldığı</>} programların tamamı
-          gösteriliyor. <strong className="font-semibold">Dolu duraklar {sen ? "senin anlattığın" : "onun anlattığı"} oturumlar</strong>; boş
+          gösteriliyor. <strong className="font-semibold">Dolu duraklar {sen ? "senin eğitmen olduğun" : "onun eğitmen olduğu"} oturumlar</strong>; boş
           duraklarda programın diğer oturumları var.
         </p>
       )}
@@ -353,7 +353,7 @@ function DurakIcerik({ d, h, isaret }: { d: Durak; h: HaritaT; isaret: Isaret })
         )}
         {isaret.vurguVar && !d.oturumlar.some(isaret.vurgu) && (
           <span className="text-xs text-soluk">
-            Bu hafta {isaret.ad === "Sen" ? "senin oturumun yok" : `${isaret.ad} anlatmıyor`}; programın oturumları gösteriliyor.
+            Bu hafta {isaret.ad === "Sen" ? "senin oturumun yok" : `${isaret.ad} eğitmen değil`}; programın oturumları gösteriliyor.
           </span>
         )}
       </div>
@@ -367,7 +367,7 @@ function DurakIcerik({ d, h, isaret }: { d: Durak; h: HaritaT; isaret: Isaret })
               <span className="flex items-center gap-2 text-xs font-semibold text-soluk">
                 {gunKisa(o.tarih)} · {g.ana ? `${g.ana} ${g.birim}` : "Saat belirsiz"}
                 {iptal && <Rozet tur="iptal">İptal</Rozet>}
-                {isaret.vurguVar && isaret.vurgu(o) && <Rozet tur="yeni">{isaret.ad === "Sen" ? "Sen" : "Anlatıyor"}</Rozet>}
+                {isaret.vurguVar && isaret.vurgu(o) && <Rozet tur="yeni">{isaret.ad === "Sen" ? "Sen" : "Eğitmen"}</Rozet>}
               </span>
               <span className={`text-sm font-semibold leading-snug ${iptal ? "text-silik line-through" : ""}`}>{o.konu || o.tur}</span>
               <span className="truncate text-xs text-soluk">{o.tur} · {o.anlaticilar.map((a) => a.ad).join(", ") || "Eğitmen atanmamış"}</span>

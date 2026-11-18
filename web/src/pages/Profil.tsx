@@ -148,7 +148,7 @@ function Abonelik({ kisiId }: { kisiId: string }) {
             <button onClick={() => setYenileSor(true)} className="font-semibold text-mercan-zemin underline">Link sızdıysa yenile</button>
           </div>
           {yenileSor && <Onay soru="Takvim linki yenilensin mi?" evet="Yenile" tehlikeli onEvet={yenile} onHayir={() => setYenileSor(false)}
-            aciklama="Eski link çalışmayı bırakır; takviminize yeni linki tekrar eklemeniz gerekir." />}
+            aciklama="Eski link çalışmayı bırakır; takvimine yeni linki tekrar eklemen gerekir." />}
         </>
       )}
     </section>
@@ -193,7 +193,7 @@ function SheetsBaglantisi({ sablon = false }: { sablon?: boolean }) {
       </div>
       {sablon && (
         <span className="text-xs text-soluk">
-          PO'ların doldurduğu kurum şablonu. Şablonda Mentor Map → Önizle ile hiçbir şey yazmadan sonucu görebilir, Gönder ile aktarırsınız.
+          PO'ların doldurduğu kurum şablonu. Şablonda Mentor Map → Önizle ile hiçbir şey yazmadan sonucu görebilir, Gönder ile aktarırsın.
         </span>
       )}
       {!sablon && d?.son_ozet && (

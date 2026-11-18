@@ -22,7 +22,7 @@ export function KalkanlarListesi() {
       <div className="flex flex-col gap-1">
         <h2 className="font-baslik text-lg font-bold">Programdan kalkan oturumlar {list.length > 0 && <span className="text-soluk">· {list.length}</span>}</h2>
         <p className="text-[13px] text-soluk">
-          Şablondan silindiği için takvimlerde ve aboneliklerde görünmüyor. Yanlışlıkla silindiyse satırı şablona geri ekleyin;
+          Şablondan silindiği için takvimlerde ve aboneliklerde görünmüyor. Yanlışlıkla silindiyse satırı şablona geri ekle;
           bir sonraki senkronda geri gelir.
         </p>
       </div>

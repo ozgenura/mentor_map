@@ -47,7 +47,7 @@ export function OturumDetay({ o, onKapat }: { o: Oturum; onKapat: () => void }) 
               <span className="rounded-full bg-white/50 px-2.5 py-1 text-xs font-semibold">{o.donem_kod}</span>
             )}
             <span className="rounded-full bg-white/50 px-2.5 py-1 text-xs font-semibold">{o.tur}</span>
-            {o.kaynak === "uygulama" && <span className="rounded-full bg-white px-2.5 py-1 text-xs font-bold text-yesil">Uygulamadan eklendi</span>}
+            {o.kaynak === "uygulama" && <span className="rounded-full bg-white px-2.5 py-1 text-xs font-bold text-yesil">Eklenen seans</span>}
           </div>
           <div className="flex flex-col gap-1.5">
             <h2 className={`font-baslik text-[28px] font-bold leading-[1.05] tracking-tight ${iptal ? "line-through opacity-70" : ""}`}>{o.konu || o.tur}</h2>
@@ -84,7 +84,7 @@ export function OturumDetay({ o, onKapat }: { o: Oturum; onKapat: () => void }) 
           )}
 
           <div className="divide-y divide-cizgi rounded-kart bg-white px-4">
-            <Satir etiket="Anlatıcılar">
+            <Satir etiket="Eğitmenler">
               {o.anlaticilar.length ? (
                 <ul className="flex flex-col gap-1">
                   {o.anlaticilar.map((a, i) => (
@@ -155,7 +155,7 @@ function Yonetim({ o, iptalAc }: { o: Oturum; iptalAc: () => void }) {
       <div className="grid grid-cols-2 gap-2">
         <button onClick={() => setForm("duzenle")} className="h-11 rounded-[14px] bg-white text-sm font-bold text-yesil">Düzenle</button>
         <button onClick={() => setForm("yeni")} className="flex h-11 items-center justify-center gap-1.5 rounded-[14px] border border-yesil-cizgi text-sm font-semibold">
-          <Ikon ad="arti" boyut={16} /> Yan seans ekle
+          <Ikon ad="arti" boyut={16} /> Seans ekle
         </button>
       </div>
       {iptal ? (
@@ -166,7 +166,7 @@ function Yonetim({ o, iptalAc }: { o: Oturum; iptalAc: () => void }) {
         <button onClick={iptalAc} className="h-11 rounded-[14px] border border-mercan text-sm font-bold text-mercan-zemin">Oturumu iptal et</button>
       )}
       <span className="text-xs text-yesil-soluk">
-        {DEMO ? "Demoda yaptığın değişiklikler yalnızca bu tarayıcıda görünür." : "Değişiklikler anlatıcıların Değişenler ekranında görünür ve takvim aboneliklerine yansır."}
+        {DEMO ? "Demoda yaptığın değişiklikler yalnızca bu tarayıcıda görünür." : "Değişiklikler eğitmenlerin Değişenler ekranında görünür ve takvim aboneliklerine yansır."}
       </span>
       {form === "duzenle" && (yanSeans
         ? <YanSeansFormu o={o} onKapat={() => setForm(null)} />
@@ -211,12 +211,12 @@ function IptalPenceresi({ o, onKapat }: { o: Oturum; onKapat: () => void }) {
         <textarea id="gerekce" required autoFocus rows={3} value={gerekce} onChange={(e) => setGerekce(e.target.value)}
           placeholder="Örn. eğitmen rahatsız; telafi tarihi duyurulacak"
           className="rounded-xl border border-[#D9CDC6] px-3 py-2 text-sm outline-none focus:border-yesil focus:ring-2 focus:ring-yesil/20" />
-        <p className="text-xs text-soluk">Anlatıcılar bunu Değişenler ekranında görür, oturum takvim aboneliklerinde iptal olarak görünür. İstersen sonra geri alabilirsin.</p>
+        <p className="text-xs text-soluk">Eğitmenler bunu Değişenler ekranında görür, oturum takvim aboneliklerinde iptal olarak görünür. İstersen sonra geri alabilirsin.</p>
         {hata && <p role="alert" className="text-sm text-mercan-yazi">{hata}</p>}
         <div className="mt-1 grid grid-cols-2 gap-2">
           <button type="button" onClick={onKapat} className="h-11 rounded-[14px] border border-[#D9CDC6] text-sm font-semibold">Vazgeç</button>
           <button type="submit" disabled={bekliyor || !gerekce.trim()} className="h-11 rounded-[14px] bg-mercan-koyu text-sm font-bold text-white disabled:opacity-50">
-            {bekliyor ? "Bekleyin…" : "İptal et"}
+            {bekliyor ? "Bekle…" : "İptal et"}
           </button>
         </div>
     </Pencere>

@@ -30,7 +30,7 @@ export function degisiklikKarti(d: Degisiklik, o: Oturum | undefined, tz: string
   const alt = o ? oturumAlt(o, tz, mod) : "";
   switch (d.olay) {
     case "yan_seans_eklendi":
-      return { ...ortak, rozet: "yeni", rozetMetin: "Yeni seans", baslik: `${konu} seansına anlatıcı olarak eklendin`,
+      return { ...ortak, rozet: "yeni", rozetMetin: "Yeni seans", baslik: `${konu} seansına eğitmen olarak eklendin`,
         alt: d.detay.ekleyen ? `${alt} · ${d.detay.ekleyen} ekledi` : alt };
     case "atandin":
       return { ...ortak, rozet: "yeni", rozetMetin: "Atandın", baslik: `${konu} oturumuna atandın`, alt };
