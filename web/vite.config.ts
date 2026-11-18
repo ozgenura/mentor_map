@@ -7,7 +7,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["icon.svg", "apple-touch-icon.png", "demo-data.json"],
+      includeAssets: ["icon.svg", "apple-touch-icon.png", "demo-data.json", "miuul-alab.png"],
       manifest: {
         name: "Mentor Map",
         short_name: "Mentor Map",

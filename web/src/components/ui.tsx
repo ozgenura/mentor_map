@@ -62,11 +62,14 @@ export function Logo({ ters = false, className = "" }: { ters?: boolean; classNa
   );
 }
 
-/** Miuul A-Lab imzası. Logo dosyası gelene kadar yazı olarak durur. */
+/** Miuul A-Lab imzası: "bir [logo] ürünü". Logo maske olarak çizilir, rengi yazı rengini izler (koyu ve açık zemin). */
 export function ALab({ ters = false, className = "" }: { ters?: boolean; className?: string }) {
   return (
-    <span className={`inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-wide ${ters ? "text-yesil-soluk" : "text-silik"} ${className}`}>
-      bir <span className="font-bold">Miuul A-Lab</span> ürünü
+    <span className={`inline-flex items-end gap-2 text-[11px] font-semibold tracking-wide ${ters ? "text-yesil-soluk" : "text-silik"} ${className}`}>
+      <span className="mb-[4px]">bir</span>
+      <span role="img" aria-label="Miuul A-Lab" className="inline-block h-[30px] w-[74px] bg-current"
+        style={{ WebkitMask: "url(/miuul-alab.png) center / contain no-repeat", mask: "url(/miuul-alab.png) center / contain no-repeat" }} />
+      <span className="mb-[4px]">ürünü</span>
     </span>
   );
 }
