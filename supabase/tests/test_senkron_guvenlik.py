@@ -41,13 +41,30 @@ def test_yeni_kisi_yonetici_olarak_eklenemez(db):
     assert kisi(db, "Sızan Kişi")[1] == "egitmen"
 
 
-def test_eposta_sayfadan_degismez(db):
+def test_yoneticinin_epostasi_sayfadan_degismez(db):
     kur(db)
     r = senkron(db, temel([], kisiler=kisiler(Özge={"eposta": "saldirgan@ornek.com"})))
     assert kisi(db, "Özge")[0] == YONETICI
-    assert any("E-posta" in h["mesaj"] for h in r["hatalar"])
+    assert any("Yöneticinin e-postası" in h["mesaj"] for h in r["hatalar"])
     with as_user(db, "saldirgan@ornek.com"):
         assert db.execute("select yonetici_mi()").fetchone()[0] is False
+
+
+def test_eposta_sayfadan_degisir(db):
+    kur(db)
+    r = senkron(db, temel([], kisiler=kisiler(Can_Yıldız={"eposta": "Can.Yeni@ornek.com"})))
+    assert kisi(db, "Can Yıldız")[0] == "can.yeni@ornek.com"
+    assert r["eposta_degisimleri"] == [{"ad": "Can Yıldız", "eski": "can@ornek.com", "yeni": "can.yeni@ornek.com"}]
+    assert not r["hatalar"]
+    senkron(db, temel([], kisiler=kisiler(Can_Yıldız={"eposta": "can.yeni@ornek.com"})))  # tekrar: değişiklik yok
+    assert db.execute("select count(*) from kisiler where ad = 'Can Yıldız'").fetchone()[0] == 1
+
+
+def test_baskasinin_epostasi_alinamaz(db):
+    kur(db)
+    r = senkron(db, temel([], kisiler=kisiler(Can_Yıldız={"eposta": AYSE})))
+    assert kisi(db, "Can Yıldız")[0] == "can@ornek.com"
+    assert kisi(db, "Ayşe Kaya")[0] == AYSE
 
 
 def test_yoneticinin_rolu_ve_aktifligi_sayfadan_degismez(db):
