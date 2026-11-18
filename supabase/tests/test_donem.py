@@ -88,3 +88,11 @@ def test_donem_gorunur_yazilamaz(db):
         with pytest.raises(psycopg.errors.InsufficientPrivilege):
             db.execute("update donem set kod = 'İK9'")
     assert db.execute("select kod from donem").fetchone()[0] == "İK3"
+
+
+def test_donem_yazim_farki_ayni_donem(db):
+    """Vibe2 ile Vibe02 aynı dönem: yazım farkı yeni dönem açmaz (Map senkronu)."""
+    senkron(db, donemli([], donem="İK2"))
+    senkron(db, donemli([], donem="İK02"))
+    assert db.execute("select array_agg(kod) from donem d join bootcamp b on b.id = d.bootcamp_id where b.kisa_kod = 'İK'").fetchone()[0] == ["İK2"]
+    assert db.execute("select public._donem_kodu_esle('İK', 'İK3')").fetchone()[0] == "İK3"
