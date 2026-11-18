@@ -123,7 +123,7 @@ function SiradakiKart({ o }: { o: Oturum }) {
         {o.toplanti_linki && (
           <a href={guvenliLink(o.toplanti_linki) ?? undefined} target="_blank" rel="noreferrer"
             className="flex h-12 items-center justify-center gap-2 rounded-[14px] bg-white text-sm font-bold text-yesil">
-            <Ikon ad="video" boyut={18} /> Toplantıya katıl
+            <Ikon ad="video" boyut={18} /> Derse katıl
           </a>
         )}
         <button onClick={() => sec(o)} className="h-12 rounded-[14px] border border-yesil-cizgi text-sm font-semibold">
