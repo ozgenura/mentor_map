@@ -28,6 +28,8 @@ export interface Api {
   kalkanlar(): Promise<Oturum[]>;
   kalkanSil(id: string): Promise<void>;
   kisiler(): Promise<Kisi[]>;
+  /** Giriş yapan kişinin kimliği (ana ya da ek e-postasıyla). Demoda null. */
+  benimKisiId(): Promise<string | null>;
   yetkiler(): Promise<Yetki[]>;
   degisiklikler(kisiId: string): Promise<Degisiklik[]>;
   sonGuncelleme(): Promise<string | null>;
@@ -110,6 +112,11 @@ function supabaseApi(db: SupabaseClient): Api {
     },
     async kalkanSil(id) {
       ok(await db.from("oturumlar").delete().eq("id", id).eq("excelden_kalkti", true));
+    },
+    async benimKisiId() {
+      const { data, error } = await db.rpc("mevcut_kisi_id");
+      if (error) throw error;
+      return (data as string | null) ?? null;
     },
     async kisiler() {
       return ok(await db.from("kisiler").select("id, ad, eposta, saat_dilimi, rol, dis_egitmen").eq("aktif", true).order("ad"));
@@ -266,6 +273,7 @@ const demoApi: Api = {
   kalkanlar: async () => [],
   kalkanSil: async () => {},
   kisiler: async () => (await demoVeri()).kisiler,
+  benimKisiId: async () => null,
   // Eski demo verisinde yetki türü yok; o kişiler demoda düzenleyebilsin diye PO sayılır.
   yetkiler: async () => (await demoVeri()).yetkiler.map((y) => ({ ...y, yetki: y.yetki ?? "po" })),
   async degisiklikler(kisiId) {

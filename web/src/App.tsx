@@ -46,6 +46,8 @@ function Ana({ api, eposta, demoKisiId }: { api: Api; eposta: string | null; dem
   const kisiler = useQuery({ queryKey: ["kisiler"], queryFn: api.kisiler });
   const oturumlar = useQuery({ queryKey: ["oturumlar"], queryFn: api.oturumlar, refetchInterval: 5 * 60_000 });
   const yetkiler = useQuery({ queryKey: ["yetkiler"], queryFn: api.yetkiler });
+  // Ek e-postayla (ör. kişisel Gmail) giriş yapan da tanınsın diye kişi sunucudan çözülür.
+  const benimId = useQuery({ queryKey: ["benimId", eposta], queryFn: api.benimKisiId, enabled: !DEMO && !!eposta });
   const sonGuncelleme = useQuery({ queryKey: ["son"], queryFn: api.sonGuncelleme });
   const [demoId, setDemoId] = useState(demoKisiId);
   const [bakisId, setBakisIdDurum] = useState<string | null>(() => {
@@ -65,12 +67,13 @@ function Ana({ api, eposta, demoKisiId }: { api: Api; eposta: string | null; dem
       return list.find((k) => k.id === demoId) ?? list.find((k) => k.ad === "Can Yıldız")
         ?? list.find((k) => k.id === enYakin) ?? list[0];
     }
-    const gercek = list.find((k) => k.eposta.toLowerCase() === eposta);
+    const gercek = list.find((k) => k.id === benimId.data) ?? list.find((k) => k.eposta.toLowerCase() === eposta);
     // Yönetici başka bir kişinin gözünden bakabilir (yalnızca görüntü; veritabanı yetkisi değişmez).
     if (gercek?.rol === "yonetici" && bakisId) return list.find((k) => k.id === bakisId) ?? gercek;
     return gercek;
-  }, [kisiler.data, oturumlar.data, eposta, demoId, bakisId]);
-  const gercekBen = useMemo(() => (kisiler.data ?? []).find((k) => k.eposta.toLowerCase() === eposta), [kisiler.data, eposta]);
+  }, [kisiler.data, oturumlar.data, eposta, demoId, bakisId, benimId.data]);
+  const gercekBen = useMemo(() => (kisiler.data ?? []).find((k) => k.id === benimId.data)
+    ?? (kisiler.data ?? []).find((k) => k.eposta.toLowerCase() === eposta), [kisiler.data, eposta, benimId.data]);
 
   const degisiklikler = useQuery({
     queryKey: ["degisiklikler", ben?.id], queryFn: () => api.degisiklikler(ben!.id), enabled: !!ben, refetchInterval: 5 * 60_000,
@@ -142,7 +145,7 @@ function Ana({ api, eposta, demoKisiId }: { api: Api; eposta: string | null; dem
       : null,
   };
 
-  if (!DEMO && kisiler.isSuccess && !ben) return <KayitsizEposta eposta={eposta} />;
+  if (!DEMO && kisiler.isSuccess && !benimId.isLoading && !ben) return <KayitsizEposta eposta={eposta} />;
   const secili = seciliId ? tum.find((o) => o.id === seciliId) : undefined;
 
   return (

@@ -123,3 +123,13 @@ def test_istemci_denetleyemez(db):
     with as_user(db, YONETICI) as c:
         with pytest.raises(psycopg.errors.InsufficientPrivilege):
             c.execute("select senkron_anahtari_denetle('x', null)")
+
+
+def test_ek_eposta_ile_giris_ayni_kisi(db):
+    kur(db)
+    db.execute("update kisiler set ek_epostalar = array['Ozge.Ikinci@gmail.com'] where ad = 'Özge'")
+    with as_user(db, "ozge.ikinci@gmail.com"):
+        assert db.execute("select yonetici_mi()").fetchone()[0] is True
+        assert db.execute("select mevcut_kisi_id() = (select id from kisiler where ad = 'Özge')").fetchone()[0] is True
+    with as_user(db, "baska@gmail.com"):
+        assert db.execute("select mevcut_kisi_id()").fetchone()[0] is None
