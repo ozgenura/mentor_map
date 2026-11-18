@@ -8,8 +8,8 @@ import { GORUNUM_ANAHTARI } from "../lib/harita";
 import { Takvim } from "../components/Takvim";
 import { Bos, Ikon, Segment } from "../components/ui";
 import { gosterim, useBaglam } from "../lib/baglam";
-import { basMs, bitMs, kartEtiketi, kisaltmaHaritasi, siraliOturumlar, TATILLER, yaziRengi } from "../lib/derive";
-import { bugunTR, gunBasligi, gunEkle, haftaBasi, saat, TR } from "../lib/time";
+import { basMs, bitMs, gectiMi, kartEtiketi, kisaltmaHaritasi, siraliOturumlar, sonrakiOturum, TATILLER, yaziRengi } from "../lib/derive";
+import { bugunTR, gunBasligi, gunEkle, haftaBasi, saat, sehir, TR } from "../lib/time";
 import type { Oturum } from "../lib/types";
 import { SaatSecici } from "./Bugun";
 
@@ -40,7 +40,8 @@ function haftaEtiketi(bas: string) {
 }
 
 export function TakvimSayfasi() {
-  const { tum, ben, kisiler, duzenleyebilirMi, sec, banaMi, sorumlu } = useBaglam();
+  const { tum, ben, kisiler, duzenleyebilirMi, sec, banaMi, sorumlu, tz, saatModu } = useBaglam();
+  const saatBilgisi = saatModu === "yerel" && tz !== TR ? `${sehir(tz)} saati` : "TR saati";
   const qc = useQueryClient();
   const [yeniSeans, setYeniSeans] = useState(false);
   const yonetebilir = useMemo(() => tum.some((o) => duzenleyebilirMi(o.bootcamp_id)), [tum, duzenleyebilirMi]);
@@ -71,7 +72,7 @@ export function TakvimSayfasi() {
 
   return (
     <>
-      <SayfaUstu baslik="Takvim" sag={
+      <SayfaUstu ust={<span className="inline-flex items-center gap-1.5"><Ikon ad="saat" boyut={14} />Saatler {saatBilgisi} ile gösteriliyor</span>} baslik="Takvim" sag={
         <div className="flex flex-wrap items-center gap-2">
           <SaatSecici />
           {yonetebilir && (
@@ -110,7 +111,8 @@ export function TakvimSayfasi() {
       </div>
       <div className="mt-4 px-3 lg:px-10">
         {gorunum === "harita"
-          ? <Harita oturumlar={haritaOturumlari} vurgu={vurgu} vurguVar={!!vurguId} />
+          ? <Harita oturumlar={haritaOturumlari} vurgu={vurgu} vurguVar={!!vurguId}
+              vurguAd={kapsam === "ben" && ben ? "Sen" : kisiler.find((k) => k.id === egitmen)?.ad} />
           : gorunum === "gun"
           ? <GunGorunumu oturumlar={gorunen} secili={secili} setSecili={setSecili} />
           : gorunum === "ay"
@@ -156,9 +158,24 @@ function GunGorunumu({ oturumlar, secili, setSecili }: { oturumlar: Oturum[]; se
           <span className="font-baslik text-base font-bold">{gunBasligi(secili)}</span>
           {TATILLER[secili] && <span className="text-xs font-semibold text-mercan-yazi">{TATILLER[secili]}</span>}
         </div>
-        {gunun.length ? <Cizelge oturumlar={gunun} /> : <Bos>Bu gün oturum yok.</Bos>}
+        {gunun.length ? <Cizelge oturumlar={gunun} /> : <BosGun oturumlar={oturumlar} secili={secili} setSecili={setSecili} />}
       </div>
     </div>
+  );
+}
+
+/** Boş gün: açıklama ve sonraki oturuma git. */
+function BosGun({ oturumlar, secili, setSecili }: { oturumlar: Oturum[]; secili: string; setSecili: (t: string) => void }) {
+  const sonraki = sonrakiOturum(oturumlar, gunEkle(secili, 1));
+  return (
+    <Bos>
+      Bu gün planlanmış oturum yok.
+      {sonraki ? (
+        <button onClick={() => setSecili(sonraki.tarih)} className="mt-2 flex w-full items-center justify-center gap-1 font-semibold text-yesil underline">
+          Sonraki oturum: {gunBasligi(sonraki.tarih)} · {sonraki.konu || sonraki.tur} <Ikon ad="sag" boyut={14} />
+        </button>
+      ) : <span className="mt-1 block">İleride planlanmış oturum da yok.</span>}
+    </Bos>
   );
 }
 
@@ -213,7 +230,7 @@ function Cizelge({ oturumlar }: { oturumlar: Oturum[] }) {
             const cakisma = !iptal && cakisanlar.has(o.id);
             return (
               <button key={o.id} onClick={() => sec(o)} title={ipucu(o)}
-                className={`absolute flex flex-col gap-0.5 overflow-hidden rounded-2xl px-3 py-2 text-left ${iptal ? "border-2 border-dashed" : ""} ${cakisma ? "ring-2 ring-mercan ring-offset-2" : ""}`}
+                className={`absolute flex flex-col gap-0.5 overflow-hidden rounded-2xl px-3 py-2 text-left ${iptal ? "border-2 border-dashed" : ""} ${cakisma ? "ring-2 ring-mercan ring-offset-2" : ""} ${gectiMi(o) ? "opacity-50" : ""}`}
                 style={{
                   top: y(basMs(o)) + 1, height: Math.max(36, y(bitMs(o)) - y(basMs(o)) - 3),
                   left: `calc(${(s / seritSayisi) * 100}% + ${s ? 4 : 0}px)`, width: `calc(${100 / seritSayisi}% - ${s ? 4 : 0}px)`,
@@ -250,7 +267,7 @@ function GunListesi({ oturumlar }: { oturumlar: Oturum[] }) {
         const iptal = o.durum === "iptal";
         return (
           <button key={o.id} onClick={() => sec(o)} title={ipucu(o)}
-            className={`flex w-full gap-3 rounded-2xl border-l-4 bg-zemin px-3 py-2.5 text-left ${iptal ? "opacity-60" : ""} ${
+            className={`flex w-full gap-3 rounded-2xl border-l-4 bg-zemin px-3 py-2.5 text-left ${iptal || gectiMi(o) ? "opacity-60" : ""} ${
               !iptal && cakisanlar.has(o.id) ? "ring-2 ring-mercan" : ""}`}
             style={{ borderColor: o.renk }}>
             <span className="w-[4.5rem] shrink-0 font-baslik text-[13px] font-bold tabular-nums">{g.ana ?? "Saat belirsiz"}</span>

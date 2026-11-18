@@ -3,7 +3,7 @@
 
 import { useMemo, useState } from "react";
 import { useBaglam } from "../lib/baglam";
-import { kartEtiketi, kisaltmaHaritasi, siraliOturumlar, TATILLER } from "../lib/derive";
+import { gectiMi, kartEtiketi, kisaltmaHaritasi, siraliOturumlar, TATILLER } from "../lib/derive";
 import { bugunTR, gunEkle, haftaBasi, saatAraligi } from "../lib/time";
 import type { Oturum } from "../lib/types";
 import { Ikon } from "./ui";
@@ -95,7 +95,7 @@ export function AyGorunumu({ oturumlar, secili, onGunSec }: { oturumlar: Oturum[
                   const iptal = o.durum === "iptal";
                   return (
                     <span key={o.id} title={ipucu(o)}
-                      className={`block rounded-md border-l-[3px] bg-zemin px-1.5 py-1 ${iptal ? "opacity-50" : ""}`}
+                      className={`block rounded-md border-l-[3px] bg-zemin px-1.5 py-1 ${iptal || gectiMi(o) ? "opacity-50" : ""}`}
                       style={{ borderColor: o.renk }}>
                       <span className={`block truncate text-[11px] font-bold leading-tight ${iptal ? "line-through" : ""}`}>{kartEtiketi(o, harita)}</span>
                       <span className={`block truncate text-[11px] leading-tight text-soluk ${iptal ? "line-through" : ""}`}>{o.konu || o.tur}</span>
@@ -110,7 +110,7 @@ export function AyGorunumu({ oturumlar, secili, onGunSec }: { oturumlar: Oturum[
           );
         })}
       </div>
-      <p className="mt-2 px-1 text-[11px] text-soluk">Bir güne dokununca o günün bütün oturumları açılır. Kırmızı nokta çakışma demektir.</p>
+      <p className="mt-2 px-1 text-[11px] text-soluk">Bir güne dokununca o günün bütün oturumları açılır. Kırmızı nokta çakışma, soluk kart geçmiş oturum demektir.</p>
     </div>
   );
 }

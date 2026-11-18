@@ -1,10 +1,11 @@
 import trLocale from "@fullcalendar/core/locales/tr";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useBaglam } from "../lib/baglam";
-import { kartEtiketi, kisaltmaHaritasi, yaziRengi } from "../lib/derive";
-import { duvar, gunEkle, saat, sehir, TR } from "../lib/time";
+import { gectiMi, kartEtiketi, kisaltmaHaritasi, sonrakiOturum, yaziRengi } from "../lib/derive";
+import { duvar, gunBasligi, gunEkle, saat, TR } from "../lib/time";
+import { Ikon } from "./ui";
 import type { Oturum } from "../lib/types";
 import { ipucu } from "./AyGorunumu";
 
@@ -32,7 +33,7 @@ export function Takvim({ oturumlar, onGunSec }: { oturumlar: Oturum[]; onGunSec:
     () =>
       oturumlar.map((o) => {
         const iptal = o.durum === "iptal";
-        const sinif = iptal ? ["mm-iptal"] : cakisanlar.has(o.id) ? ["mm-cakisma"] : [];
+        const sinif = [...(iptal ? ["mm-iptal"] : cakisanlar.has(o.id) ? ["mm-cakisma"] : []), ...(gectiMi(o) ? ["mm-gecmis"] : [])];
         return {
           id: o.id,
           title: o.konu || o.tur,
@@ -55,9 +56,27 @@ export function Takvim({ oturumlar, onGunSec }: { oturumlar: Oturum[]; onGunSec:
   }, [oturumlar, gTz]);
 
   const view = dar ? "ucGun" : "timeGridWeek";
+  const takvim = useRef<FullCalendar>(null);
+  // Görünen aralık boşsa: açıklama ve sonraki oturuma git (geri bildirim, 18 Kasım).
+  const [aralik, setAralik] = useState<[string, string] | null>(null);
+  const bos = aralik && !oturumlar.some((o) => o.tarih >= aralik[0] && o.tarih < aralik[1]);
+  const sonraki = bos ? sonrakiOturum(oturumlar, aralik![1]) : undefined;
   return (
     <div className="mm-takvim rounded-[24px] bg-white p-3 sm:p-4">
+      {bos && (
+        <div role="status" className="mb-3 flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-zemin px-4 py-3 text-[13px]">
+          <span className="font-semibold">{dar ? "Bu günlerde" : "Bu hafta"} planlanmış oturum yok.</span>
+          {sonraki ? (
+            <button onClick={() => takvim.current?.getApi().gotoDate(sonraki.tarih)}
+              className="flex items-center gap-1 font-semibold text-yesil underline">
+              Sonraki oturum: {gunBasligi(sonraki.tarih)} · {sonraki.konu || sonraki.tur} <Ikon ad="sag" boyut={14} />
+            </button>
+          ) : <span className="text-soluk">İleride planlanmış oturum da yok.</span>}
+        </div>
+      )}
       <FullCalendar
+        ref={takvim}
+        datesSet={(a) => setAralik([a.startStr.slice(0, 10), a.endStr.slice(0, 10)])}
         key={view}
         plugins={[timeGridPlugin]}
         locale={trLocale}
@@ -103,8 +122,8 @@ export function Takvim({ oturumlar, onGunSec }: { oturumlar: Oturum[]; onGunSec:
         }}
       />
       <p className="mt-2 px-1 text-[11px] text-soluk">
-        Saatler {gTz === TR ? "TR" : sehir(gTz)} saatidir. Kartta bootcamp · anlatıcının baş harfleri ve ders adı yazar; tam bilgi için üzerine gel ya da dokun.
-        Kırmızı çerçeve çakışma demektir.
+        Kartta bootcamp · anlatıcının baş harfleri ve ders adı yazar; tam bilgi için üzerine gel ya da dokun.
+        Kırmızı çerçeve çakışma, soluk kart geçmiş oturum demektir.
       </p>
     </div>
   );

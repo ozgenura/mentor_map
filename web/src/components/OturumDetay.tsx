@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { DEMO } from "../lib/api";
 import { gosterim, useBaglam } from "../lib/baglam";
-import { kalan, sureSaatMetni, TATILLER, yaziRengi, guvenliLink } from "../lib/derive";
+import { kalan, katilimZamani, sureSaatMetni, TATILLER, yaziRengi, guvenliLink } from "../lib/derive";
 import { gunBasligi } from "../lib/time";
 import type { Oturum } from "../lib/types";
 import { DetayFormu, YanSeansFormu } from "./SeansFormu";
@@ -25,6 +25,9 @@ export function OturumDetay({ o, onKapat }: { o: Oturum; onKapat: () => void }) 
   const iptal = o.durum === "iptal";
   const yonetebilir = duzenleyebilirMi(o.bootcamp_id);
   const yazi = yaziRengi(o.renk);
+  // Ders 30 dk içinde başlıyor ya da sürüyor: katılım düğmesi en üstte ve vurgulu.
+  const katilLink = !iptal ? guvenliLink(o.toplanti_linki) : null;
+  const simdiKatil = !!katilLink && katilimZamani(o);
 
   return (
     <Pencere etiket={o.konu || o.tur} onKapat={onKapat} dis="fixed inset-0 z-50 flex justify-end bg-murekkep/40"
@@ -59,6 +62,12 @@ export function OturumDetay({ o, onKapat }: { o: Oturum; onKapat: () => void }) 
         </div>
 
         <div className="flex flex-col gap-3 px-3 py-4">
+          {simdiKatil && (
+            <a href={katilLink!} target="_blank" rel="noreferrer"
+              className="flex h-14 items-center justify-center gap-2 rounded-2xl bg-mercan-koyu text-[15px] font-bold text-white shadow-lg shadow-mercan/40">
+              <Ikon ad="video" boyut={20} /> Derse katıl · {kalan(o) === "Şimdi" ? "ders sürüyor" : "birazdan başlıyor"}
+            </a>
+          )}
           {iptal && (
             <div className="rounded-kart bg-mercan-acik p-4 text-sm text-mercan-koyu">
               <strong className="font-semibold">Bu oturum iptal edildi.</strong>
@@ -102,10 +111,10 @@ export function OturumDetay({ o, onKapat }: { o: Oturum; onKapat: () => void }) 
             {o.notlar && <Satir etiket="Not"><span className="whitespace-pre-line">{o.notlar}</span></Satir>}
           </div>
 
-          {o.toplanti_linki && !iptal && (
-            <a href={guvenliLink(o.toplanti_linki) ?? undefined} target="_blank" rel="noreferrer"
+          {katilLink && !simdiKatil && (
+            <a href={katilLink} target="_blank" rel="noreferrer"
               className="flex h-12 items-center justify-center gap-2 rounded-2xl bg-yesil text-sm font-bold text-white">
-              <Ikon ad="video" boyut={18} /> Toplantıya katıl
+              <Ikon ad="video" boyut={18} /> Derse katıl
             </a>
           )}
 

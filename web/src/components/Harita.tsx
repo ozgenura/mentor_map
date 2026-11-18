@@ -26,9 +26,13 @@ function haftaUst(bas: string) {
   return a.ay === b.ay ? `${a.gun}–${b.gun} ${AY_UST[a.ay]}` : `${a.gun} ${AY_UST[a.ay]} – ${b.gun} ${AY_UST[b.ay]}`;
 }
 
-type Props = { oturumlar: Oturum[]; vurgu: (o: Oturum) => boolean; vurguVar: boolean };
+/** vurguAd: dolu durakların kimin olduğu ("Sen" ya da seçili eğitmenin adı). */
+type Props = { oturumlar: Oturum[]; vurgu: (o: Oturum) => boolean; vurguVar: boolean; vurguAd?: string | null };
+type Isaret = { vurgu: (o: Oturum) => boolean; vurguVar: boolean; ad: string };
 
-export function Harita({ oturumlar, vurgu, vurguVar }: Props) {
+export function Harita({ oturumlar, vurgu, vurguVar, vurguAd }: Props) {
+  const isaret: Isaret = { vurgu, vurguVar, ad: vurguAd ?? "Sen" };
+  const sen = isaret.ad === "Sen";
   const bugun = bugunTR();
   const h = useMemo(() => haritaKur(oturumlar, vurgu, bugun), [oturumlar, vurgu, bugun]);
   const [secili, setSecili] = useState<string | null>(null);
@@ -52,19 +56,26 @@ export function Harita({ oturumlar, vurgu, vurguVar }: Props) {
 
   return (
     <div className="flex flex-col gap-3">
+      {vurguVar && (
+        <p className="rounded-2xl bg-white px-4 py-3 text-[13px] leading-snug">
+          {sen ? "Yer aldığın" : <><strong className="font-semibold">{isaret.ad}</strong> adlı eğitmenin yer aldığı</>} programların tamamı
+          gösteriliyor. <strong className="font-semibold">Dolu duraklar {sen ? "senin anlattığın" : "onun anlattığı"} oturumlar</strong>; boş
+          duraklarda programın diğer oturumları var.
+        </p>
+      )}
       <Lejant h={h} vurguVar={vurguVar} />
       <div className="lg:hidden">
         <DikeyHarita h={h} vurgu={vurgu} vurguVar={vurguVar} onDurak={(d) => durakSec(d, true)} />
         <p className="mt-2.5 px-2 text-[11px] leading-snug text-soluk">
-          Her hat bir bootcamp. Haftalar yukarıdan aşağı akar{vurguVar ? "; dolu duraklar senin oturumların" : ""}. Bir durağa dokununca o haftanın oturumları açılır.
+          Her hat bir bootcamp. Haftalar yukarıdan aşağı akar. Bir durağa dokununca o haftanın oturumları açılır.
         </p>
-        {sayfa && seciliDurak && <AltPanel d={seciliDurak} h={h} onKapat={() => setSayfa(false)} />}
+        {sayfa && seciliDurak && <AltPanel d={seciliDurak} h={h} isaret={isaret} onKapat={() => setSayfa(false)} />}
       </div>
       <div className="hidden gap-5 lg:grid lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start">
         <YatayHarita h={h} vurguVar={vurguVar} secili={seciliDurak} onDurak={(d) => durakSec(d, false)} />
         <div className="flex flex-col gap-4">
-          {seciliDurak && <DurakKarti d={seciliDurak} h={h} />}
-          <Siradakiler h={h} vurgu={vurgu} vurguVar={vurguVar} onSec={(k) => setSecili(k)} />
+          {seciliDurak && <DurakKarti d={seciliDurak} h={h} isaret={isaret} />}
+          <Siradakiler h={h} isaret={isaret} onSec={(k) => setSecili(k)} />
         </div>
       </div>
     </div>
@@ -327,7 +338,7 @@ function YatayHarita({ h, vurguVar, secili, onDurak }: { h: HaritaT; vurguVar: b
 
 /* ---------- durak paneli ---------- */
 
-function DurakIcerik({ d, h }: { d: Durak; h: HaritaT }) {
+function DurakIcerik({ d, h, isaret }: { d: Durak; h: HaritaT; isaret: Isaret }) {
   const { sec, tz, saatModu } = useBaglam();
   const hat = h.hatlar.find((x) => x.id === d.hatId)!;
   return (
@@ -340,6 +351,11 @@ function DurakIcerik({ d, h }: { d: Durak; h: HaritaT }) {
         {d.cakisma && (
           <span className="flex items-center gap-1.5 text-xs font-semibold text-mercan-koyu"><Ikon ad="uyari" boyut={14} /> Bu hafta çakışan oturumun var</span>
         )}
+        {isaret.vurguVar && !d.oturumlar.some(isaret.vurgu) && (
+          <span className="text-xs text-soluk">
+            Bu hafta {isaret.ad === "Sen" ? "senin oturumun yok" : `${isaret.ad} anlatmıyor`}; programın oturumları gösteriliyor.
+          </span>
+        )}
       </div>
       <div className="flex flex-col gap-2">
         {d.oturumlar.map((o) => {
@@ -351,6 +367,7 @@ function DurakIcerik({ d, h }: { d: Durak; h: HaritaT }) {
               <span className="flex items-center gap-2 text-xs font-semibold text-soluk">
                 {gunKisa(o.tarih)} · {g.ana ? `${g.ana} ${g.birim}` : "Saat belirsiz"}
                 {iptal && <Rozet tur="iptal">İptal</Rozet>}
+                {isaret.vurguVar && isaret.vurgu(o) && <Rozet tur="yeni">{isaret.ad === "Sen" ? "Sen" : "Anlatıyor"}</Rozet>}
               </span>
               <span className={`text-sm font-semibold leading-snug ${iptal ? "text-silik line-through" : ""}`}>{o.konu || o.tur}</span>
               <span className="truncate text-xs text-soluk">{o.tur} · {o.anlaticilar.map((a) => a.ad).join(", ") || "Eğitmen atanmamış"}</span>
@@ -362,16 +379,16 @@ function DurakIcerik({ d, h }: { d: Durak; h: HaritaT }) {
   );
 }
 
-function DurakKarti({ d, h }: { d: Durak; h: HaritaT }) {
+function DurakKarti({ d, h, isaret }: { d: Durak; h: HaritaT; isaret: Isaret }) {
   return (
     <div className="rounded-[24px] bg-white p-4">
       <span className="mb-2 block text-[11px] font-bold uppercase tracking-wider text-silik">Seçili durak</span>
-      <DurakIcerik d={d} h={h} />
+      <DurakIcerik d={d} h={h} isaret={isaret} />
     </div>
   );
 }
 
-function AltPanel({ d, h, onKapat }: { d: Durak; h: HaritaT; onKapat: () => void }) {
+function AltPanel({ d, h, isaret, onKapat }: { d: Durak; h: HaritaT; isaret: Isaret; onKapat: () => void }) {
   useEffect(() => {
     const f = (e: KeyboardEvent) => e.key === "Escape" && onKapat();
     document.addEventListener("keydown", f);
@@ -383,7 +400,7 @@ function AltPanel({ d, h, onKapat }: { d: Durak; h: HaritaT; onKapat: () => void
         className="max-h-[70vh] w-full overflow-y-auto rounded-t-[28px] bg-white px-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-3">
         <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-cizgi" />
         <div className="flex items-start justify-between gap-3">
-          <DurakIcerik d={d} h={h} />
+          <DurakIcerik d={d} h={h} isaret={isaret} />
           <button aria-label="Kapat" onClick={onKapat} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-zemin">
             <Ikon ad="kapat" boyut={16} />
           </button>
@@ -393,7 +410,8 @@ function AltPanel({ d, h, onKapat }: { d: Durak; h: HaritaT; onKapat: () => void
   );
 }
 
-function Siradakiler({ h, vurgu, vurguVar, onSec }: { h: HaritaT; vurgu: (o: Oturum) => boolean; vurguVar: boolean; onSec: (k: string) => void }) {
+function Siradakiler({ h, isaret, onSec }: { h: HaritaT; isaret: Isaret; onSec: (k: string) => void }) {
+  const { vurgu, vurguVar } = isaret;
   const simdi = Date.now();
   const liste = h.duraklar
     .flatMap((d) => d.oturumlar.map((o) => ({ o, d })))
@@ -403,7 +421,7 @@ function Siradakiler({ h, vurgu, vurguVar, onSec }: { h: HaritaT; vurgu: (o: Otu
   if (!liste.length) return null;
   return (
     <div className="rounded-[24px] bg-white p-4">
-      <span className="mb-2 block text-[11px] font-bold uppercase tracking-wider text-silik">{vurguVar ? "Senin sıradaki durakların" : "Sıradaki duraklar"}</span>
+      <span className="mb-2 block text-[11px] font-bold uppercase tracking-wider text-silik">{!vurguVar ? "Sıradaki duraklar" : isaret.ad === "Sen" ? "Senin sıradaki durakların" : `${isaret.ad}: sıradaki duraklar`}</span>
       <div className="flex flex-col">
         {liste.map(({ o, d }) => (
           <button key={o.id} onClick={() => onSec(durakAnahtari(d.hatId, d.hafta))}

@@ -20,6 +20,21 @@ export function bitMs(o: Oturum): number {
   return o.bitis ? Date.parse(o.bitis) : Date.parse(`${gunEkle(o.tarih, 1)}T00:00:00+03:00`);
 }
 
+/** Oturum bitti mi (geçmiş oturumlar takvimde soluk gösterilir). */
+export function gectiMi(o: Oturum, simdi = Date.now()): boolean {
+  return bitMs(o) <= simdi;
+}
+
+/** Ders başlamak üzere (30 dk kala) ya da sürüyor: "Derse katıl" öne çıkar. */
+export function katilimZamani(o: Oturum, simdi = Date.now()): boolean {
+  return !!o.baslangic && o.durum === "planli" && basMs(o) - 30 * 6e4 <= simdi && simdi < bitMs(o);
+}
+
+/** Verilen tarihten sonraki ilk planlı oturum (boş gün / hafta mesajındaki "sonraki oturum"). */
+export function sonrakiOturum(os: Oturum[], sonraki: string): Oturum | undefined {
+  return siraliOturumlar(os).find((o) => o.durum === "planli" && o.tarih >= sonraki);
+}
+
 export function siraliOturumlar(os: Oturum[]): Oturum[] {
   return [...os].sort((a, b) => a.tarih.localeCompare(b.tarih) || basMs(a) - basMs(b));
 }

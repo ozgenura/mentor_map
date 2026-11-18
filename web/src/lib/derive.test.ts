@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cakismalar, ilerlemeler, kalan, siradaki, yaziRengi } from "./derive";
+import { cakismalar, gectiMi, ilerlemeler, kalan, katilimZamani, siradaki, sonrakiOturum, yaziRengi } from "./derive";
 import type { Oturum } from "./types";
 
 function o(id: string, tarih: string, bas: string | null, bit: string | null, ek: Partial<Oturum> = {}): Oturum {
@@ -120,5 +120,25 @@ describe("rol modeli", () => {
     expect(yetkiAdi(true, [])).toBe("Admin");
     expect(yetkiAdi(false, ["po"])).toBe("PO");
     expect(yetkiAdi(true, ["po"])).toBe("PO");
+  });
+});
+
+describe("takvim geri bildirimi (18 Kasım)", () => {
+  const ders = o("ders", "2026-11-02", "20:30", "23:00");
+  it("geçmiş: bitiş saatinden sonra", () => {
+    expect(gectiMi(ders, Date.parse("2026-11-02T22:59:00+03:00"))).toBe(false);
+    expect(gectiMi(ders, Date.parse("2026-11-02T23:00:00+03:00"))).toBe(true);
+  });
+  it("derse katıl: 30 dk kala başlar, ders bitince biter; iptalde yok", () => {
+    expect(katilimZamani(ders, Date.parse("2026-11-02T19:59:00+03:00"))).toBe(false);
+    expect(katilimZamani(ders, Date.parse("2026-11-02T20:00:00+03:00"))).toBe(true);
+    expect(katilimZamani(ders, Date.parse("2026-11-02T22:30:00+03:00"))).toBe(true);
+    expect(katilimZamani(ders, Date.parse("2026-11-02T23:00:00+03:00"))).toBe(false);
+    expect(katilimZamani({ ...ders, durum: "iptal" }, Date.parse("2026-11-02T20:40:00+03:00"))).toBe(false);
+  });
+  it("sonraki oturum: verilen günden itibaren ilk planlı", () => {
+    const list = [o("a", "2026-11-03", "20:00", "21:00", { durum: "iptal" }), o("b", "2026-11-10", "20:00", "21:00"), o("c", "2026-11-05", "20:00", "21:00")];
+    expect(sonrakiOturum(list, "2026-11-03")?.id).toBe("c");
+    expect(sonrakiOturum(list, "2026-11-11")).toBeUndefined();
   });
 });
