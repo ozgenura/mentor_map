@@ -4,7 +4,7 @@
 # Kullanım: python3 onceki_varliklar.py <dist> <canlı adres>
 import json, os, re, sys, urllib.error, urllib.request
 
-SAKLA = 5
+SAKLA = 3  # Worker boyut sınırı (ücretsiz plan 3 MB sıkıştırılmış) için kısa tutulur
 dist, adres = sys.argv[1], sys.argv[2].rstrip("/")
 
 def al(yol):
