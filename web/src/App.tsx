@@ -98,7 +98,7 @@ function Ana({ api, eposta, demoKisiId }: { api: Api; eposta: string | null; dem
     window.scrollTo({ top: 0 });
   }, []);
 
-  const [saatModu, setSaatModuDurum] = useState<SaatModu>(() => (oku("mm-saat") as SaatModu) || "tr");
+  const [saatModu, setSaatModuDurum] = useState<SaatModu>(() => (oku("mm-saat") as SaatModu) || "yerel");  // varsayılan: kişinin kendi saat dilimi
   const setSaatModu = useCallback((m: SaatModu) => { setSaatModuDurum(m); yaz("mm-saat", m); }, []);
 
   const sonGorulmeAnahtari = `mm-son-gorulme-${ben?.id ?? "x"}`;
