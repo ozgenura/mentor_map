@@ -37,7 +37,7 @@ export function OturumDetay({ o, onKapat }: { o: Oturum; onKapat: () => void }) 
             <button onClick={onKapat} aria-label="Kapat" className="flex h-11 w-11 items-center justify-center rounded-[14px] bg-white/50">
               <Ikon ad="sol" boyut={20} />
             </button>
-            {yonetebilir && <span className="rounded-full bg-mercan-zemin px-2.5 py-1.5 text-[11px] font-bold uppercase tracking-wide text-mercan-koyu">
+            {yonetebilir && <span lang="en" className="rounded-full bg-mercan-zemin px-2.5 py-1.5 text-[11px] font-bold uppercase tracking-wide text-mercan-koyu">
               {yetkiAdi(ben?.rol === "yonetici", yetkilerim.filter((y) => y.bootcamp_id === o.bootcamp_id).map((y) => y.yetki ?? "ana_egitmen"))}
             </span>}
           </div>

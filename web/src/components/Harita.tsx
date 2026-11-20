@@ -344,7 +344,7 @@ function DurakIcerik({ d, h, isaret }: { d: Durak; h: HaritaT; isaret: Isaret })
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-col gap-1">
-        <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-soluk">
+        <span className="flex items-center gap-2 text-[13px] font-bold text-soluk">
           <span className="h-[5px] w-4 rounded-[3px]" style={{ background: hat.renk }} />{hat.ad}
         </span>
         <span className="font-baslik text-lg font-bold tracking-tight">{haftaUst(h.haftalar[d.hafta])}</span>
@@ -421,7 +421,7 @@ function Siradakiler({ h, isaret, onSec }: { h: HaritaT; isaret: Isaret; onSec: 
   if (!liste.length) return null;
   return (
     <div className="rounded-[24px] bg-white p-4">
-      <span className="mb-2 block text-[11px] font-bold uppercase tracking-wider text-silik">{!vurguVar ? "Sıradaki duraklar" : isaret.ad === "Sen" ? "Senin sıradaki durakların" : `${isaret.ad}: sıradaki duraklar`}</span>
+      <span className="mb-2 block text-[11px] font-bold uppercase tracking-wider text-silik">{!vurguVar ? "Sıradaki duraklar" : isaret.ad === "Sen" ? "Senin sıradaki durakların" : <><span className="normal-case">{isaret.ad}</span>: sıradaki duraklar</>}</span>
       <div className="flex flex-col">
         {liste.map(({ o, d }) => (
           <button key={o.id} onClick={() => onSec(durakAnahtari(d.hatId, d.hafta))}
