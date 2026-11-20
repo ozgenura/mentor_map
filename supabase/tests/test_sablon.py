@@ -220,3 +220,15 @@ def test_donem_linkleri_sablondan(kurulu):
     sablon(db, [sekme([c], donem="İK4", zoom="https://zoom.us/j/4")])
     assert g(c["id"])[0] == "https://zoom.us/j/4"
     assert g(a["id"])[0] == "https://zoom.us/j/3"
+
+
+def test_hafta_sonu_tarih_bazli_sekme(kurulu):
+    """Hafta sonu eğitimleri Genel gibi tarih bazlı sekmeden gelir: dönem gerekmez, tür satırdan."""
+    db = kurulu
+    db.execute("insert into bootcamp (kisa_kod, ad, egitim_turu) values ('HS', 'Hafta Sonu Eğitimleri', 'Hafta Sonu Eğitimleri')")
+    g1 = oturum(grup="E", tarih="2026-12-05", konu="Power BI için Etkin SQL Kullanımı", tur="Ders", baslangic="10:00", bitis="17:00")
+    g2 = oturum(grup="E", tarih="2026-12-06", konu="Power BI için Etkin SQL Kullanımı", tur="Ders", baslangic="10:00", bitis="17:00")
+    r = sablon(db, [{"sekme": "Hafta Sonu", "kod": "HS", "genel": True, "oturumlar": [g1, g2]}])
+    assert r["hata_sayisi"] == 0, r["hatalar"]
+    rows = db.execute("select tarih::text, tur::text, egitim_turu from oturum_gorunumu where kisa_kod = 'HS' order by tarih").fetchall()
+    assert rows == [("2026-12-05", "Ders", "Hafta Sonu Eğitimleri"), ("2026-12-06", "Ders", "Hafta Sonu Eğitimleri")]

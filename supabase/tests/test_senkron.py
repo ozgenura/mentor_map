@@ -205,3 +205,19 @@ def test_ana_egitmen_bootcampler_sekmesinden(db):
     assert rows == [("Ayşe Kaya",), ("Can Yıldız",)]
     senkron(db, temel([], ana=""))
     assert db.execute("select count(*) from bootcamp_yetkilileri where yetki = 'ana_egitmen'").fetchone()[0] == 0
+
+
+def test_egitim_turu_sayfadan(db):
+    p = temel([])
+    p["bootcamplar"][0]["egitim_turu"] = "Uygulamalı Eğitim Programı"
+    p["bootcamplar"].append({"satir": 3, "kod": "HS", "ad": "Hafta Sonu Eğitimleri", "renk": "#123456", "egitim_turu": "hafta sonu eğitimleri"})
+    r = senkron(db, p)
+    assert r["hatalar"] == []
+    assert dict(db.execute("select kisa_kod, egitim_turu from bootcamp").fetchall()) == {
+        "İK": "Uygulamalı Eğitim Programı", "HS": "Hafta Sonu Eğitimleri"}
+    p["bootcamplar"][0]["egitim_turu"] = "Kurs"
+    r = senkron(db, p)
+    assert [h["satir"] for h in r["hatalar"]] == [2]
+    del p["bootcamplar"][0]["egitim_turu"]  # sütun yoksa dokunulmaz
+    senkron(db, p)
+    assert db.execute("select egitim_turu from bootcamp where kisa_kod = 'İK'").fetchone()[0] == "Uygulamalı Eğitim Programı"

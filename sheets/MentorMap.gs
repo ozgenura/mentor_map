@@ -190,7 +190,7 @@ function gonder(onay) {
       // Sütunlar başlık adıyla okunur: sırası değişse de bozulmaz. Roller yalnızca Bootcamp'ler sekmesinden gelir.
       bootcamplar: basliklaOku(ss.getSheetByName(SEKME.BOOTCAMP), {
         'kod': 'kod', 'ad': 'ad', 'renk': 'renk', 'varsayılan zoom linki': 'zoom',
-        'po': 'po', 'ana eğitmen': 'ana_egitmen', 'asistan': 'asistan', 'dönem': 'donem'
+        'po': 'po', 'ana eğitmen': 'ana_egitmen', 'asistan': 'asistan', 'dönem': 'donem', 'eğitim türü': 'egitim_turu'
       }),
       kisiler: basliklaOku(ss.getSheetByName(SEKME.KISI), {
         'ad': 'ad', 'e-posta': 'eposta', 'saat dilimi': 'saat_dilimi', 'aktif': 'aktif', 'kurum': 'kurum'

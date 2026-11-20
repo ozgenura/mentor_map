@@ -10,7 +10,7 @@ import { gosterim, useBaglam } from "../lib/baglam";
 import { bitMs } from "../lib/derive";
 import { bootcampOturumlari, dikkatGruplari, dikkatListesi, haftalar, programOzeti, type Dikkat, type DikkatGrubu } from "../lib/program";
 import { gunBasligi } from "../lib/time";
-import type { Oturum } from "../lib/types";
+import { EGITIM_TURLERI, type Oturum } from "../lib/types";
 import { SaatSecici } from "./Bugun";
 
 const NEDEN: Record<Dikkat["neden"], string> = {
@@ -28,9 +28,9 @@ function yazSecim(id: string) {
 
 /** Kişinin düzenleyebildiği bootcamp'ler (ad sırasıyla). */
 export function yonetilenBootcamplar(tum: Oturum[], duzenleyebilirMi: (id: string) => boolean) {
-  const m = new Map<string, { id: string; ad: string; kod: string; renk: string }>();
+  const m = new Map<string, { id: string; ad: string; kod: string; renk: string; tur: string }>();
   for (const o of tum) if (!m.has(o.bootcamp_id) && duzenleyebilirMi(o.bootcamp_id))
-    m.set(o.bootcamp_id, { id: o.bootcamp_id, ad: o.bootcamp_ad, kod: o.kisa_kod, renk: o.renk });
+    m.set(o.bootcamp_id, { id: o.bootcamp_id, ad: o.bootcamp_ad, kod: o.kisa_kod, renk: o.renk, tur: o.egitim_turu ?? "Diğer" });
   return [...m.values()].sort((a, b) => a.ad.localeCompare(b.ad, "tr"));
 }
 
@@ -52,7 +52,7 @@ export function Program() {
   if (!b) return (
     <>
       <SayfaUstu ust="PO paneli" baslik="Program" />
-      <div className="px-3 pt-4 lg:px-10"><Bos>Düzenleyebildiğin bir bootcamp yok.</Bos></div>
+      <div className="px-3 pt-4 lg:px-10"><Bos>Programında henüz oturum yok. Oturumlar program şablonundan gönderildiğinde burada görünür.</Bos></div>
     </>
   );
 
@@ -77,7 +77,12 @@ export function Program() {
         {bootcamplar.length > 1 && (
           <div className="px-2 lg:px-0">
             <select aria-label="Bootcamp" value={b.id} onChange={(e) => { setSecim(e.target.value); yazSecim(e.target.value); }} className="secim">
-              {bootcamplar.map((x) => <option key={x.id} value={x.id}>{x.ad}</option>)}
+              {[...EGITIM_TURLERI, "Diğer"].map((t) => {
+                const list = bootcamplar.filter((x) => x.tur === t);
+                return list.length ? (
+                  <optgroup key={t} label={t}>{list.map((x) => <option key={x.id} value={x.id}>{x.ad}</option>)}</optgroup>
+                ) : null;
+              })}
             </select>
           </div>
         )}

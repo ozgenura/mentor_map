@@ -13,11 +13,15 @@
  */
 
 const ADRES = 'https://SUPABASE_PROJE_REF.supabase.co/functions/v1/sablon-senkron';
-const BETIK_SURUMU = 3;
+const BETIK_SURUMU = 4;
 const ILK_SATIR = 10;                                  // bootcamp sekmelerinde ilk hafta satırı
 const GRUPLAR = [['A', 4], ['B', 9], ['C', 14]];        // grup harfi, Tarih sütunu (D, I, N); ardından Saat, Tür, Konu, Eğitmen(ler)
 const ID_SUTUN = { A: 20, B: 21, C: 22 };               // T, U, V
 const GENEL = { ad: 'Genel', baslik: 5, ilk: 6, id: 9 }; // No, Tarih, Saat, Başlık, Açıklama, Konuşmacı(lar), Dış konuşmacı, Not | I: ID
+// Tarih bazlı sekmeler (Genel ile aynı düzen; her satır bir gün): sekme adı → bootcamp kodu ve oturum türü.
+// Dönem gerekmez; Hafta Sonu'nda Başlık = kurs adı, Konuşmacı(lar) = eğitmen(ler).
+const TARIH_SEKMELERI = { 'Genel': { kod: 'Genel', tur: 'Etkinlik' }, 'Hafta Sonu': { kod: 'HS', tur: 'Ders' } };
+function tarihSekmesi(ad) { return TARIH_SEKMELERI[ad] || null; }
 const ATLA = ['Nasıl doldurulur', 'Eğitmenler'];
 const DURUM_SUTUN = { bootcamp: 23, genel: 10 };          // W; Genel'de J
 const EK_ISARET = 'Eklenen seanslar (Mentor Map)';         // A sütununda; okuyucu bu satırdan sonrasını okumaz
@@ -96,7 +100,7 @@ function oku() {
   const ss = SpreadsheetApp.getActive();
   const sekmeler = [], hucre = {}, gorulen = {};
   ss.getSheets().forEach(function (sh) {
-    if (sh.getName() === GENEL.ad) { sekmeler.push(genelOku(sh, hucre, gorulen)); return; }
+    if (tarihSekmesi(sh.getName())) { sekmeler.push(genelOku(sh, hucre, gorulen)); return; }
     if (!bootcampSekmesiMi(sh)) return;
     idSutunlariniHazirla(sh, ID_SUTUN.A, ID_SUTUN.C, ['ID A', 'ID B', 'ID C'], ILK_SATIR - 1);
     const son = veriSonu(sh, ILK_SATIR);
@@ -166,12 +170,12 @@ function genelOku(sh, hucre, gorulen) {
       const saat = saatAraligi(gor[i][2]) || varsayilan;
       oturumlar.push({
         id: id, satir: GENEL.ilk + i, grup: 'E', hafta: String(gor[i][0]).trim(), tarih: tarih,
-        baslangic: saat[0], bitis: saat[1], tur: 'Etkinlik', konu: String(gor[i][3]).trim(),
+        baslangic: saat[0], bitis: saat[1], tur: tarihSekmesi(sh.getName()).tur, konu: String(gor[i][3]).trim(),
         aciklama: String(gor[i][4]).trim(), egitmenler: adlar(gor[i][5]), konuklar: adlar(gor[i][6])
       });
     }
   }
-  return { sekme: sh.getName(), kod: 'Genel', genel: true, oturumlar: oturumlar };
+  return { sekme: sh.getName(), kod: tarihSekmesi(sh.getName()).kod, genel: true, oturumlar: oturumlar };
 }
 
 // ---------------------------------------------------------------- gönderim
@@ -242,7 +246,7 @@ function durumlariYaz(okunan, s) {
   (s.durumlar || []).forEach(function (d) {
     const h = okunan.hucre[d.id];
     if (!h) return;
-    const genel = h[0] === GENEL.ad, metin = durumMetni(d);
+    const genel = !!tarihSekmesi(h[0]), metin = durumMetni(d);
     if (!metin) return;
     const k = (satirlar[h[0]] = satirlar[h[0]] || {});
     (k[h[1]] = k[h[1]] || []).push(genel ? metin : d.grup + ': ' + metin);
@@ -325,7 +329,7 @@ function korumalariKur() {
   const rapor = [];
   SpreadsheetApp.getActive().getSheets().forEach(function (sh) {
     let kod = null;
-    if (sh.getName() === GENEL.ad) kod = 'Genel';
+    if (tarihSekmesi(sh.getName())) kod = tarihSekmesi(sh.getName()).kod;
     else if (bootcampSekmesiMi(sh)) kod = String(sh.getRange('B2').getDisplayValue()).trim();
     const duzenleyenler = yoneticiler.concat(kod ? (po[kod] || []) : []);
     sh.getProtections(SpreadsheetApp.ProtectionType.SHEET).forEach(function (p) { p.remove(); });

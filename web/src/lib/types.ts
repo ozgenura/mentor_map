@@ -24,6 +24,8 @@ export type Oturum = {
   /** Oturuma özel materyal linki (ham) ve dönemin materyal linki; materyal_linki ikisinden gösterileni verir. */
   oturum_materyal_linki?: string | null;
   varsayilan_materyal_linki?: string | null;
+  /** Bootcamp / Uygulamalı Eğitim Programı / Hafta Sonu Eğitimleri (Genel'de yok). */
+  egitim_turu?: string | null;
   excelden_kalkti?: boolean;
   /** Dönem (DA11). Geçici dönemde kodun kendisidir (DA). */
   donem_kod?: string | null;
@@ -64,3 +66,6 @@ export type Degisiklik = {
 export type YetkiTuru = "ana_egitmen" | "po" | "asistan";
 export type Yetki = { bootcamp_id: string; kisi_id: string; yetki?: YetkiTuru };
 export const DUZENLEYEN_YETKILER: YetkiTuru[] = ["po"];
+
+/** Eğitim türleri (filtre sırası). */
+export const EGITIM_TURLERI = ["Bootcamp", "Uygulamalı Eğitim Programı", "Hafta Sonu Eğitimleri"];

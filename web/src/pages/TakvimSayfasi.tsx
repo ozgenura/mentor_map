@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { kisiEtiketi, YanSeansFormu } from "../components/SeansFormu";
 import { SayfaUstu } from "../components/Kabuk";
 import { AyGorunumu, ipucu } from "../components/AyGorunumu";
@@ -10,7 +10,7 @@ import { Bos, Ikon, Segment } from "../components/ui";
 import { gosterim, useBaglam } from "../lib/baglam";
 import { basMs, bitMs, gectiMi, kartEtiketi, kisaltmaHaritasi, siraliOturumlar, sonrakiOturum, TATILLER, yaziRengi } from "../lib/derive";
 import { bugunTR, gunBasligi, gunEkle, haftaBasi, saat, sehir, TR } from "../lib/time";
-import type { Oturum } from "../lib/types";
+import { EGITIM_TURLERI, type Oturum } from "../lib/types";
 import { SaatSecici } from "./Bugun";
 
 type Gorunum = "gun" | "hafta" | "ay" | "harita";
@@ -39,6 +39,10 @@ function haftaEtiketi(bas: string) {
   return a1 === a2 ? `${g1}–${g2} ${AY[a1 - 1]}` : `${g1} ${AY[a1 - 1]} – ${g2} ${AY[a2 - 1]}`;
 }
 
+const TUMU: Record<string, string> = {
+  "Bootcamp": "Tüm bootcamp'ler", "Uygulamalı Eğitim Programı": "Tüm uygulamalı programlar", "Hafta Sonu Eğitimleri": "Tüm hafta sonu eğitimleri",
+};
+
 export function TakvimSayfasi() {
   const { tum, ben, kisiler, duzenleyebilirMi, sec, banaMi, sorumlu, tz, saatModu } = useBaglam();
   const saatBilgisi = saatModu === "yerel" && tz !== TR ? `${sehir(tz)} saati` : "TR saati";
@@ -48,18 +52,22 @@ export function TakvimSayfasi() {
   const [gorunum, setGorunum] = useState<Gorunum>(() => istenenGorunum() ?? (genisEkran() ? "hafta" : "gun"));
   const [kapsam, setKapsam] = useState<Kapsam>(ben ? "ben" : "hepsi");
   const [bootcamp, setBootcamp] = useState("");
+  const [egitimTuru, setEgitimTuru] = useState("");
   const [egitmen, setEgitmen] = useState("");
   const [secili, setSecili] = useState(bugunTR());
 
-  const bootcamplar = useMemo(() => [...new Map(tum.map((o) => [o.kisa_kod, o.bootcamp_ad])).entries()]
-    .sort((a, b) => a[0].localeCompare(b[0], "tr")), [tum]);
+  const turler = useMemo(() => EGITIM_TURLERI.filter((t) => tum.some((o) => o.egitim_turu === t)), [tum]);
+  const turUyar = useCallback((o: Oturum) => !egitimTuru || o.egitim_turu === egitimTuru, [egitimTuru]);
+  const bootcamplar = useMemo(() => [...new Map(tum.filter(turUyar).map((o) => [o.kisa_kod, o.bootcamp_ad])).entries()]
+    .sort((a, b) => a[0].localeCompare(b[0], "tr")), [tum, turUyar]);
 
   const gorunen = useMemo(() => tum.filter((o) => {
+    if (!turUyar(o)) return false;
     if (bootcamp && o.kisa_kod !== bootcamp) return false;
     if (kapsam === "ben" && ben) return banaMi(o);
     if (egitmen) return o.anlaticilar.some((a) => a.kisi_id === egitmen);
     return true;
-  }), [tum, bootcamp, kapsam, egitmen, ben, banaMi]);
+  }), [tum, bootcamp, kapsam, egitmen, ben, banaMi, turUyar]);
 
   // Harita tüm programı gösterir: kişinin (ya da seçili eğitmenin) bootcamp'lerinin bütün oturumları, kişininkiler vurgulu.
   const vurguId = kapsam === "ben" && ben ? ben.id : egitmen || null;
@@ -67,8 +75,8 @@ export function TakvimSayfasi() {
   const haritaOturumlari = useMemo(() => {
     const hatlar = vurguId ? new Set(tum.filter(vurgu).map((o) => o.bootcamp_id)) : null;
     if (hatlar && kapsam === "ben") for (const id of sorumlu) hatlar.add(id);  // asistan / PO olduğu bootcamp'ler
-    return tum.filter((o) => (!bootcamp || o.kisa_kod === bootcamp) && (!hatlar || hatlar.has(o.bootcamp_id)));
-  }, [tum, vurgu, vurguId, bootcamp, kapsam, sorumlu]);
+    return tum.filter((o) => turUyar(o) && (!bootcamp || o.kisa_kod === bootcamp) && (!hatlar || hatlar.has(o.bootcamp_id)));
+  }, [tum, vurgu, vurguId, bootcamp, kapsam, sorumlu, turUyar]);
 
   return (
     <>
@@ -97,8 +105,15 @@ export function TakvimSayfasi() {
             secenekler={[["gun", "Gün"], ["hafta", "Hafta"], ["ay", "Ay"], ["harita", "Harita"]]} />
         </div>
         <div className="flex flex-wrap gap-2">
+          {turler.length > 1 && (
+            <select aria-label="Eğitim türü" value={egitimTuru} className="secim"
+              onChange={(e) => { setEgitimTuru(e.target.value); setBootcamp(""); }}>
+              <option value="">Tüm eğitim türleri</option>
+              {turler.map((t) => <option key={t} value={t}>{t}</option>)}
+            </select>
+          )}
           <select aria-label="Bootcamp" value={bootcamp} onChange={(e) => setBootcamp(e.target.value)} className="secim">
-            <option value="">Tüm bootcamp'ler</option>
+            <option value="">{TUMU[egitimTuru] ?? "Tüm programlar"}</option>
             {bootcamplar.map(([kod, ad]) => <option key={kod} value={kod}>{ad}</option>)}
           </select>
           {kapsam === "hepsi" && (
