@@ -232,3 +232,19 @@ def test_hafta_sonu_tarih_bazli_sekme(kurulu):
     assert r["hata_sayisi"] == 0, r["hatalar"]
     rows = db.execute("select tarih::text, tur::text, egitim_turu from oturum_gorunumu where kisa_kod = 'HS' order by tarih").fetchall()
     assert rows == [("2026-12-05", "Ders", "Hafta Sonu Eğitimleri"), ("2026-12-06", "Ders", "Hafta Sonu Eğitimleri")]
+
+
+def test_genel_her_poya_acik(kurulu):
+    """Genel'i herhangi bir bootcamp'in PO'su gönderebilir; korumada Genel'in düzenleyicileri tüm PO'lar."""
+    db = kurulu
+    db.execute("insert into bootcamp (kisa_kod, ad) values ('Genel', 'Genel etkinlikler') on conflict do nothing")
+    db.execute("""insert into bootcamp_yetkilileri (bootcamp_id, kisi_id, yetki)
+                  select b.id, k.id, 'po' from bootcamp b, kisiler k where b.kisa_kod = 'İK' and k.ad = 'Ayşe Kaya'""")
+    e = oturum(grup="E", tarih="2026-12-10", konu="Kariyer günü", tur="Etkinlik")
+    r = sablon(db, [{"sekme": "Genel", "kod": "Genel", "genel": True, "oturumlar": [e]}], gonderen=AYSE)
+    assert r["hata_sayisi"] == 0, r["hatalar"]
+    k = db.execute("select sablon_korumalari()").fetchone()[0]
+    assert AYSE in k["bootcamplar"]["Genel"] and AYSE in k["bootcamplar"]["İK"]
+    # PO olmayan eğitmen Genel'i gönderemez
+    r = sablon(db, [{"sekme": "Genel", "kod": "Genel", "genel": True, "oturumlar": [e]}], gonderen="can@ornek.com")
+    assert r["hata_sayisi"] == 1 and "yetki" in r["hatalar"][0]["mesaj"]
