@@ -31,3 +31,17 @@ describe("etkinlikler", () => {
     expect(etkinlikGruplari(tum, "Genel", SIMDI).yaklasan.flatMap((a) => a.etkinlikler.map((x) => x.id))).toEqual(["genel"]);
   });
 });
+
+describe("Takvimime ekle", () => {
+  it("Google Takvim bağlantısı UTC saatle ve katılım linkiyle", async () => {
+    const { googleTakvimLinki } = await import("./etkinlik");
+    const u = new URL(googleTakvimLinki({
+      tarih: "2026-11-18", baslangic: "2026-11-18T17:00:00Z", bitis: "2026-11-18T18:00:00Z", konu: "Claude ile Asistan",
+      aciklama: "Canlı demo", toplanti_linki: "https://zoom.us/j/1",
+    } as never));
+    expect(u.searchParams.get("dates")).toBe("20261118T170000Z/20261118T180000Z");
+    expect(u.searchParams.get("text")).toBe("Claude ile Asistan");
+    expect(u.searchParams.get("location")).toBe("https://zoom.us/j/1");
+    expect(u.searchParams.get("details")).toContain("Katılım: https://zoom.us/j/1");
+  });
+});

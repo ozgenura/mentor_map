@@ -2,11 +2,12 @@
 
 import { useMemo, useState } from "react";
 import { SayfaUstu } from "../components/Kabuk";
-import { BootcampEtiketi, Bos, Ikon, Kart, Rozet } from "../components/ui";
+import { AyGorunumu } from "../components/AyGorunumu";
+import { BootcampEtiketi, Bos, Ikon, Kart, Rozet, Segment } from "../components/ui";
 import { gosterim, useBaglam } from "../lib/baglam";
-import { guvenliLink } from "../lib/derive";
-import { etkinlikGruplari, etkinlikMi, GENEL_KOD, type AyGrubu } from "../lib/etkinlik";
-import { gunBasligi } from "../lib/time";
+import { bitMs, guvenliLink } from "../lib/derive";
+import { etkinlikGruplari, etkinlikMi, GENEL_KOD, googleTakvimLinki, type AyGrubu } from "../lib/etkinlik";
+import { bugunTR, gunBasligi } from "../lib/time";
 import type { Oturum } from "../lib/types";
 import { SaatSecici } from "./Bugun";
 
@@ -17,28 +18,44 @@ export function Etkinlikler() {
   const { tum } = useBaglam();
   const [bootcamp, setBootcamp] = useState("");
   const [gecmisAcik, setGecmisAcik] = useState(false);
+  const [gorunum, setGorunum] = useState<"liste" | "takvim">("liste");
+  // Takvim sıradaki etkinliğin gününde açılır (yoksa bugün).
+  const [gun, setGun] = useState(() => tum.filter((o) => etkinlikMi(o) && o.durum === "planli" && bitMs(o) > Date.now())
+    .map((o) => o.tarih).sort()[0] ?? bugunTR());
   const secenekler = useMemo(() => [...new Map(tum.filter(etkinlikMi).map((o) => [o.kisa_kod, o.bootcamp_ad])).entries()]
     .sort((a, b) => (a[0] === GENEL_KOD ? -1 : b[0] === GENEL_KOD ? 1 : a[0].localeCompare(b[0], "tr"))), [tum]);
   const g = useMemo(() => etkinlikGruplari(tum, bootcamp), [tum, bootcamp]);
   const adet = g.yaklasan.reduce((n, a) => n + a.etkinlikler.length, 0);
+  // Takvim görünümü: herkes tüm etkinlikleri ay takviminde görür; güne dokununca o günün etkinlikleri açılır.
+  const hepsi = useMemo(() => tum.filter((o) => etkinlikMi(o) && !o.excelden_kalkti && (!bootcamp || o.kisa_kod === bootcamp)), [tum, bootcamp]);
+  const gununEtkinlikleri = hepsi.filter((o) => o.tarih === gun);
 
   return (
     <>
       <SayfaUstu ust="Bootcamp etkinlikleri ve genel etkinlikler" baslik={adet ? `${adet} yaklaşan etkinlik` : "Etkinlikler"}
         sag={<SaatSecici />} />
       <div className="flex flex-col gap-5 px-3 pt-4 lg:px-10">
-        <div className="px-2 lg:px-0">
+        <div className="flex flex-wrap items-center gap-2 px-2 lg:px-0">
+          <Segment<"liste" | "takvim"> etiket="Görünüm" deger={gorunum} onDegis={setGorunum} secenekler={[["liste", "Liste"], ["takvim", "Takvim"]]} />
           <select aria-label="Bootcamp" value={bootcamp} onChange={(e) => setBootcamp(e.target.value)} className="secim">
             <option value="">Tüm etkinlikler</option>
             {secenekler.map(([kod, ad]) => <option key={kod} value={kod}>{kod === GENEL_KOD ? "Genel (bootcamp'e bağlı olmayan)" : ad}</option>)}
           </select>
         </div>
-        {g.yaklasan.length ? <Gruplar gruplar={g.yaklasan} /> : (
+        {gorunum === "takvim" ? (
+          <section className="flex flex-col gap-3">
+            <AyGorunumu oturumlar={hepsi} secili={gun} onGunSec={setGun} />
+            <h2 className="px-2 font-baslik text-lg font-bold tracking-tight lg:px-0">{gunBasligi(gun)}</h2>
+            {gununEtkinlikleri.length ? (
+              <div className="grid gap-3 lg:grid-cols-2">{gununEtkinlikleri.map((o) => <EtkinlikKarti key={o.id} o={o} />)}</div>
+            ) : <Bos>Bu gün etkinlik yok. Takvimde etkinliği olan bir güne dokun.</Bos>}
+          </section>
+        ) : g.yaklasan.length ? <Gruplar gruplar={g.yaklasan} /> : (
           <Bos>
             Yaklaşan etkinlik yok.
           </Bos>
         )}
-        {g.gecmis.length > 0 && (
+        {gorunum === "liste" && g.gecmis.length > 0 && (
           <section className="flex flex-col gap-3">
             <button onClick={() => setGecmisAcik((x) => !x)} aria-expanded={gecmisAcik}
               className="flex items-center gap-1.5 px-2 text-[13px] font-semibold text-soluk lg:px-0">
@@ -97,6 +114,12 @@ function EtkinlikKarti({ o }: { o: Oturum }) {
           <a href={link} target="_blank" rel="noreferrer"
             className="flex h-10 items-center gap-1.5 rounded-full bg-yesil px-4 text-[13px] font-bold text-white">
             <Ikon ad="video" boyut={16} /> Katılım linki
+          </a>
+        )}
+        {!iptal && bitMs(o) > Date.now() && (
+          <a href={googleTakvimLinki(o)} target="_blank" rel="noreferrer"
+            className="flex h-10 items-center gap-1.5 rounded-full border border-cizgi px-4 text-[13px] font-semibold">
+            <Ikon ad="abone" boyut={16} /> Takvimime ekle
           </a>
         )}
         <button onClick={() => sec(o)} className="h-10 rounded-full border border-cizgi px-4 text-[13px] font-semibold">Detay</button>
