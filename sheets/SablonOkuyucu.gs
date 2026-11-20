@@ -326,7 +326,7 @@ function korumalariKur() {
   const y = istek('get');
   if (y.kod !== 200) { ui.alert('Korumalar alınamadı: ' + (y.veri.hata || y.kod)); return; }
   const yoneticiler = y.veri.yoneticiler || [], po = y.veri.bootcamplar || {};
-  const rapor = [];
+  const rapor = [], atlanan = [];
   SpreadsheetApp.getActive().getSheets().forEach(function (sh) {
     let kod = null;
     if (tarihSekmesi(sh.getName())) kod = tarihSekmesi(sh.getName()).kod;
@@ -337,8 +337,15 @@ function korumalariKur() {
     k.getEditors().forEach(function (e) {
       if (duzenleyenler.indexOf(e.getEmail()) < 0) { try { k.removeEditor(e); } catch (hata) { /* dosya sahibi çıkarılamaz */ } }
     });
-    if (duzenleyenler.length) k.addEditors(duzenleyenler);
-    rapor.push(sh.getName() + ': ' + (duzenleyenler.length ? duzenleyenler.join(', ') : 'yalnızca dosya sahibi'));
+    // Tek tek eklenir: Google hesabı olmayan bir adres (ör. kurumsal ama Google'a bağlı olmayan) tüm listeyi düşürmesin.
+    const eklenen = [];
+    duzenleyenler.forEach(function (e) {
+      try { k.addEditor(e); eklenen.push(e); } catch (hata) { if (atlanan.indexOf(e) < 0) atlanan.push(e); }
+    });
+    rapor.push(sh.getName() + ': ' + (eklenen.length ? eklenen.join(', ') : 'yalnızca dosya sahibi'));
   });
-  ui.alert('Sekme korumaları kuruldu', rapor.join('\n') + '\n\nE-postası yer tutucu olan PO\'lar eklenmedi.', ui.ButtonSet.OK);
+  ui.alert('Sekme korumaları kuruldu', rapor.join('\n') +
+    (atlanan.length ? '\n\nGoogle hesabı olmadığı için eklenemeyenler: ' + atlanan.join(', ') +
+      '. Bu kişilerin Google hesabıyla kullandığı adresi Mentor Map Program\'da yazın (yöneticinin ek adresi uygulamadan eklenir).' : '') +
+    '\n\nE-postası yer tutucu olan PO\'lar eklenmedi.', ui.ButtonSet.OK);
 }
