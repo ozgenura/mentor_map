@@ -113,7 +113,11 @@ function Ana({ api, eposta, demoKisiId }: { api: Api; eposta: string | null; dem
     yaz(sonGorulmeAnahtari, String(t));
   }, [sonGorulmeAnahtari]);
 
-  const [seciliId, setSeciliId] = useState<string | null>(null);
+  // Bildirime dokunulunca (?oturum=<id>) o oturumun detayı açılır.
+  const [seciliId, setSeciliId] = useState<string | null>(() => new URLSearchParams(location.search).get("oturum"));
+  useEffect(() => {
+    if (new URLSearchParams(location.search).has("oturum")) history.replaceState(null, "", location.pathname + location.hash);
+  }, []);
   const kapat = useCallback(() => setSeciliId(null), []);
 
   const tum = oturumlar.data ?? [];

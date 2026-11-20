@@ -7,7 +7,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["icon.svg", "apple-touch-icon.png", "demo-data.json", "miuul-alab.png"],
+      includeAssets: ["icon.svg", "apple-touch-icon.png", "demo-data.json", "miuul-alab.png", "push-sw.js"],
       manifest: {
         name: "Mentor Map",
         short_name: "Mentor Map",
@@ -25,6 +25,7 @@ export default defineConfig({
       },
       workbox: {
         navigateFallback: "/index.html",
+        importScripts: ["push-sw.js"],  // anlık bildirim (push) dinleyicileri
         runtimeCaching: [
           {
             // Program verisi: önce ağ, yoksa son başarılı yanıt (çevrimdışı açılış).

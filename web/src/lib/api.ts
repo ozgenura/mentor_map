@@ -45,6 +45,19 @@ export interface Api {
   /** Açık şablon çakışmaları (kişinin yetkili olduğu bootcamp'ler). */
   cakismalar(): Promise<Cakisma[]>;
   cakismaCoz(id: number, secim: "sablon" | "uygulama"): Promise<void>;
+  /** Durak tabelaları: anonslar (3 gün yayında) ve PO'na ilet talepleri. */
+  anonslar(): Promise<Anons[]>;
+  anonsYaz(bootcampId: string | null, metin: string): Promise<void>;
+  anonsGorduk(idler: number[]): Promise<void>;
+  talepler(): Promise<Talep[]>;
+  talepGonder(bootcampId: string, konu: string, metin: string): Promise<void>;
+  talepCevapla(id: number, metin: string): Promise<void>;
+  talepleriOkudum(): Promise<void>;
+  /** Anlık bildirim: cihaz kaydı, ders hatırlatması ayarı, deneme bildirimi. */
+  pushAboneOl(a: { endpoint: string; p256dh: string; auth: string }): Promise<void>;
+  pushAbonelikSil(endpoint: string): Promise<void>;
+  bildirimAyari(hatirlatma?: boolean): Promise<{ hatirlatma: boolean; cihaz: number }>;
+  pushDeneme(): Promise<void>;
   senkronDurumu(): Promise<SenkronDurumu | null>;
   senkronAnahtariOlustur(): Promise<string>;
   senkronAdresi(): string | null;
@@ -56,6 +69,17 @@ export interface Api {
   geriBildirimler(): Promise<GeriBildirim[]>;
   geriBildirimDurum(id: number, durum: GeriBildirimDurumu): Promise<void>;
 }
+
+export type Anons = {
+  id: number; metin: string; olusturma: string; bitis: string; bootcamp_id: string | null; kod: string | null; renk: string | null;
+  yazan: string; gordum: boolean; benim: boolean; goren: number | null; kitle: number | null;
+};
+export type Talep = {
+  id: number; konu: string; metin: string; olusturma: string; bootcamp_id: string; kod: string; renk: string;
+  gonderen: string; benim: boolean; gelen: boolean; cevap: string | null; cevaplayan: string | null; cevap_zamani: string | null;
+  okunmadi: boolean;
+};
+export const TALEP_KONULARI = ["Ders içeriği", "Program / saat", "Materyal / link", "Diğer"];
 
 /** Şablon ile uygulamanın aynı alanı farklı değiştirdiği durum (Aşama C). */
 export type Cakisma = {
@@ -205,6 +229,17 @@ function supabaseApi(db: SupabaseClient): Api {
     async cakismaCoz(id, secim) {
       ok(await db.rpc("sablon_cakisma_coz", { p_id: id, p_secim: secim }));
     },
+    anonslar: async () => ok(await db.rpc("anonslarim")) as Anons[],
+    async anonsYaz(bootcampId, metin) { ok(await db.rpc("anons_yaz", { p_bootcamp: bootcampId, p_metin: metin })); },
+    async anonsGorduk(idler) { if (idler.length) ok(await db.rpc("anons_gorduk", { p_idler: idler })); },
+    talepler: async () => ok(await db.rpc("taleplerim")) as Talep[],
+    async talepGonder(b, konu, metin) { ok(await db.rpc("talep_gonder", { p_bootcamp: b, p_konu: konu, p_metin: metin })); },
+    async talepCevapla(id, metin) { ok(await db.rpc("talep_cevapla", { p_id: id, p_metin: metin })); },
+    async talepleriOkudum() { ok(await db.rpc("talepleri_okudum")); },
+    async pushAboneOl(a) { ok(await db.rpc("push_abone_ol", { p_endpoint: a.endpoint, p_p256dh: a.p256dh, p_auth: a.auth })); },
+    async pushAbonelikSil(endpoint) { ok(await db.rpc("push_abonelik_sil", { p_endpoint: endpoint })); },
+    bildirimAyari: async (hatirlatma) => ok(await db.rpc("bildirim_ayarim", { p_hatirlatma: hatirlatma ?? null })) as { hatirlatma: boolean; cihaz: number },
+    async pushDeneme() { ok(await db.rpc("push_deneme")); },
     async geriBildirimGonder(tur, metin, sayfa) {
       ok(await db.rpc("geri_bildirim_gonder", { p_tur: tur, p_metin: metin, p_sayfa: sayfa }));
     },
@@ -219,6 +254,18 @@ function supabaseApi(db: SupabaseClient): Api {
 }
 
 // ---------------------------------------------------------------- demo
+const simdi = Date.now();
+const DEMO_ANONSLAR: Anons[] = [
+  { id: 1, metin: "26 Kasım Perşembe dersi 21:00'e alındı. Zoom linki aynı.", olusturma: new Date(simdi - 2 * 36e5).toISOString(),
+    bitis: new Date(simdi + 3 * 864e5).toISOString(), bootcamp_id: null, kod: "Fabric", renk: "#E3A008", yazan: "Elif Şahin",
+    gordum: false, benim: false, goren: null, kitle: null },
+];
+const DEMO_TALEPLER: Talep[] = [
+  { id: 1, konu: "Program / saat", metin: "Kapanış dersinde proje sunumlarına 30 dk ek süre verebilir miyiz?",
+    olusturma: new Date(simdi - 3 * 864e5).toISOString(), bootcamp_id: "", kod: "Fabric", renk: "#E3A008", gonderen: "Sen",
+    benim: true, gelen: false, cevap: "Olur, 23:30'a kadar uzatalım. Programı güncelledim.", cevaplayan: "Elif",
+    cevap_zamani: new Date(simdi - 2 * 864e5).toISOString(), okunmadi: true },
+];
 // Demoda yapılan değişiklikler (iptal, düzenleme, yan seans) yalnızca bu tarayıcıda tutulur.
 // Bildirimler gerçek sistemdeki gibi oturumun anlatıcılarına ve bootcamp'in ana eğitmenlerine yazılır.
 
@@ -231,6 +278,8 @@ type Yerel = {
   yeniSeanslar: Oturum[];
   bildirimler: YerelBildirim[];
   geriBildirimler?: GeriBildirim[];
+  anonslar?: Anons[];
+  talepler?: Talep[];
 };
 
 const YEREL_ANAHTAR = "mm-demo-yerel";
@@ -346,6 +395,36 @@ const demoApi: Api = {
     await demoApi.yanSeansKaydet(s);
   },
   cakismalar: async () => [],
+  anonslar: async () => (yerel.anonslar ?? DEMO_ANONSLAR),
+  async anonsYaz(bootcampId, metin) {
+    const tum = await demoOturumlar();
+    const o = tum.find((x) => x.bootcamp_id === bootcampId);
+    yereliYaz({ anonslar: [{ id: Date.now(), metin, olusturma: new Date().toISOString(), bitis: new Date(Date.now() + 3 * 864e5).toISOString(),
+      bootcamp_id: bootcampId, kod: o?.kisa_kod ?? null, renk: o?.renk ?? "#8F807A", yazan: "Sen", gordum: true, benim: true, goren: 0, kitle: 8 },
+      ...(yerel.anonslar ?? DEMO_ANONSLAR)] });
+  },
+  async anonsGorduk(idler) {
+    yereliYaz({ anonslar: (yerel.anonslar ?? DEMO_ANONSLAR).map((a) => (idler.includes(a.id) ? { ...a, gordum: true } : a)) });
+  },
+  talepler: async () => (yerel.talepler ?? DEMO_TALEPLER),
+  async talepGonder(bootcampId, konu, metin) {
+    const tum = await demoOturumlar();
+    const o = tum.find((x) => x.bootcamp_id === bootcampId);
+    yereliYaz({ talepler: [{ id: Date.now(), konu, metin, olusturma: new Date().toISOString(), bootcamp_id: bootcampId,
+      kod: o?.kisa_kod ?? "", renk: o?.renk ?? "#8F807A", gonderen: "Sen", benim: true, gelen: false, cevap: null, cevaplayan: null,
+      cevap_zamani: null, okunmadi: false }, ...(yerel.talepler ?? DEMO_TALEPLER)] });
+  },
+  async talepCevapla(id, metin) {
+    yereliYaz({ talepler: (yerel.talepler ?? DEMO_TALEPLER).map((t) => (t.id === id
+      ? { ...t, cevap: metin, cevaplayan: "Sen", cevap_zamani: new Date().toISOString(), okunmadi: false } : t)) });
+  },
+  async talepleriOkudum() {
+    yereliYaz({ talepler: (yerel.talepler ?? DEMO_TALEPLER).map((t) => ({ ...t, okunmadi: false })) });
+  },
+  async pushAboneOl() { throw new Error("Demoda bildirim açılamaz."); },
+  async pushAbonelikSil() { /* demo */ },
+  bildirimAyari: async () => ({ hatirlatma: false, cihaz: 0 }),
+  async pushDeneme() { throw new Error("Demoda bildirim yok."); },
   async cakismaCoz() { /* demoda şablon yok */ },
   async yanSeansKaydet(s) {
     const v = await demoVeri();
