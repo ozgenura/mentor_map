@@ -39,10 +39,13 @@ function useTabelaVerisi() {
 export function DurakTabelalari() {
   const { api } = useBaglam();
   const acik = useQuery({ queryKey: ["ozellik", "tabelalar"], queryFn: () => api.ozellikAcik("tabelalar"), staleTime: 10 * 60_000 });
-  return acik.data ? <Tabelalar /> : null;
+  const herkese = useQuery({ queryKey: ["ozellik-herkese", "tabelalar"], queryFn: () => api.ozellikHerkeseAcik("tabelalar"),
+    enabled: !!acik.data, staleTime: 10 * 60_000 });
+  // Özellik herkese kapalıyken yönetici önizleme olarak görür (birinin gözünden bakarken de); başlık bunu söyler.
+  return acik.data ? <Tabelalar onizleme={herkese.data === false} /> : null;
 }
 
-function Tabelalar() {
+function Tabelalar({ onizleme }: { onizleme: boolean }) {
   const { anonslar, talepler } = useTabelaVerisi();
   // Bildirime dokunulunca (?tabela=anons | po) ilgili tabela açılır.
   const [acik, setAcik] = useState<Tabela | null>(() => {
@@ -59,7 +62,9 @@ function Tabelalar() {
   return (
     <section aria-label="Durak tabelaları" className="overflow-hidden rounded-[24px] bg-yesil text-white shadow-lg shadow-yesil/15">
       <div className="flex items-center justify-between px-4 pb-1 pt-3">
-        <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-yesil-soluk">Durak tabelası</span>
+        <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-yesil-soluk">
+          Durak tabelası{onizleme && <span className="ml-2 rounded bg-mercan-zemin px-1.5 py-0.5 normal-case tracking-normal text-mercan-koyu">Önizleme · yalnızca sen görüyorsun</span>}
+        </span>
         <span className="flex gap-1" aria-hidden="true">
           {["#F08891", "#7FA650", "#E3A008", "#5B8DEF"].map((r) => <span key={r} className="h-1.5 w-4 rounded-full" style={{ background: r }} />)}
         </span>

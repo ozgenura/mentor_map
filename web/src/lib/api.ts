@@ -60,6 +60,7 @@ export interface Api {
   pushDeneme(): Promise<void>;
   /** Özellik anahtarı (ör. 'tabelalar'); yöneticide hep açık. */
   ozellikAcik(anahtar: string): Promise<boolean>;
+  ozellikHerkeseAcik(anahtar: string): Promise<boolean>;
   senkronDurumu(): Promise<SenkronDurumu | null>;
   senkronAnahtariOlustur(): Promise<string>;
   senkronAdresi(): string | null;
@@ -243,6 +244,7 @@ function supabaseApi(db: SupabaseClient): Api {
     bildirimAyari: async (hatirlatma) => ok(await db.rpc("bildirim_ayarim", { p_hatirlatma: hatirlatma ?? null })) as { hatirlatma: boolean; cihaz: number },
     async pushDeneme() { ok(await db.rpc("push_deneme")); },
     ozellikAcik: async (anahtar) => ok(await db.rpc("ozellik_acik", { p_anahtar: anahtar })) === true,
+    ozellikHerkeseAcik: async (anahtar) => ok(await db.rpc("ozellik_herkese_acik", { p_anahtar: anahtar })) === true,
     async geriBildirimGonder(tur, metin, sayfa) {
       ok(await db.rpc("geri_bildirim_gonder", { p_tur: tur, p_metin: metin, p_sayfa: sayfa }));
     },
@@ -429,6 +431,7 @@ const demoApi: Api = {
   bildirimAyari: async () => ({ hatirlatma: false, cihaz: 0 }),
   async pushDeneme() { throw new Error("Demoda bildirim yok."); },
   ozellikAcik: async () => true,
+  ozellikHerkeseAcik: async () => true,
   async cakismaCoz() { /* demoda şablon yok */ },
   async yanSeansKaydet(s) {
     const v = await demoVeri();

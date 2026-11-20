@@ -148,3 +148,10 @@ def test_ozellik_kapaliyken_yalnizca_yonetici(hat):
         db.execute("select anons_yaz(%s, 'Yönetici dener')", (ik(db),))
     with as_user(db, CAN):
         assert db.execute("select ozellik_acik('tabelalar')").fetchone()[0] is False
+
+
+def test_ozellik_herkese_acik_mi(hat):
+    db = hat
+    db.execute("update uygulama_ayarlari set acik = false where anahtar = 'tabelalar'")
+    with as_user(db, YONETICI):
+        assert db.execute("select ozellik_acik('tabelalar'), ozellik_herkese_acik('tabelalar')").fetchone() == (True, False)
