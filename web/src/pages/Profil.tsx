@@ -56,9 +56,7 @@ export function Profil({ demoSec }: { demoSec: (id: string) => void }) {
             <Satir etiket="Ad">{ben.ad}</Satir>
             <Satir etiket="E-posta">{ben.eposta}</Satir>
             <Satir etiket="Saat dilimi">{tz === TR ? "Türkiye (TR)" : `${sehir(tz)} · saatler TR ile birlikte gösterilir`}</Satir>
-            {(ben.rol === "yonetici" || ben.dis_egitmen) && (
-              <Satir etiket="Rol">{[ben.rol === "yonetici" && "Admin", ben.dis_egitmen && "Dış eğitmen"].filter(Boolean).join(" · ")}</Satir>
-            )}
+            {ben.rol === "yonetici" && <Satir etiket="Rol">Admin</Satir>}
             {yetkiListesi("po") && <Satir etiket="Product owner">{yetkiListesi("po")}</Satir>}
             {yetkiListesi("ana_egitmen") && <Satir etiket="Ana eğitmen">{yetkiListesi("ana_egitmen")}</Satir>}
             {yetkiListesi("asistan") && <Satir etiket="Asistan eğitmen">{yetkiListesi("asistan")}</Satir>}

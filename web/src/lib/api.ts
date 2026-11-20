@@ -131,7 +131,7 @@ function supabaseApi(db: SupabaseClient): Api {
       return (data as string | null) ?? null;
     },
     async kisiler() {
-      return ok(await db.from("kisiler").select("id, ad, eposta, saat_dilimi, rol, dis_egitmen").eq("aktif", true).order("ad"));
+      return ok(await db.from("kisiler").select("id, ad, eposta, saat_dilimi, rol").eq("aktif", true).order("ad"));
     },
     async yetkiler() {
       return ok(await db.from("bootcamp_yetkilileri").select("bootcamp_id, kisi_id, yetki"));

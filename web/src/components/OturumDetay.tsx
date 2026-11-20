@@ -19,8 +19,7 @@ export function yetkiAdi(yonetici: boolean, yetkiler: string[]): string {
 
 /** Oturum detayı: mobilde tam ekran sayfa, geniş ekranda sağdan açılan panel. */
 export function OturumDetay({ o, onKapat }: { o: Oturum; onKapat: () => void }) {
-  const { tz, saatModu, duzenleyebilirMi, cakisanlar, ben, kisiler, yetkilerim } = useBaglam();
-  const disEgitmen = new Set(kisiler.filter((k) => k.dis_egitmen).map((k) => k.id));
+  const { tz, saatModu, duzenleyebilirMi, cakisanlar, ben, yetkilerim } = useBaglam();
   const [iptalAcik, setIptalAcik] = useState(false);
   const g = gosterim(o, tz, saatModu);
   const iptal = o.durum === "iptal";
@@ -92,7 +91,6 @@ export function OturumDetay({ o, onKapat }: { o: Oturum; onKapat: () => void }) 
                     <li key={i}>
                       {a.kisi_id && a.kisi_id === ben?.id ? "Sen" : a.ad}
                       {ROL[a.rol] && <span className="ml-1 text-xs text-soluk">({ROL[a.rol]})</span>}
-                      {a.kisi_id && disEgitmen.has(a.kisi_id) && <span className="ml-1 text-xs text-soluk">· dış eğitmen</span>}
                     </li>
                   ))}
                 </ul>

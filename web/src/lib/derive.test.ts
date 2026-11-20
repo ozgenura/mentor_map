@@ -102,7 +102,7 @@ describe("Faz 0", () => {
   });
   it("anlatıcı listesinde herkes, rolüyle (MM-06)", () => {
     expect(kisiEtiketi({ id: "1", ad: "Özge", eposta: "", saat_dilimi: "Europe/Istanbul", rol: "yonetici" })).toBe("Özge (admin)");
-    expect(kisiEtiketi({ id: "2", ad: "Dora", eposta: "", saat_dilimi: "Europe/Istanbul", rol: "egitmen", dis_egitmen: true })).toBe("Dora (dış)");
+    expect(kisiEtiketi({ id: "2", ad: "Dora", eposta: "", saat_dilimi: "Europe/Istanbul", rol: "egitmen", dis_egitmen: true })).toBe("Dora")  // iç/dış ayrımı uygulamada gösterilmez;
     expect(kisiEtiketi({ id: "3", ad: "Can", eposta: "", saat_dilimi: "Europe/Istanbul", rol: "egitmen" })).toBe("Can");
   });
   it("TR saatiyle 01:00'de bugün, UTC'deki dün değildir (MM-08)", () => {

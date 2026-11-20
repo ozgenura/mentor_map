@@ -21,8 +21,8 @@ export function seansSuresiDk(bas: string, bit: string): number {
 
 /** Anlatıcı listelerinde kişi adı ve rolü (MM-06: herkes anlatıcı olabilir). */
 export function kisiEtiketi(k: Kisi): string {
-  const ek = [k.rol === "yonetici" ? "admin" : "", k.dis_egitmen ? "dış" : ""].filter(Boolean);
-  return ek.length ? `${k.ad} (${ek.join(", ")})` : k.ad;
+  // İç/dış eğitmen ayrımı yalnızca Mentor Map Program sayfasında (yönetici bilgisi); uygulamada gösterilmez.
+  return k.rol === "yonetici" ? `${k.ad} (admin)` : k.ad;
 }
 
 /** Oturumun kendi linki; bootcamp'in varsayılan linki forma kopyalanmaz (MM-03). Eski demo verisinde ham alan yok. */
