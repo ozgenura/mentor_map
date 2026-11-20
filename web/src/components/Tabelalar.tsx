@@ -108,12 +108,10 @@ function Secenekler({ secenekler, onSec }: { secenekler: [string, string?][]; on
 /* ---------- Anonslar ---------- */
 
 function AnonsPenceresi({ onKapat }: { onKapat: () => void }) {
-  const [gorulen, setGorulen] = useState<number[]>([]);
   const [yaz, setYaz] = useState(false);
   return (
     <TabelaPenceresi harf="A" renk="#F08891" ad="Anonslar" onKapat={onKapat}>
       {ANONSLAR.map((a) => {
-        const gordu = a.gordum || gorulen.includes(a.id);
         return (
           <article key={a.id} className="flex flex-col gap-2 rounded-2xl bg-white p-4">
             <div className="flex items-center gap-2 text-xs text-soluk">
@@ -121,15 +119,8 @@ function AnonsPenceresi({ onKapat }: { onKapat: () => void }) {
               <span className="font-semibold text-murekkep">{a.yazan}</span> · {a.zaman} · {a.kalan} daha yayında
             </div>
             <p className="text-[15px] font-medium leading-snug">{a.metin}</p>
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-soluk">{a.goren + (gorulen.includes(a.id) ? 1 : 0)}/{a.toplam} kişi gördü</span>
-              {gordu ? (
-                <span className="flex items-center gap-1 rounded-full bg-nane px-3 py-1.5 text-xs font-bold text-nane-koyu">🎫 Gördün</span>
-              ) : (
-                <button onClick={() => setGorulen([...gorulen, a.id])}
-                  className="rounded-full bg-yesil px-3.5 py-1.5 text-xs font-bold text-white">Gördüm</button>
-              )}
-            </div>
+            {/* Görülme kendiliğinden (anonslar açılınca) sayılır; kimseden onay istenmez. Sayıyı yalnızca yazan PO ve yönetici görür. */}
+            <span className="text-xs text-soluk">{a.goren}/{a.toplam} kişi gördü</span>
           </article>
         );
       })}
@@ -159,7 +150,7 @@ function AnonsYaz({ onBitti }: { onBitti: () => void }) {
       </>}
       {gitti && <>
         <Balon ben>{metin}</Balon>
-        <Balon>Anons {hat} hattında yayında 🚇 Gören herkes "Gördüm" diyecek; kaç kişinin gördüğünü buradan izlersin.</Balon>
+        <Balon>Anons {hat} hattında yayında 🚇</Balon>
         <button onClick={onBitti} className="self-start text-[13px] font-semibold underline">Tamam</button>
       </>}
     </div>
@@ -202,7 +193,7 @@ function PoPenceresi({ onKapat }: { onKapat: () => void }) {
       </>}
       {gitti && <>
         <Balon ben>{metin}</Balon>
-        <Balon>İletildi, {po[hat!]}'ya ulaştı 🚇 Cevap gelince bu tabelada "cevap" yazacak.</Balon>
+        <Balon>Talebin {po[hat!]}'ya ulaştı 🚇</Balon>
       </>}
     </TabelaPenceresi>
   );
