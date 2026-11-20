@@ -109,7 +109,9 @@ export function DetayFormu({ o, onKapat }: { o: Oturum; onKapat: () => void }) {
     <Kabuk baslik="Oturumu düzenle" alt={`${o.kisa_kod} · ${o.konu} · ${gunBasligi(o.tarih)}`} onKapat={onKapat} onKaydet={kaydet}
       bekliyor={bekliyor} hata={hata} kaydetMetni="Kaydet" kirli={JSON.stringify(d) !== JSON.stringify(ilk)}>
       <p className="rounded-xl bg-mavi px-3 py-2.5 text-xs text-mavi-koyu">
-        Tarih, saat, konu ve eğitmen program dosyasından gelir; değişiklik orada yapılır. Buradaki alanlar program güncellemesinde korunur.
+        {o.kaynak === "sablon"
+          ? "Tarih, saat, konu ve eğitmen \"Programı düzenle\"den değiştirilir. Buradaki alanlar şablon gönderiminde korunur."
+          : "Tarih, saat, konu ve eğitmen program dosyasından gelir; değişiklik orada yapılır. Buradaki alanlar program güncellemesinde korunur."}
       </p>
       <Alan etiket="Toplantı linki" htmlFor="f-link"
         ipucu={o.varsayilan_toplanti_linki ? `Boş bırakılırsa dönemin Zoom linki kullanılır: ${o.varsayilan_toplanti_linki}` : undefined}>
@@ -133,8 +135,9 @@ export function DetayFormu({ o, onKapat }: { o: Oturum; onKapat: () => void }) {
   );
 }
 
-export function YanSeansFormu({ o, bootcampId, onKapat, onKaydedildi }: {
-  o?: Oturum; bootcampId?: string; onKapat: () => void; onKaydedildi?: (id: string) => void;
+/** program: şablondan gelen oturumun programı (tarih, saat, tür, konu, eğitmenler) düzenlenir; link ve açıklama ayrı formdadır. */
+export function YanSeansFormu({ o, bootcampId, onKapat, onKaydedildi, program = false }: {
+  o?: Oturum; bootcampId?: string; onKapat: () => void; onKaydedildi?: (id: string) => void; program?: boolean;
 }) {
   const { api, tum, kisiler, duzenleyebilirMi } = useBaglam();
   const qc = useQueryClient();
@@ -189,7 +192,7 @@ export function YanSeansFormu({ o, bootcampId, onKapat, onKaydedildi }: {
     setBekliyor(true);
     setHata(null);
     try {
-      const id = await api.yanSeansKaydet(s);
+      const id = program && s.id ? (await api.programGuncelle({ ...s, id: s.id }), s.id) : await api.yanSeansKaydet(s);
       await Promise.all([qc.invalidateQueries({ queryKey: ["oturumlar"] }), qc.invalidateQueries({ queryKey: ["degisiklikler"] })]);
       onKapat();
       onKaydedildi?.(id);
@@ -201,7 +204,10 @@ export function YanSeansFormu({ o, bootcampId, onKapat, onKaydedildi }: {
   }
 
   return (
-    <Kabuk baslik={o ? "Seansı düzenle" : "Seans ekle"} alt="Saatleri Türkiye saatiyle gir; herkes takviminde kendi saatiyle görür. Eğitmenlere bildirim gider."
+    <Kabuk baslik={program ? "Programı düzenle" : o ? "Seansı düzenle" : "Seans ekle"}
+      alt={program
+        ? "Saatleri Türkiye saatiyle gir. Değişiklik eğitmenlere bildirilir ve bir sonraki şablon gönderiminde şablona da yazılır."
+        : "Saatleri Türkiye saatiyle gir; herkes takviminde kendi saatiyle görür. Eğitmenlere bildirim gider."}
       onKapat={onKapat} onKaydet={kaydet} bekliyor={bekliyor} hata={hata} kaydetMetni={o ? "Kaydet" : "Seansı ekle"}
       kirli={JSON.stringify(s) !== ilkSeans || !!konuk.trim()}>
       {!o && (
@@ -232,7 +238,7 @@ export function YanSeansFormu({ o, bootcampId, onKapat, onKaydedildi }: {
       </div>
       <Alan etiket="Tür" htmlFor="y-tur">
         <select id="y-tur" value={s.tur} onChange={(e) => setS({ ...s, tur: e.target.value })} className={GIRDI}>
-          {TURLER.map((t) => <option key={t}>{t}</option>)}
+          {(TURLER.includes(s.tur) ? TURLER : [s.tur, ...TURLER]).map((t) => <option key={t}>{t}</option>)}
         </select>
       </Alan>
 
@@ -272,6 +278,7 @@ export function YanSeansFormu({ o, bootcampId, onKapat, onKaydedildi }: {
         </div>
       )}
 
+      {!program && <>
       <Alan etiket="Toplantı linki" htmlFor="y-link"
         ipucu={o?.varsayilan_toplanti_linki ? `Boş bırakılırsa dönemin Zoom linki kullanılır: ${o.varsayilan_toplanti_linki}` : undefined}>
         <input id="y-link" type="url" inputMode="url" placeholder="https://meet.google.com/…" value={s.toplanti_linki}
@@ -281,6 +288,7 @@ export function YanSeansFormu({ o, bootcampId, onKapat, onKaydedildi }: {
         <textarea id="y-aciklama" rows={3} value={s.aciklama} onChange={(e) => setS({ ...s, aciklama: e.target.value })}
           className={`${GIRDI} h-auto py-2`} />
       </Alan>
+      </>}
     </Kabuk>
   );
 }

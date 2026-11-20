@@ -13,7 +13,7 @@
  */
 
 const ADRES = 'https://SUPABASE_PROJE_REF.supabase.co/functions/v1/sablon-senkron';
-const BETIK_SURUMU = 4;
+const BETIK_SURUMU = 5;
 const ILK_SATIR = 10;                                  // bootcamp sekmelerinde ilk hafta satırı
 const GRUPLAR = [['A', 4], ['B', 9], ['C', 14]];        // grup harfi, Tarih sütunu (D, I, N); ardından Saat, Tür, Konu, Eğitmen(ler)
 const ID_SUTUN = { A: 20, B: 21, C: 22 };               // T, U, V
@@ -220,14 +220,57 @@ function gonder(onizleme, onay, durumYaz) {
       if (h) SpreadsheetApp.getActive().getSheetByName(h[0]).getRange(h[1], h[2]).setValue(k.yeni);
     });
   }
+  // Aşama C: uygulamada değiştirilen tarih/saat/tür/konu/eğitmen şablondaki hücrelere yazılır (Gönder ve Durumu yenile).
+  // Sunucu yalnızca şablonda son gönderimden beri değişmemiş alanları gönderir; PO'nun göndermediği düzenleme ezilmez.
+  const yazilan = (!onizleme || durumYaz) ? geriYaz(okunan, s.geri_yazim || []) : 0;
   if (durumYaz) durumlariYaz(okunan, s);
   if (durumYaz && onizleme) {
     ui.alert('Durum yenilendi', (s.durumlar || []).length + ' oturumun durumu ve ' +
       (s.ek_oturumlar || []).reduce(function (t, e) { return t + e.oturumlar.length; }, 0) +
-      ' eklenen seans yazıldı. Program Mentor Map\'e gönderilmedi.', ui.ButtonSet.OK);
+      ' eklenen seans yazıldı.' + (yazilan ? ' Uygulamadaki ' + yazilan + ' değişiklik şablona işlendi.' : '') +
+      ' Program Mentor Map\'e gönderilmedi.' + cakismaMetni(s), ui.ButtonSet.OK);
     return;
   }
-  ui.alert(onizleme ? 'Önizleme (hiçbir şey yazılmadı)' : 'Gönderildi', ozetMetni(s), ui.ButtonSet.OK);
+  ui.alert(onizleme ? 'Önizleme (hiçbir şey yazılmadı)' : 'Gönderildi', ozetMetni(s) +
+    (onizleme ? ((s.geri_yazim || []).length ? '\n\nGönderince uygulamadaki ' + s.geri_yazim.length + ' oturumun değişikliği şablona yazılacak.' : '')
+              : (yazilan ? '\n\nUygulamadaki ' + yazilan + ' oturumun değişikliği şablona yazıldı.' : '')), ui.ButtonSet.OK);
+}
+
+function cakismaMetni(s) {
+  return s.acik_cakisma ? '\n\n' + s.acik_cakisma + ' çakışma Mentor Map\'te çözülmeyi bekliyor (PO paneli).' : '';
+}
+
+/** Uygulamadaki değişiklikleri hücrelere yazar. Döner: yazılan oturum sayısı. */
+function geriYaz(okunan, liste) {
+  const ss = SpreadsheetApp.getActive();
+  let n = 0;
+  liste.forEach(function (g) {
+    const h = okunan.hucre[g.id];
+    if (!h) return;
+    const sh = ss.getSheetByName(h[0]), satir = h[1];
+    let sut;  // tarih, saat, tür, konu, eğitmen(ler), konuk sütunları
+    if (tarihSekmesi(h[0])) sut = { tarih: 2, saat: 3, tur: null, konu: 4, egitmen: 6, konuk: 7 };
+    else {
+      const grp = GRUPLAR.filter(function (x) { return x[0] === g.grup; })[0];
+      if (!grp) return;
+      const c = grp[1];
+      sut = { tarih: c, saat: c + 1, tur: c + 2, konu: c + 3, egitmen: c + 4, konuk: null };
+    }
+    if (g.tarih !== undefined) { sh.getRange(satir, sut.tarih).setValue(g.tarih); sh.getRange(satir, sut.saat).setValue(g.saat || ''); }
+    if (g.tur !== undefined && sut.tur) sh.getRange(satir, sut.tur).setValue(g.tur);
+    if (g.konu !== undefined) sh.getRange(satir, sut.konu).setValue(g.konu);
+    if (g.egitmenler !== undefined) {
+      if (sut.konuk) {
+        sh.getRange(satir, sut.egitmen).setValue(g.egitmenler);
+        sh.getRange(satir, sut.konuk).setValue(g.konuklar || '');
+      } else {
+        sh.getRange(satir, sut.egitmen).setValue([g.egitmenler, g.konuklar].filter(String).join(', '));
+      }
+    }
+    n++;
+  });
+  if (n) SpreadsheetApp.flush();
+  return n;
 }
 
 // ---------------------------------------------------------------- durum geri yazımı (MM-54)
@@ -304,7 +347,7 @@ function ekBolumuYaz(sh, veriSon, genislik, oturumlar) {
 function ozetMetni(s) {
   const satirlar = (s.sekmeler || []).map(function (x) {
     return x.sekme + (x.donem ? ' (' + x.donem + ')' : '') + ': ' + x.yeni + ' yeni, ' + x.guncellenen + ' güncellenen, ' +
-      x.devralinan + ' devralınan, ' + x.kalkan + ' kalkan';
+      x.devralinan + ' devralınan, ' + x.kalkan + ' kalkan' + (x.cakisma ? ', ' + x.cakisma + ' çakışma' : '');
   });
   if (s.hata_sayisi) {
     satirlar.push('', s.hata_sayisi + ' sorun:');
@@ -314,6 +357,10 @@ function ozetMetni(s) {
   }
   if ((s.eslesmeyen_adlar || []).length) {
     satirlar.push('', 'Mentor Map\'te bulunamayan adlar (konuk olarak yazıldı): ' + s.eslesmeyen_adlar.join(', '));
+  }
+  if (s.acik_cakisma) {
+    satirlar.push('', s.acik_cakisma + ' çakışma: aynı alan hem şablonda hem Mentor Map\'te farklı değiştirildi. ' +
+      'Oturum Mentor Map\'teki haliyle kaldı; hangisinin geçerli olduğunu Mentor Map → Program (PO paneli) içinde seçin.');
   }
   satirlar.push('', 'Gönderen: ' + (s.gonderen || '?'));
   return satirlar.join('\n');

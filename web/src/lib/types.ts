@@ -33,7 +33,7 @@ export type Oturum = {
   notlar: string | null;
   durum: "planli" | "iptal";
   iptal_gerekcesi: string | null;
-  kaynak: "excel" | "uygulama";
+  kaynak: "excel" | "uygulama" | "sablon";
   uyarilar: string[];
   anlaticilar: Anlatici[];
 };

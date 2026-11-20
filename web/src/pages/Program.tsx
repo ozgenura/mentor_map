@@ -3,6 +3,7 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
+import { CakismaListesi } from "../components/Cakismalar";
 import { SayfaUstu } from "../components/Kabuk";
 import { YanSeansFormu } from "../components/SeansFormu";
 import { Baslik, Bos, Ikon, Kart, Rozet, Segment } from "../components/ui";
@@ -95,6 +96,8 @@ export function Program() {
           <Kutu etiket="Dikkat" deger={String(dikkat.length)} vurgu={dikkat.length > 0} />
         </div>
 
+        <CakismaListesi bootcampId={b.id} />
+
         <section className="flex flex-col gap-3">
           <Baslik>Dikkat isteyenler</Baslik>
           {gruplar.length ? (
@@ -116,8 +119,8 @@ export function Program() {
             </div>
           )) : <Bos>Yaklaşan oturum yok.</Bos>}
           <p className="px-2 text-xs text-soluk lg:px-0">
-            İptal, toplantı linki, materyal ve not oturumun detayından düzenlenir. Konu, tarih ve eğitmen değişiklikleri
-            şimdilik program dosyasından yapılır.
+            Oturuma dokunup detaydan düzenleyebilirsin: iptal, link, materyal ve not her oturumda; tarih, saat, konu ve eğitmen
+            şablondan gelen oturumlarda "Programı düzenle" ile. Mentor Map Program'dan yönetilen programlarda bunlar orada değişir.
           </p>
         </section>
       </div>

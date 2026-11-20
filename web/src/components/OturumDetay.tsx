@@ -5,6 +5,7 @@ import { gosterim, useBaglam } from "../lib/baglam";
 import { kalan, katilimZamani, sureSaatMetni, TATILLER, yaziRengi, guvenliLink } from "../lib/derive";
 import { gunBasligi } from "../lib/time";
 import type { Oturum } from "../lib/types";
+import { OturumCakismalari } from "./Cakismalar";
 import { DetayFormu, YanSeansFormu } from "./SeansFormu";
 import { Pencere } from "./Pencere";
 import { Ikon, Rozet } from "./ui";
@@ -118,6 +119,7 @@ export function OturumDetay({ o, onKapat }: { o: Oturum; onKapat: () => void }) 
             </a>
           )}
 
+          {yonetebilir && <OturumCakismalari oturumId={o.id} />}
           {yonetebilir && <Yonetim o={o} iptalAc={() => setIptalAcik(true)} />}
         </div>
       {iptalAcik && <IptalPenceresi o={o} onKapat={() => setIptalAcik(false)} />}
@@ -137,9 +139,10 @@ function Satir({ etiket, children }: { etiket: string; children: React.ReactNode
 function Yonetim({ o, iptalAc }: { o: Oturum; iptalAc: () => void }) {
   const { api, sec } = useBaglam();
   const qc = useQueryClient();
-  const [form, setForm] = useState<"duzenle" | "yeni" | null>(null);
+  const [form, setForm] = useState<"duzenle" | "program" | "yeni" | null>(null);
   const iptal = o.durum === "iptal";
   const yanSeans = o.kaynak === "uygulama";
+  const sablondan = o.kaynak === "sablon";  // Aşama C: programı uygulamadan da düzenlenir
 
   async function geriAl() {
     await api.iptalGeriAl(o.id);
@@ -153,7 +156,14 @@ function Yonetim({ o, iptalAc }: { o: Oturum; iptalAc: () => void }) {
         <span className="text-xs text-yesil-soluk">Yalnızca düzenleme yetkisi olanlar görür</span>
       </div>
       <div className="grid grid-cols-2 gap-2">
-        <button onClick={() => setForm("duzenle")} className="h-11 rounded-[14px] bg-white text-sm font-bold text-yesil">Düzenle</button>
+        {sablondan && (
+          <button onClick={() => setForm("program")} className="col-span-2 h-11 rounded-[14px] bg-white text-sm font-bold text-yesil">
+            Programı düzenle (tarih, saat, konu, eğitmen)
+          </button>
+        )}
+        <button onClick={() => setForm("duzenle")} className={`h-11 rounded-[14px] text-sm font-bold ${sablondan ? "border border-yesil-cizgi text-white" : "bg-white text-yesil"}`}>
+          {sablondan ? "Link ve not" : "Düzenle"}
+        </button>
         <button onClick={() => setForm("yeni")} className="flex h-11 items-center justify-center gap-1.5 rounded-[14px] border border-yesil-cizgi text-sm font-semibold">
           <Ikon ad="arti" boyut={16} /> Seans ekle
         </button>
@@ -168,6 +178,7 @@ function Yonetim({ o, iptalAc }: { o: Oturum; iptalAc: () => void }) {
       <span className="text-xs text-yesil-soluk">
         {DEMO ? "Demoda yaptığın değişiklikler yalnızca bu tarayıcıda görünür." : "Değişiklikler eğitmenlerin Değişenler ekranında görünür ve takvim aboneliklerine yansır."}
       </span>
+      {form === "program" && <YanSeansFormu o={o} program onKapat={() => setForm(null)} />}
       {form === "duzenle" && (yanSeans
         ? <YanSeansFormu o={o} onKapat={() => setForm(null)} />
         : <DetayFormu o={o} onKapat={() => setForm(null)} />)}

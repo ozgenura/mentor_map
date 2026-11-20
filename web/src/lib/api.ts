@@ -40,6 +40,11 @@ export interface Api {
   iptalGeriAl(oturumId: string): Promise<void>;
   detayGuncelle(oturumId: string, d: OturumDetayi): Promise<void>;
   yanSeansKaydet(s: YanSeans): Promise<string>;
+  /** Şablondan gelen oturumun programını (tarih, saat, tür, konu, eğitmenler) düzenler; PO ve yönetici. */
+  programGuncelle(s: YanSeans & { id: string }): Promise<void>;
+  /** Açık şablon çakışmaları (kişinin yetkili olduğu bootcamp'ler). */
+  cakismalar(): Promise<Cakisma[]>;
+  cakismaCoz(id: number, secim: "sablon" | "uygulama"): Promise<void>;
   senkronDurumu(): Promise<SenkronDurumu | null>;
   senkronAnahtariOlustur(): Promise<string>;
   senkronAdresi(): string | null;
@@ -51,6 +56,13 @@ export interface Api {
   geriBildirimler(): Promise<GeriBildirim[]>;
   geriBildirimDurum(id: number, durum: GeriBildirimDurumu): Promise<void>;
 }
+
+/** Şablon ile uygulamanın aynı alanı farklı değiştirdiği durum (Aşama C). */
+export type Cakisma = {
+  id: number; oturum_id: string; alan: "zaman" | "tur" | "konu" | "egitmenler";
+  sablon_metni: string; uygulama_metni: string; olusturma: string;
+};
+export const CAKISMA_ALANI: Record<Cakisma["alan"], string> = { zaman: "Tarih ve saat", tur: "Tür", konu: "Konu", egitmenler: "Eğitmenler" };
 
 export type GeriBildirimTuru = "oneri" | "sorun" | "diger";
 export type GeriBildirimDurumu = "yeni" | "inceleniyor" | "yapildi" | "kapandi";
@@ -179,6 +191,19 @@ function supabaseApi(db: SupabaseClient): Api {
         return s.id;
       }
       return ok(await db.rpc("yan_seans_ekle", { p_bootcamp_id: s.bootcamp_id, ...ortak }));
+    },
+    async programGuncelle(s) {
+      ok(await db.rpc("oturum_programi_guncelle", {
+        p_oturum_id: s.id, p_tarih: s.tarih, p_baslangic: s.baslangic, p_bitis: s.bitis, p_tur: s.tur,
+        p_konu: s.konu, p_anlaticilar: s.anlaticilar,
+      }));
+    },
+    async cakismalar() {
+      return ok(await db.from("sablon_cakismalari").select("id, oturum_id, alan, sablon_metni, uygulama_metni, olusturma")
+        .is("cozum", null).order("olusturma")) as Cakisma[];
+    },
+    async cakismaCoz(id, secim) {
+      ok(await db.rpc("sablon_cakisma_coz", { p_id: id, p_secim: secim }));
     },
     async geriBildirimGonder(tur, metin, sayfa) {
       ok(await db.rpc("geri_bildirim_gonder", { p_tur: tur, p_metin: metin, p_sayfa: sayfa }));
@@ -317,6 +342,11 @@ const demoApi: Api = {
       materyal_linki: bosIseNull(d.materyal_linki), notlar: bosIseNull(d.notlar),
     } } });
   },
+  async programGuncelle(s) {
+    await demoApi.yanSeansKaydet(s);
+  },
+  cakismalar: async () => [],
+  async cakismaCoz() { /* demoda şablon yok */ },
   async yanSeansKaydet(s) {
     const v = await demoVeri();
     const tum = await demoOturumlar();

@@ -55,7 +55,7 @@ def test_yeni_sekme_iceri_alinir(kurulu):
     a = oturum(hafta=1)
     r = sablon(db, [sekme([a])])
     assert r["hata_sayisi"] == 0, r["hatalar"]
-    assert r["sekmeler"][0] | {} == {"sekme": "İK", "donem": "İK3", "yeni": 1, "guncellenen": 0, "devralinan": 0, "kalkan": 0}
+    assert r["sekmeler"][0] | {} == {"sekme": "İK", "donem": "İK3", "yeni": 1, "guncellenen": 0, "devralinan": 0, "kalkan": 0, "cakisma": 0}
     row = db.execute("""select o.kaynak::text, d.kod, d.kaynak, o.hafta, o.grup, o.modul, o.sablon_tabani->>'konu'
                         from oturumlar o join donem d on d.id = o.donem_id where o.id = %s""", (a["id"],)).fetchone()
     assert row == ("sablon", "İK3", "sablon", 1, "A", "SQL", "SQL")
