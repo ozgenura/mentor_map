@@ -248,3 +248,13 @@ def test_genel_her_poya_acik(kurulu):
     # PO olmayan eğitmen Genel'i gönderemez
     r = sablon(db, [{"sekme": "Genel", "kod": "Genel", "genel": True, "oturumlar": [e]}], gonderen="can@ornek.com")
     assert r["hata_sayisi"] == 1 and "yetki" in r["hatalar"][0]["mesaj"]
+
+
+def test_tarih_sekmesinde_aciklama_degisimi(kurulu):
+    db = kurulu
+    db.execute("insert into bootcamp (kisa_kod, ad) values ('HS', 'Hafta Sonu Eğitimleri')")
+    g = oturum(grup="E", tarih="2026-12-05", tur="Ders", aciklama="1. gün")
+    sablon(db, [{"sekme": "Hafta Sonu", "kod": "HS", "genel": True, "oturumlar": [g]}])
+    r = sablon(db, [{"sekme": "Hafta Sonu", "kod": "HS", "genel": True, "oturumlar": [g | {"aciklama": "1. gün / 2 · Cumartesi"}]}])
+    assert r["sekmeler"][0]["guncellenen"] == 1
+    assert db.execute("select aciklama from oturumlar where id = %s", (g["id"],)).fetchone()[0] == "1. gün / 2 · Cumartesi"
