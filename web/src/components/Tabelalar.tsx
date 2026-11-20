@@ -35,7 +35,14 @@ function useTabelaVerisi() {
   return { anonslar: anonslar.data ?? [], talepler: talepler.data ?? [] };
 }
 
+/** Özellik anahtarı 'tabelalar' kapalıyken yalnızca yönetici görür (yeni özellik önce yöneticide denenir). */
 export function DurakTabelalari() {
+  const { api } = useBaglam();
+  const acik = useQuery({ queryKey: ["ozellik", "tabelalar"], queryFn: () => api.ozellikAcik("tabelalar"), staleTime: 10 * 60_000 });
+  return acik.data ? <Tabelalar /> : null;
+}
+
+function Tabelalar() {
   const { anonslar, talepler } = useTabelaVerisi();
   // Bildirime dokunulunca (?tabela=anons | po) ilgili tabela açılır.
   const [acik, setAcik] = useState<Tabela | null>(() => {

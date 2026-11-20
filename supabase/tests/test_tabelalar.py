@@ -21,6 +21,7 @@ def hat(kurulu):
         with as_user(db, e):
             db.execute("select push_abone_ol(%s, 'p', 'a')", (f"https://push.example/{e}",))
     db.execute("delete from push_kuyrugu")
+    db.execute("update uygulama_ayarlari set acik = true where anahtar = 'tabelalar'")
     return db
 
 
@@ -133,3 +134,17 @@ def test_deneme_bildirimi(hat):
     with as_user(db, CAN):
         db.execute("select push_deneme()")
     assert kuyruk(db) == [("Can Yıldız", "🚇 Mentor Map")]
+
+
+def test_ozellik_kapaliyken_yalnizca_yonetici(hat):
+    db = hat
+    db.execute("update uygulama_ayarlari set acik = false where anahtar = 'tabelalar'")
+    with as_user(db, AYSE), hata_bekle(db, psycopg.errors.InsufficientPrivilege, "henüz açık değil"):
+        db.execute("select anons_yaz(%s, 'x')", (ik(db),))
+    with as_user(db, CAN), hata_bekle(db, psycopg.errors.InsufficientPrivilege, "henüz açık değil"):
+        db.execute("select talep_gonder(%s, 'Diğer', 'x')", (ik(db),))
+    with as_user(db, YONETICI):
+        assert db.execute("select ozellik_acik('tabelalar')").fetchone()[0] is True
+        db.execute("select anons_yaz(%s, 'Yönetici dener')", (ik(db),))
+    with as_user(db, CAN):
+        assert db.execute("select ozellik_acik('tabelalar')").fetchone()[0] is False
