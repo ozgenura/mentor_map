@@ -24,7 +24,7 @@ export function GeriBildirimDugmesi({ sekme, ters = false, className = "" }: { s
   );
 }
 
-function GeriBildirimFormu({ sekme, onKapat }: { sekme: Sekme; onKapat: () => void }) {
+export function GeriBildirimFormu({ sekme, onKapat }: { sekme: Sekme; onKapat: () => void }) {
   const { api } = useBaglam();
   const qc = useQueryClient();
   const [tur, setTur] = useState<GeriBildirimTuru>("oneri");

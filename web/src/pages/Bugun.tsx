@@ -1,4 +1,6 @@
 import { useMemo } from "react";
+import { DEMO } from "../lib/api";
+import { DurakTabelalari } from "../components/Tabelalar";
 import { SayfaUstu } from "../components/Kabuk";
 import { Baslik, BootcampEtiketi, Bos, Ikon, Kart, Rozet, Sayac, Segment } from "../components/ui";
 import { gosterim, useBaglam, type SaatModu } from "../lib/baglam";
@@ -48,8 +50,9 @@ export function Bugun() {
       <div className="px-5 pt-4 lg:hidden"><SaatSecici /></div>
 
       <div className="mt-4 grid gap-6 px-3 lg:mt-6 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start lg:px-10">
-        <div className="flex flex-col gap-6 lg:order-2">
+        <div className="flex min-w-0 flex-col gap-6 lg:order-2">
           {sira ? <SiradakiKart o={sira} /> : <Bos>Yaklaşan oturum yok.</Bos>}
+          {DEMO && <DurakTabelalari />}
           <HaritaSeridi />
           <section className="flex flex-col gap-2.5 px-2 lg:px-0">
             <Baslik sag={<button onClick={() => b.git("degisenler")} className="text-[13px] font-semibold underline">Tümü</button>}>
