@@ -63,7 +63,7 @@ function Tabelalar({ onizleme }: { onizleme: boolean }) {
     <section aria-label="Durak tabelaları" className="overflow-hidden rounded-[24px] bg-yesil text-white shadow-lg shadow-yesil/15">
       <div className="flex items-center justify-between px-4 pb-1 pt-3">
         <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-yesil-soluk">
-          Durak tabelası{onizleme && <span className="ml-2 rounded bg-mercan-zemin px-1.5 py-0.5 normal-case tracking-normal text-mercan-koyu">Önizleme · yalnızca sen görüyorsun</span>}
+          Durak tabelası{onizleme && <span className="ml-2 rounded bg-mercan-zemin px-1.5 py-0.5 normal-case tracking-normal text-mercan-koyu">Önizleme</span>}
         </span>
         <span className="flex gap-1" aria-hidden="true">
           {["#F08891", "#7FA650", "#E3A008", "#5B8DEF"].map((r) => <span key={r} className="h-1.5 w-4 rounded-full" style={{ background: r }} />)}
