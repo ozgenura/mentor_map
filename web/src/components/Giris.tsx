@@ -2,6 +2,21 @@ import { useState } from "react";
 import { supabase } from "../lib/api";
 import { ALab, Logo } from "./ui";
 
+/** E-postadaki giriş bağlantısından tek kullanımlık anahtar (token_hash) ve türü. Bağlantı değilse null. */
+export function baglantidanAnahtar(metin: string): { token_hash: string; type: "magiclink" | "signup" | "invite" | "email" } | null {
+  const m = metin.trim().match(/https?:\/\/\S+/);
+  if (!m) return null;
+  try {
+    const u = new URL(m[0]);
+    const token = u.searchParams.get("token") ?? u.searchParams.get("token_hash");
+    if (!token) return null;
+    const t = u.searchParams.get("type");
+    return { token_hash: token, type: t === "signup" || t === "invite" || t === "email" ? t : "magiclink" };
+  } catch {
+    return null;
+  }
+}
+
 function hataMesaji(m: string): string {
   if (/kayıtlı değil|signups not allowed|user not found|before user created/i.test(m)) return "Bu e-posta Mentor Map'te kayıtlı değil. Yöneticiye yaz.";
   if (/expired|invalid/i.test(m)) return "Kod hatalı ya da süresi dolmuş. Yeni kod iste.";
@@ -30,7 +45,12 @@ export function Giris() {
     e.preventDefault();
     setBekliyor(true);
     setHata(null);
-    const { error } = await supabase!.auth.verifyOtp({ email: eposta.trim(), token: kod.trim(), type: "email" });
+    // iPhone'da ana ekran uygulaması e-postadaki bağlantıyı açamaz (bağlantı tarayıcıda açılır):
+    // bağlantı kopyalanıp buraya yapıştırılırsa içindeki tek kullanımlık anahtarla giriş yapılır.
+    const b = baglantidanAnahtar(kod);
+    const { error } = b
+      ? await supabase!.auth.verifyOtp(b)
+      : await supabase!.auth.verifyOtp({ email: eposta.trim(), token: kod.replace(/\D/g, ""), type: "email" });
     setBekliyor(false);
     if (error) setHata(hataMesaji(error.message));
   }
@@ -53,11 +73,15 @@ export function Giris() {
             </>
           ) : (
             <>
-              <label htmlFor="kod" className="text-sm font-semibold">{eposta} adresine gelen kod</label>
-              <p className="-mt-1 text-xs text-soluk">E-postada bağlantı geldiyse ona dokunman yeterli; kod geldiyse buraya yaz.</p>
-              <input id="kod" inputMode="numeric" autoComplete="one-time-code" required autoFocus pattern="[0-9]{6}" maxLength={6}
-                value={kod} onChange={(e) => setKod(e.target.value.replace(/\D/g, ""))} placeholder="••••••"
-                className="h-14 rounded-xl border border-[#D9CDC6] text-center font-baslik text-2xl tracking-[0.5em] outline-none focus:border-yesil focus:ring-2 focus:ring-yesil/20" />
+              <label htmlFor="kod" className="text-sm font-semibold">{eposta} adresine gelen kod ya da bağlantı</label>
+              <p className="-mt-1 text-xs text-soluk">
+                E-postadaki kodu yaz. Yalnızca bağlantı geldiyse ve uygulamayı ana ekrandan açtıysan: bağlantıya dokunma,
+                basılı tutup <strong>Kopyala</strong>, sonra buraya yapıştır.
+              </p>
+              <input id="kod" autoComplete="one-time-code" required autoFocus autoCapitalize="off" autoCorrect="off" spellCheck={false}
+                value={kod} onChange={(e) => setKod(e.target.value)} placeholder="Kod ya da bağlantı"
+                className={`h-14 rounded-xl border border-[#D9CDC6] px-3 outline-none focus:border-yesil focus:ring-2 focus:ring-yesil/20 ${
+                  /^\s*\d{0,6}\s*$/.test(kod) ? "text-center font-baslik text-2xl tracking-[0.5em]" : "text-sm"}`} />
               <button type="button" onClick={() => { setAdim("eposta"); setKod(""); }} className="self-start text-xs font-semibold underline">
                 Farklı e-posta kullan
               </button>

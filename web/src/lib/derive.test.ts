@@ -142,3 +142,14 @@ describe("takvim geri bildirimi (18 Kasım)", () => {
     expect(sonrakiOturum(list, "2026-11-11")).toBeUndefined();
   });
 });
+
+describe("giriş bağlantısı yapıştırma", () => {
+  it("e-postadaki bağlantıdan tek kullanımlık anahtarı çıkarır", async () => {
+    const { baglantidanAnahtar } = await import("../components/Giris");
+    expect(baglantidanAnahtar("https://x.supabase.co/auth/v1/verify?token=abc123&type=magiclink&redirect_to=https://m.dev"))
+      .toEqual({ token_hash: "abc123", type: "magiclink" });
+    expect(baglantidanAnahtar(" Sign in: https://x.supabase.co/auth/v1/verify?token=t9&type=signup ")).toEqual({ token_hash: "t9", type: "signup" });
+    expect(baglantidanAnahtar("123456")).toBeNull();
+    expect(baglantidanAnahtar("https://ornek.com/baska")).toBeNull();
+  });
+});
