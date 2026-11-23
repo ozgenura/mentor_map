@@ -309,3 +309,12 @@ def test_baskasinin_gozunden_bakma_yalnizca_yoneticiye(db, seed):
             assert db.execute("select yonetici_mi()").fetchone()[0] is False
     with as_user(db, YONETICI):
         assert _count(db, "select count(*) from bildirim_kuyrugu") == 2
+
+
+def test_kayit_kancasi_ek_epostayi_tanir(db, seed):
+    """İlk girişte hesap açılırken kanca ana ve ek e-postayı kabul eder; tanımadığını ve pasif kişiyi reddeder."""
+    db.execute("update kisiler set ek_epostalar = array['Ozge.Kisisel@gmail.com'] where eposta = %s", (YONETICI,))
+    kanca = lambda e: db.execute("select kayit_kontrol(%s::jsonb)", (f'{{"user": {{"email": "{e}"}}}}',)).fetchone()[0]
+    assert kanca(YONETICI) == {} and kanca("ozge.kisisel@gmail.com") == {}
+    assert kanca("yabanci@gmail.com")["error"]["http_code"] == 403
+    assert kanca(PASIF)["error"]["http_code"] == 403
