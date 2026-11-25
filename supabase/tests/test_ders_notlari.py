@@ -121,3 +121,11 @@ def test_ertesi_sabah_ikinci_hatirlatma(ders):
     db.execute("select push_hatirlatmalari()")
     n = db.execute("select count(*) from push_kuyrugu where anahtar like 'dersnotu-sabah:%'").fetchone()[0]
     assert n == (1 if saat == 9 else 0)
+
+
+def test_yonetici_her_dersin_notunu_yazabilir(ders):
+    db, oid = ders
+    with as_user(db, YONETICI):
+        assert db.execute("select ders_notu(%s)", (oid,)).fetchone()[0]["yazabilir"] is True
+        kaydet(db, oid)
+        assert db.execute("select ders_notu(%s)", (oid,)).fetchone()[0]["not"]["yazan"] == "Özge"

@@ -1,4 +1,4 @@
-// Ders kartındaki "Ders sonu notu": ana eğitmen ders başladıktan sonra 1 dakikalık not bırakır;
+// Ders kartındaki "Ders sonu notu": ana eğitmen (ve yönetici) ders başladıktan sonra 1 dakikalık not bırakır;
 // yönetici ve rapor izleyicisi aynı notu salt okunur görür.
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -14,7 +14,7 @@ export const PLAN_RENGI: Record<DersPlani, string> = {
 };
 
 export function DersNotuKarti({ o }: { o: Oturum }) {
-  const { api } = useBaglam();
+  const { api, ben } = useBaglam();
   const q = useQuery({ queryKey: ["ders-notu", o.id], queryFn: () => api.dersNotu(o.id) });
   const [form, setForm] = useState(false);
   const d = q.data;
@@ -38,7 +38,7 @@ export function DersNotuKarti({ o }: { o: Oturum }) {
         {d.yazabilir && <button onClick={() => setForm(true)} className="h-9 rounded-xl border border-[#D9CDC6] px-3 text-[13px] font-semibold">Düzenle</button>}
       </div>
       <NotOzeti n={d.not} />
-      {!d.yazabilir && d.not.yazan && <span className="text-xs text-soluk">{d.not.yazan}</span>}
+      {d.not.yazan && d.not.yazan !== ben?.ad && <span className="text-xs text-soluk">{d.not.yazan}</span>}
     </section>
   );
 }
