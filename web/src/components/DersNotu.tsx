@@ -51,7 +51,7 @@ export function NotOzeti({ n }: { n: DersNotu }) {
         <span className="rounded-full bg-cizgi px-2.5 py-1">{NABIZ[n.nabiz].yuz} {NABIZ[n.nabiz].ad}</span>
         {n.katilim != null && <span className="rounded-full bg-cizgi px-2.5 py-1">{n.katilim} kişi</span>}
       </div>
-      {n.islenen && <p className="whitespace-pre-line"><span className="text-soluk">Ne işlendi: </span>{n.islenen}</p>}
+      {n.islenen && <p className="whitespace-pre-line">{n.islenen}</p>}
       {n.dikkat && <p className="whitespace-pre-line rounded-xl bg-mercan-acik px-3 py-2 text-mercan-koyu"><strong>Dikkat: </strong>{n.dikkat}</p>}
     </div>
   );
@@ -82,7 +82,7 @@ function NotFormu({ o, eski, onKapat }: { o: Oturum; eski: DersNotu | null; onKa
   const [plan, setPlan] = useState<DersPlani | null>(eski?.plan ?? null);
   const [nabiz, setNabiz] = useState<SinifNabzi | null>(eski?.nabiz ?? null);
   const [katilim, setKatilim] = useState(eski?.katilim != null ? String(eski.katilim) : "");
-  const [islenen, setIslenen] = useState(eski?.islenen ?? o.konu ?? "");
+  const [islenen, setIslenen] = useState(eski?.islenen ?? "");
   const [dikkat, setDikkat] = useState(eski?.dikkat ?? "");
   const [bekliyor, setBekliyor] = useState(false);
   const [hata, setHata] = useState<string | null>(null);
@@ -119,8 +119,9 @@ function NotFormu({ o, eski, onKapat }: { o: Oturum; eski: DersNotu | null; onKa
         <input inputMode="numeric" value={katilim} onChange={(e) => setKatilim(e.target.value.replace(/\D/g, ""))} className={`${alan} max-w-[8rem]`} />
       </label>
       <label className="flex flex-col gap-2 text-sm font-semibold">
-        Ne işlendi
-        <textarea rows={3} value={islenen} onChange={(e) => setIslenen(e.target.value)} maxLength={2000} className={`${alan} font-normal`} />
+        Ders nasıl geçti?
+        <textarea rows={3} value={islenen} onChange={(e) => setIslenen(e.target.value)} maxLength={2000}
+          placeholder="Kendi cümlelerinle kısaca özetle" className={`${alan} font-normal`} />
       </label>
       <label className="flex flex-col gap-2 text-sm font-semibold">
         <span>Dikkat gerektiren <span className="font-normal text-soluk">· isteğe bağlı, raporda en üstte çıkar</span></span>
