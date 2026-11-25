@@ -11,7 +11,8 @@ import webpush from "npm:web-push@3.6.7";
 const db = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, {
   auth: { persistSession: false },
 });
-webpush.setVapidDetails("mailto:bildirim@mentor-map.invalid", Deno.env.get("VAPID_PUBLIC")!, Deno.env.get("VAPID_PRIVATE")!);
+// Apple (web.push.apple.com) geçersiz alan adlı "sub" iddiasını 403 ile reddeder: uygulamanın gerçek adresi.
+webpush.setVapidDetails("https://mentor-map.oac.workers.dev", Deno.env.get("VAPID_PUBLIC")!, Deno.env.get("VAPID_PRIVATE")!);
 
 type Abonelik = { endpoint: string; p256dh: string; auth: string };
 type Bekleyen = { id: number; baslik: string; govde: string; url: string; abonelikler: Abonelik[] | null };
