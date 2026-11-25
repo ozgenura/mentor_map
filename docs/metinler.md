@@ -32,7 +32,7 @@ Ekrana ve kimin gördüğüne göre gruplandı. Köşeli parantezli yerler (`[ko
 
 ## Genel (herkes)
 
-- Menü: Bugün · Takvim · Etkinlikler · Program (yalnızca admin ve PO) · Değişenler · Profil
+- Menü: Bugün · Takvim · Etkinlikler · Program (yalnızca admin ve PO) · Bildirimler · Profil
 - Yükleniyor: "Program yükleniyor…" · Hata: "Program yüklenemedi. İnternet bağlantınızı kontrol edip sayfayı yenileyin." ⚠️ 1
 - Geri bildirim düğmesi: "Öneri / sorun bildir" · Pencere: "Mentor Map'i geliştirmemize yardım et. Yazdığını yalnızca yönetici görür." · Sonuç: "Teşekkürler, iletildi."
 - Kaydedilmemiş değişiklikle pencere kapatılırken: "Değişiklikler kaydedilmedi" · "Kapatırsan yazdıkların kaybolur." · "Düzenlemeye dön"
@@ -77,8 +77,8 @@ Ekrana ve kimin gördüğüne göre gruplandı. Köşeli parantezli yerler (`[ko
 ## Oturum yönetimi (yalnızca admin ve PO)
 
 - Detayın altında: "Bu oturumu yönet" · "Yalnızca düzenleme yetkisi olanlar görür" · "Oturumu düzenle" · "Yan seans ekle" ⚠️ 4 · "Oturumu iptal et" / "İptali geri al"
-- İptal penceresi: "Anlatıcılar bunu Değişenler ekranında görür, oturum takvim aboneliklerinde iptal olarak görünür. İstersen sonra geri alabilirsin." · gerekçe örneği "Örn. eğitmen rahatsız; telafi tarihi duyurulacak" · "İptal et" · hata "İptal edilemedi."
-- Düzenleme formu: "Oturumu düzenle" · "Tarih, saat, konu ve eğitmen program dosyasından gelir; değişiklik orada yapılır. Buradaki alanlar program güncellemesinde korunur." · "Toplantı linki" (ipucu: "Boş bırakılırsa bootcamp'in linki kullanılır: [link]") · "Açıklama" (ipucu: "Anlatıcıların ve eğitmenlerin göreceği kısa bilgi.") · "Değişiklikler anlatıcıların Değişenler ekranında görünür ve takvim aboneliklerine yansır."
+- İptal penceresi: "Anlatıcılar bunu Bildirimler ekranında görür, oturum takvim aboneliklerinde iptal olarak görünür. İstersen sonra geri alabilirsin." · gerekçe örneği "Örn. eğitmen rahatsız; telafi tarihi duyurulacak" · "İptal et" · hata "İptal edilemedi."
+- Düzenleme formu: "Oturumu düzenle" · "Tarih, saat, konu ve eğitmen program dosyasından gelir; değişiklik orada yapılır. Buradaki alanlar program güncellemesinde korunur." · "Toplantı linki" (ipucu: "Boş bırakılırsa bootcamp'in linki kullanılır: [link]") · "Açıklama" (ipucu: "Anlatıcıların ve eğitmenlerin göreceği kısa bilgi.") · "Değişiklikler anlatıcıların Bildirimler ekranında görünür ve takvim aboneliklerine yansır."
 - Yan seans formu: "Yan seans ekle" / "Yan seansı düzenle" · alt satır "Saatler TR saatidir. Anlatıcılara bildirim gider." ⚠️ 3 · konu örneği "Örn. SQL soru-cevap" · "Anlatıcılar: İlk eklenen ana anlatıcıdır. Mentor Map kullanıcısı olan konuk da listeden seçilebilir." · "+ Kayıtlı eğitmen ekle" · "Konuk ekle" · "Konuk anlatıcı adı" · "Seansı ekle"
   - Uyarı: "Bu saatte başka oturumlar var. Yine de kaydedebilirsin."
   - Hatalar: "En az bir anlatıcı seçin." ⚠️ 1 · "Seans en çok 12 saat sürebilir." · "Ertesi gün biter." (gece yarısını geçen seans)
@@ -101,9 +101,9 @@ Ekrana ve kimin gördüğüne göre gruplandı. Köşeli parantezli yerler (`[ko
 - Alt not: "İptal, toplantı linki, materyal ve not oturumun detayından düzenlenir. Konu, tarih ve eğitmen değişiklikleri şimdilik program dosyasından yapılır."
 - Yetkisi yoksa: "Düzenleyebildiğin bir bootcamp yok."
 
-## Değişenler (herkes)
+## Bildirimler (herkes; eski adı Değişenler)
 
-- Başlık: "Ne değişti" · "Son okuduğun: [tarih]" · "Hepsini okundu say"
+- Başlık: "Bildirimler" · "Son okuduğun: [tarih]" · "Hepsini okundu say"
 - Gruplar: "Dikkat · [n]" · "Yeni · [n]" · "Daha önce" · rozet "Okunmadı" · "Oturuma bak"
 - Kart başlıkları:
   - "[konu] seansına anlatıcı olarak eklendin" · "[…] · [ad] ekledi"
@@ -123,7 +123,7 @@ Ekrana ve kimin gördüğüne göre gruplandı. Köşeli parantezli yerler (`[ko
 
 ## Profil, yalnızca admin
 
-- "Yönetici: kimin gözünden bakıyorsun?" · "Seçtiğin kişinin Bugün, Takvim ve Değişenler ekranlarını onun gördüğü gibi görürsün. Yalnızca görüntüdür; iptal gibi işlemler yine senin adınla kaydedilir."
+- "Yönetici: kimin gözünden bakıyorsun?" · "Seçtiğin kişinin Bugün, Takvim ve Bildirimler ekranlarını onun gördüğü gibi görürsün. Yalnızca görüntüdür; iptal gibi işlemler yine senin adınla kaydedilir."
 - Başkasının gözünden bakarken üst şerit: "[ad] olarak görüntülüyorsun. Yaptığın işlemler senin yetkinle kaydedilir." · "Kendine dön"
 - "Mentor Map Program bağlantısı": "Son gönderim: [n] yeni, [n] güncellenen, [n] kalkan, [n] hatalı satır (sayfadaki Senkron sekmesinde)." · "Henüz senkron yok"
 - "Program şablonu bağlantısı": "PO'ların doldurduğu kurum şablonu. Şablonda Mentor Map → Önizle ile hiçbir şey yazmadan sonucu görebilir, Gönder ile aktarırsınız." ⚠️ 1 ("aktarırsınız")

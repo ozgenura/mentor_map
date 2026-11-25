@@ -1,4 +1,4 @@
-// Profil → Bildirimler: bu cihazda anlık bildirimi aç/kapat, ders hatırlatması, deneme bildirimi.
+// Profil → Bildirim ayarları: bu cihazda anlık bildirimi aç/kapat, ders hatırlatması, deneme bildirimi.
 // iPhone'da bildirim yalnızca ana ekrana eklenmiş uygulamada çalışır; adımlar gösterilir.
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -27,7 +27,7 @@ export function Bildirimler() {
     <Kart className="flex flex-col gap-3 p-4">
       <div className="flex items-center gap-2">
         <Ikon ad="zil" boyut={18} />
-        <h2 className="font-baslik text-lg font-bold">Bildirimler</h2>
+        <h2 className="font-baslik text-lg font-bold">Bildirim ayarları</h2>
         {durum === "acik" && <span className="ml-auto rounded-full bg-nane px-2.5 py-1 text-xs font-bold text-nane-koyu">Bu cihazda açık</span>}
       </div>
       <p className="text-[13px] text-soluk">

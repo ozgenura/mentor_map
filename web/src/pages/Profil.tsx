@@ -49,7 +49,7 @@ export function Profil({ demoSec }: { demoSec: (id: string) => void }) {
                 <option key={k.id} value={k.id}>{k.ad}{k.ad === bakis.gercekAd ? " (sen)" : ""}</option>
               ))}
             </select>
-            <span className="text-xs text-soluk">Seçtiğin kişinin Bugün, Takvim ve Değişenler ekranlarını onun gördüğü gibi görürsün. Yalnızca görüntüdür; iptal gibi işlemler yine senin adınla kaydedilir.</span>
+            <span className="text-xs text-soluk">Seçtiğin kişinin Bugün, Takvim ve Bildirimler ekranlarını onun gördüğü gibi görürsün. Yalnızca görüntüdür; iptal gibi işlemler yine senin adınla kaydedilir.</span>
           </Kart>
         )}
 

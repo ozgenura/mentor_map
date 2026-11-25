@@ -12,7 +12,7 @@ const SEKMELER: { id: Sekme; ad: string; ikon: string }[] = [
   { id: "etkinlikler", ad: "Etkinlikler", ikon: "etkinlik" },
   { id: "program", ad: "Program", ikon: "dosya" },
   { id: "notlar", ad: "Notlar", ikon: "not" },
-  { id: "degisenler", ad: "Değişenler", ikon: "zil" },
+  { id: "degisenler", ad: "Bildirimler", ikon: "zil" },
   { id: "profil", ad: "Profil", ikon: "kisi" },
 ];
 

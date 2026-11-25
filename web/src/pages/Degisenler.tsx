@@ -20,7 +20,7 @@ export function Degisenler() {
 
   return (
     <>
-      <SayfaUstu baslik="Ne değişti"
+      <SayfaUstu baslik="Bildirimler"
         ust={sonGorulme ? `Son okuduğun: ${gunBasligi(gun(new Date(sonGorulme).toISOString()))}` : undefined}
         sag={yeni.length > 0 && (
           <button onClick={okunduSay} className="h-9 rounded-full border border-[#D9CDC6] bg-white px-3 text-xs font-semibold">Hepsini okundu say</button>
