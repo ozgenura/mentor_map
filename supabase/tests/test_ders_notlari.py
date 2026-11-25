@@ -106,7 +106,18 @@ def test_not_hatirlatmasi_bir_kez_ve_not_varsa_yok(ders):
 
 def test_not_alinmayan_tur_boardda_yok(ders):
     db, oid = ders
-    db.execute("update oturumlar set tur = 'Mentor Görüşmesi'")
+    db.execute("update oturumlar set tur = 'Sunum'")
     with as_user(db, YONETICI):
         assert hafta(db) == []
         assert db.execute("select ders_notu(%s)", (oid,)).fetchone()[0] is None
+
+
+def test_ertesi_sabah_ikinci_hatirlatma(ders):
+    db, oid = ders
+    db.execute("delete from push_kuyrugu")
+    # Sabah 09:xx TR'de dünkü notsuz ders: yalnızca saat 9'da ve bir kez.
+    saat = db.execute("select extract(hour from now() at time zone 'Europe/Istanbul')").fetchone()[0]
+    db.execute("select push_hatirlatmalari()")
+    db.execute("select push_hatirlatmalari()")
+    n = db.execute("select count(*) from push_kuyrugu where anahtar like 'dersnotu-sabah:%'").fetchone()[0]
+    assert n == (1 if saat == 9 else 0)

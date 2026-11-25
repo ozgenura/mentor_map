@@ -26,10 +26,10 @@ alter table public.ders_notlari enable row level security;
 revoke all on public.ders_notlari from anon, authenticated;
 -- Okuma ve yazma yalnızca aşağıdaki fonksiyonlarla.
 
--- Not alınan oturum türleri (mentor görüşmesi, sunum, etkinlik, kick-off dışarıda).
+-- Not alınan oturum türleri (sunum, etkinlik, kick-off dışarıda; mentor görüşmesinde de sınıfın nabzı tutulur).
 create or replace function public._notlu_tur_mu(p_tur public.oturum_turu) returns boolean
 language sql immutable set search_path = '' as $$
-  select p_tur::text in ('Ders', 'Uygulama', 'Proje', 'Master Class')
+  select p_tur::text in ('Ders', 'Ek Ders', 'Uygulama', 'Proje', 'Master Class', 'Mentor Görüşmesi')
 $$;
 
 create or replace function public._ders_notu_yazari_mi(p_oturum uuid) returns boolean
@@ -148,7 +148,7 @@ begin
     n := n + 1;
   end loop;
 
-  -- Ders sonu notu: bitişten 40–60 dk sonra hâlâ not yoksa ana eğitmene tek bir hatırlatma.
+  -- Ders sonu notu: bitişten 40–60 dk sonra hâlâ not yoksa ana eğitmene hatırlatma (ertesi sabah bir kez daha).
   -- (22:00'de biten ders 22:40–23:00 arasında; sessiz saate kalmaz.)
   for r in
     select a.kisi_id, o.id, o.konu, o.tur, b.kisa_kod
@@ -166,6 +166,26 @@ begin
       '/?oturum=' || r.id, false, 'dersnotu:' || r.id || ':' || r.kisi_id);
     n := n + 1;
   end loop;
+
+  -- Ertesi sabah (TR 09:00–09:59) dünkü dersin notu hâlâ yoksa ikinci ve son hatırlatma.
+  if extract(hour from v_simdi) = 9 then
+    for r in
+      select a.kisi_id, o.id, o.konu, o.tur, b.kisa_kod
+        from public.oturumlar o
+        join public.bootcamp b on b.id = o.bootcamp_id
+        join public.oturum_anlaticilari a on a.oturum_id = o.id and a.rol = 'ana'
+        join public.kisiler k on k.id = a.kisi_id and k.aktif
+       where (v_notlar_acik or k.rol = 'yonetici')
+         and o.durum = 'planli' and not o.excelden_kalkti and public._notlu_tur_mu(o.tur)
+         and o.tarih = v_simdi::date - 1
+         and not exists (select 1 from public.ders_notlari d where d.oturum_id = o.id)
+    loop
+      perform public._push_ekle(r.kisi_id, '📝 Dünkü dersin notu',
+        r.kisa_kod || ' · ' || coalesce(nullif(r.konu, ''), r.tur::text) || ' · 1 dakikanı ayırabilirsen not bırak',
+        '/?oturum=' || r.id, false, 'dersnotu-sabah:' || r.id || ':' || r.kisi_id);
+      n := n + 1;
+    end loop;
+  end if;
 
   -- Haftalık özet: pazartesi 09:00 (TR) sonrası, geçen haftanın özeti rapor görenlere; hafta başına bir kez.
   if extract(isodow from v_simdi) = 1 and extract(hour from v_simdi) >= 9 then
