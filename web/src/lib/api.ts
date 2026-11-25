@@ -61,6 +61,8 @@ export interface Api {
   /** Özellik anahtarı (ör. 'tabelalar'); yöneticide hep açık. */
   ozellikAcik(anahtar: string): Promise<boolean>;
   ozellikHerkeseAcik(anahtar: string): Promise<boolean>;
+  /** Cihaz eşleme: bu cihazda başka cihaz için 10 dakikalık giriş kodu üretir. */
+  cihazKoduOlustur(): Promise<string>;
   senkronDurumu(): Promise<SenkronDurumu | null>;
   senkronAnahtariOlustur(): Promise<string>;
   senkronAdresi(): string | null;
@@ -244,6 +246,7 @@ function supabaseApi(db: SupabaseClient): Api {
     bildirimAyari: async (hatirlatma) => ok(await db.rpc("bildirim_ayarim", { p_hatirlatma: hatirlatma ?? null })) as { hatirlatma: boolean; cihaz: number },
     async pushDeneme() { ok(await db.rpc("push_deneme")); },
     ozellikAcik: async (anahtar) => ok(await db.rpc("ozellik_acik", { p_anahtar: anahtar })) === true,
+    cihazKoduOlustur: async () => ok(await db.rpc("cihaz_kodu_olustur")) as string,
     ozellikHerkeseAcik: async (anahtar) => ok(await db.rpc("ozellik_herkese_acik", { p_anahtar: anahtar })) === true,
     async geriBildirimGonder(tur, metin, sayfa) {
       ok(await db.rpc("geri_bildirim_gonder", { p_tur: tur, p_metin: metin, p_sayfa: sayfa }));
@@ -432,6 +435,7 @@ const demoApi: Api = {
   async pushDeneme() { throw new Error("Demoda bildirim yok."); },
   ozellikAcik: async () => true,
   ozellikHerkeseAcik: async () => true,
+  async cihazKoduOlustur() { throw new Error("Demoda yok."); },
   async cakismaCoz() { /* demoda şablon yok */ },
   async yanSeansKaydet(s) {
     const v = await demoVeri();
@@ -466,3 +470,15 @@ const demoApi: Api = {
 };
 
 export const api: Api | null = DEMO ? demoApi : supabase ? supabaseApi(supabase) : null;
+
+/** Cihaz eşleme koduyla giriş (giriş ekranı; oturum yokken). E-posta gerekmez. */
+export async function cihazKoduylaGir(kod: string): Promise<void> {
+  if (!supabase || !URL_) throw new Error("Bağlantı yok.");
+  const r = await fetch(`${URL_.replace(/\/$/, "")}/functions/v1/cihaz-eslesme`, {
+    method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ kod }),
+  });
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok || !d.token_hash) throw new Error(d.hata ?? "Kod doğrulanamadı.");
+  const { error } = await supabase.auth.verifyOtp({ token_hash: d.token_hash, type: "magiclink" });
+  if (error) throw new Error("Giriş yapılamadı. Diğer cihazda yeni kod al.");
+}

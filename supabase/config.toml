@@ -30,3 +30,7 @@ verify_jwt = false
 # pg_cron her dakika çağırır; koruma X-Mentormap-Cron başlığındaki gizli anahtardan.
 [functions.push-gonder]
 verify_jwt = false
+
+# Ana ekran uygulamasında e-postasız giriş: koruma tek kullanımlık, kısa ömürlü eşleme kodundan.
+[functions.cihaz-eslesme]
+verify_jwt = false

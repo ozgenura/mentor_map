@@ -22,3 +22,6 @@ grant execute on all functions in schema auth to anon, authenticated, service_ro
 grant usage on schema public to anon, authenticated, service_role;
 alter default privileges in schema public grant all on tables to service_role;
 alter default privileges in schema public grant all on functions to service_role;
+
+-- Supabase Auth kullanıcı tablosunun yerel taklidi (yalnızca e-posta; cihaz eşleme testleri için).
+create table if not exists auth.users (id uuid primary key default gen_random_uuid(), email text);

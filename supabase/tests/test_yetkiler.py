@@ -318,3 +318,21 @@ def test_kayit_kancasi_ek_epostayi_tanir(db, seed):
     assert kanca(YONETICI) == {} and kanca("ozge.kisisel@gmail.com") == {}
     assert kanca("yabanci@gmail.com")["error"]["http_code"] == 403
     assert kanca(PASIF)["error"]["http_code"] == 403
+
+
+def test_cihaz_eslesme_kodu(db, seed):
+    """Girişli kişi kod üretir; kod bir kez, 10 dakika içinde kullanılır ve kişinin giriş adresini verir."""
+    db.execute("insert into auth.users (email) values (%s)", (CAN,))
+    with as_user(db, CAN):
+        kod = db.execute("select cihaz_kodu_olustur()").fetchone()[0]
+    assert len(kod) == 9 and kod[4] == "-"
+    kullan = lambda k: db.execute("select cihaz_kodu_kullan(%s)", (k,)).fetchone()[0]
+    assert kullan("YANLIS-KOD") is None
+    assert kullan(kod.lower().replace("-", " ")) == CAN           # büyük/küçük harf ve ayraç önemsiz
+    assert kullan(kod) is None                                     # tek kullanımlık
+    with as_user(db, CAN):
+        kod2 = db.execute("select cihaz_kodu_olustur()").fetchone()[0]
+    db.execute("update cihaz_kodlari set bitis = now() - interval '1 second'")
+    assert kullan(kod2) is None                                    # süresi geçti
+    with as_user(db, CAN), pytest.raises(psycopg.errors.InsufficientPrivilege):
+        db.execute("select cihaz_kodu_kullan('x')")                # istemci doğrudan çağıramaz

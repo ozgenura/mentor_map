@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { supabase } from "../lib/api";
+import { cihazKoduylaGir, supabase } from "../lib/api";
 import { ALab, Logo } from "./ui";
 
 /** E-postadaki giriş bağlantısından tek kullanımlık anahtar (token_hash) ve türü. Bağlantı değilse null. */
@@ -27,7 +27,8 @@ function hataMesaji(m: string): string {
 export function Giris() {
   const [eposta, setEposta] = useState("");
   const [kod, setKod] = useState("");
-  const [adim, setAdim] = useState<"eposta" | "kod">("eposta");
+  const [adim, setAdim] = useState<"eposta" | "kod" | "eslesme">("eposta");
+  const [eslesmeKodu, setEslesmeKodu] = useState("");
   const [bekliyor, setBekliyor] = useState(false);
   const [hata, setHata] = useState<string | null>(null);
 
@@ -39,6 +40,14 @@ export function Giris() {
     setBekliyor(false);
     if (error) setHata(hataMesaji(error.message));
     else setAdim("kod");
+  }
+
+  async function eslestir(e: React.FormEvent) {
+    e.preventDefault();
+    setBekliyor(true);
+    setHata(null);
+    try { await cihazKoduylaGir(eslesmeKodu); } catch (err) { setHata(err instanceof Error ? err.message : "Olmadı."); }
+    setBekliyor(false);
   }
 
   async function dogrula(e: React.FormEvent) {
@@ -63,8 +72,22 @@ export function Giris() {
           <h1 className="font-baslik text-[34px] font-bold leading-[1.05] tracking-tight">Her ders<br />bir durak.</h1>
           <p className="text-sm text-soluk">Eğitmen takvimine e-posta adresinle giriş yap. Şifre yok; e-postana bir giriş bağlantısı ya da 6 haneli kod göndereceğiz.</p>
         </div>
-        <form onSubmit={adim === "eposta" ? kodGonder : dogrula} className="flex flex-col gap-3 rounded-buyuk bg-white p-5">
-          {adim === "eposta" ? (
+        <form onSubmit={adim === "eposta" ? kodGonder : adim === "eslesme" ? eslestir : dogrula} className="flex flex-col gap-3 rounded-buyuk bg-white p-5">
+          {adim === "eslesme" ? (
+            <>
+              <label htmlFor="eslesme" className="text-sm font-semibold">Eşleme kodu</label>
+              <p className="-mt-1 text-xs text-soluk">
+                Mentor Map'e girişli olduğun cihazda (ör. telefonunun tarayıcısı ya da bilgisayar) <strong>Profil → Başka cihazda giriş → Kod al</strong>.
+                Çıkan 8 karakterlik kodu buraya yaz.
+              </p>
+              <input id="eslesme" required autoFocus autoCapitalize="characters" autoCorrect="off" spellCheck={false} maxLength={9}
+                value={eslesmeKodu} onChange={(e) => setEslesmeKodu(e.target.value.toUpperCase())} placeholder="XXXX-XXXX"
+                className="h-14 rounded-xl border border-[#D9CDC6] text-center font-baslik text-2xl tracking-[0.2em] outline-none focus:border-yesil focus:ring-2 focus:ring-yesil/20" />
+              <button type="button" onClick={() => { setAdim("eposta"); setHata(null); }} className="self-start text-xs font-semibold underline">
+                E-postayla giriş yap
+              </button>
+            </>
+          ) : adim === "eposta" ? (
             <>
               <label htmlFor="eposta" className="text-sm font-semibold">E-posta adresin</label>
               <input id="eposta" type="email" required autoComplete="email" autoFocus value={eposta}
@@ -91,6 +114,11 @@ export function Giris() {
           <button type="submit" disabled={bekliyor} className="mt-1 h-12 rounded-2xl bg-yesil text-sm font-bold text-white disabled:opacity-60">
             {bekliyor ? "Bekle…" : adim === "eposta" ? "Kod gönder" : "Giriş yap"}
           </button>
+          {adim === "eposta" && (
+            <button type="button" onClick={() => { setAdim("eslesme"); setHata(null); }} className="text-center text-xs font-semibold underline">
+              Başka cihazda girişliyim: eşleme koduyla gir
+            </button>
+          )}
         </form>
       </div>
       <ALab className="mx-auto pb-6" />
