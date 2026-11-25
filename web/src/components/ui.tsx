@@ -23,6 +23,7 @@ const YOLLAR: Record<string, ReactNode> = {
   geriAl: <><path d="M9 14L4 9l5-5" /><path d="M4 9h10a6 6 0 0 1 0 12h-2" /></>,
   abone: <><rect x="3" y="5" width="18" height="16" rx="3" /><path d="M3 10h18M12 13v5M9.5 15.5h5" /></>,
   etkinlik: <path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z" />,
+  not: <><rect x="5" y="4" width="14" height="17" rx="2" /><path d="M9 4h6v3H9zM9 12h6M9 16h4" /></>,
   mesaj: <path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-5 4V6a1 1 0 0 1 1-1z" />,
 };
 

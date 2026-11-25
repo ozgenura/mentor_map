@@ -6,6 +6,7 @@ import { kalan, katilimZamani, sureSaatMetni, TATILLER, yaziRengi, guvenliLink }
 import { gunBasligi } from "../lib/time";
 import type { Oturum } from "../lib/types";
 import { OturumCakismalari } from "./Cakismalar";
+import { DersNotuKarti } from "./DersNotu";
 import { DetayFormu, YanSeansFormu } from "./SeansFormu";
 import { Pencere } from "./Pencere";
 import { Ikon, Rozet } from "./ui";
@@ -19,7 +20,7 @@ export function yetkiAdi(yonetici: boolean, yetkiler: string[]): string {
 
 /** Oturum detayı: mobilde tam ekran sayfa, geniş ekranda sağdan açılan panel. */
 export function OturumDetay({ o, onKapat }: { o: Oturum; onKapat: () => void }) {
-  const { tz, saatModu, duzenleyebilirMi, cakisanlar, ben, yetkilerim } = useBaglam();
+  const { tz, saatModu, duzenleyebilirMi, cakisanlar, ben, yetkilerim, dersNotlari } = useBaglam();
   const [iptalAcik, setIptalAcik] = useState(false);
   const g = gosterim(o, tz, saatModu);
   const iptal = o.durum === "iptal";
@@ -116,6 +117,8 @@ export function OturumDetay({ o, onKapat }: { o: Oturum; onKapat: () => void }) 
               <Ikon ad="video" boyut={18} /> Derse katıl
             </a>
           )}
+
+          {!iptal && dersNotlari.acik && <DersNotuKarti o={o} />}
 
           {yonetebilir && <OturumCakismalari oturumId={o.id} />}
           {yonetebilir && <Yonetim o={o} iptalAc={() => setIptalAcik(true)} />}

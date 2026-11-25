@@ -36,11 +36,13 @@ export type Baglam = {
   git: (s: Sekme) => void;
   /** PO paneli görünür mü (admin ya da en az bir bootcamp'in PO'su). */
   programPaneli: boolean;
+  /** Ders sonu notları: özellik açık mı; board'u görür mü (yönetici ya da rapor izleyicisi). */
+  dersNotlari: { acik: boolean; izleyici: boolean };
   /** Yalnızca gerçek modda yönetici için: başka bir kişinin gözünden bakma. */
   bakis: { yonetici: true; aktif: boolean; gercekAd: string; sec: (kisiId: string | null) => void } | null;
 };
 
-export type Sekme = "bugun" | "takvim" | "etkinlikler" | "program" | "degisenler" | "profil";
+export type Sekme = "bugun" | "takvim" | "etkinlikler" | "program" | "notlar" | "degisenler" | "profil";
 
 export const BaglamCtx = createContext<Baglam | null>(null);
 

@@ -61,6 +61,13 @@ export interface Api {
   /** Özellik anahtarı (ör. 'tabelalar'); yöneticide hep açık. */
   ozellikAcik(anahtar: string): Promise<boolean>;
   ozellikHerkeseAcik(anahtar: string): Promise<boolean>;
+  /** Ders sonu notları: özellik açık mı, kişi board'u görür mü (yönetici ya da rapor izleyicisi). */
+  dersNotlariDurumu(): Promise<{ acik: boolean; izleyici: boolean }>;
+  /** Oturumun notu; yazamayan ve göremeyen için null. */
+  dersNotu(oturumId: string): Promise<DersNotuDurumu | null>;
+  dersNotuKaydet(oturumId: string, n: DersNotuGirdi): Promise<void>;
+  /** Board: pazartesiden başlayan haftanın başlamış dersleri ve notları. */
+  dersNotlariHafta(pazartesi: string): Promise<HaftaDersi[]>;
   /** Cihaz eşleme: bu cihazda başka cihaz için 10 dakikalık giriş kodu üretir. */
   cihazKoduOlustur(): Promise<string>;
   senkronDurumu(): Promise<SenkronDurumu | null>;
@@ -84,6 +91,20 @@ export type Talep = {
   gonderen: string; benim: boolean; gelen: boolean; cevap: string | null; cevaplayan: string | null; cevap_zamani: string | null;
   okunmadi: boolean;
 };
+export type DersPlani = "tamam" | "kismen" | "geride";
+export type SinifNabzi = "zorlandi" | "iyi" | "cok_iyi";
+export type DersNotuGirdi = { plan: DersPlani; nabiz: SinifNabzi; katilim: number | null; islenen: string; dikkat: string };
+export type DersNotu = Omit<DersNotuGirdi, "dikkat"> & { dikkat: string | null; yazan: string | null; guncelleme: string };
+export type DersNotuDurumu = { yazabilir: boolean; basladi: boolean; not: DersNotu | null };
+export type HaftaDersi = {
+  id: string; bootcamp_id: string; kisa_kod: string; bootcamp_ad: string; renk: string; tarih: string; baslangic: string | null;
+  tur: string; konu: string; egitmenler: string[]; not: DersNotu | null;
+};
+export const PLAN_ADI: Record<DersPlani, string> = { tamam: "Tamam", kismen: "Kısmen", geride: "Geride" };
+export const NABIZ: Record<SinifNabzi, { ad: string; yuz: string }> = {
+  zorlandi: { ad: "Zorlandı", yuz: "😕" }, iyi: { ad: "İyi", yuz: "🙂" }, cok_iyi: { ad: "Çok iyi", yuz: "🤩" },
+};
+
 export const TALEP_KONULARI = ["Ders içeriği", "Program / saat", "Materyal / link", "Diğer"];
 
 /** Şablon ile uygulamanın aynı alanı farklı değiştirdiği durum (Aşama C). */
@@ -247,6 +268,13 @@ function supabaseApi(db: SupabaseClient): Api {
     async pushDeneme() { ok(await db.rpc("push_deneme")); },
     ozellikAcik: async (anahtar) => ok(await db.rpc("ozellik_acik", { p_anahtar: anahtar })) === true,
     cihazKoduOlustur: async () => ok(await db.rpc("cihaz_kodu_olustur")) as string,
+    dersNotlariDurumu: async () => ok(await db.rpc("ders_notlari_durumu")) as { acik: boolean; izleyici: boolean },
+    dersNotu: async (id) => ok(await db.rpc("ders_notu", { p_oturum: id })) as DersNotuDurumu | null,
+    async dersNotuKaydet(id, n) {
+      ok(await db.rpc("ders_notu_kaydet", { p_oturum: id, p_plan: n.plan, p_nabiz: n.nabiz, p_katilim: n.katilim,
+        p_islenen: n.islenen, p_dikkat: n.dikkat }));
+    },
+    dersNotlariHafta: async (pzt) => ok(await db.rpc("ders_notlari_hafta", { p_pazartesi: pzt })) as HaftaDersi[],
     ozellikHerkeseAcik: async (anahtar) => ok(await db.rpc("ozellik_herkese_acik", { p_anahtar: anahtar })) === true,
     async geriBildirimGonder(tur, metin, sayfa) {
       ok(await db.rpc("geri_bildirim_gonder", { p_tur: tur, p_metin: metin, p_sayfa: sayfa }));
@@ -436,6 +464,11 @@ const demoApi: Api = {
   ozellikAcik: async () => true,
   ozellikHerkeseAcik: async () => true,
   async cihazKoduOlustur() { throw new Error("Demoda yok."); },
+  // Ders sonu notları demoda yok.
+  dersNotlariDurumu: async () => ({ acik: false, izleyici: false }),
+  dersNotu: async () => null,
+  async dersNotuKaydet() { throw new Error("Demoda yok."); },
+  dersNotlariHafta: async () => [],
   async cakismaCoz() { /* demoda şablon yok */ },
   async yanSeansKaydet(s) {
     const v = await demoVeri();

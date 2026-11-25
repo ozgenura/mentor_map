@@ -12,6 +12,7 @@ import { bugunTR, TR } from "./lib/time";
 import { DUZENLEYEN_YETKILER, type Kisi, type Oturum } from "./lib/types";
 import { Bugun } from "./pages/Bugun";
 import { Degisenler } from "./pages/Degisenler";
+import { DersNotlari } from "./pages/DersNotlari";
 import { Etkinlikler } from "./pages/Etkinlikler";
 import { Profil } from "./pages/Profil";
 import { Program } from "./pages/Program";
@@ -40,7 +41,7 @@ export default function App() {
   return <Ana api={api} eposta={kimlik.eposta} demoKisiId={kimlik.demoKisiId} />;
 }
 
-const SEKMELER: Sekme[] = ["bugun", "takvim", "etkinlikler", "program", "degisenler", "profil"];
+const SEKMELER: Sekme[] = ["bugun", "takvim", "etkinlikler", "program", "notlar", "degisenler", "profil"];
 
 function Ana({ api, eposta, demoKisiId }: { api: Api; eposta: string | null; demoKisiId: string | null }) {
   const kisiler = useQuery({ queryKey: ["kisiler"], queryFn: api.kisiler });
@@ -48,6 +49,7 @@ function Ana({ api, eposta, demoKisiId }: { api: Api; eposta: string | null; dem
   const yetkiler = useQuery({ queryKey: ["yetkiler"], queryFn: api.yetkiler });
   // Ek e-postayla (ör. kişisel Gmail) giriş yapan da tanınsın diye kişi sunucudan çözülür.
   const benimId = useQuery({ queryKey: ["benimId", eposta], queryFn: api.benimKisiId, enabled: !DEMO && !!eposta });
+  const dersNotlari = useQuery({ queryKey: ["ders-notlari-durumu"], queryFn: api.dersNotlariDurumu, staleTime: 10 * 60_000 });
   const sonGuncelleme = useQuery({ queryKey: ["son"], queryFn: api.sonGuncelleme });
   const [demoId, setDemoId] = useState(demoKisiId);
   const [bakisId, setBakisIdDurum] = useState<string | null>(() => {
@@ -144,6 +146,7 @@ function Ana({ api, eposta, demoKisiId }: { api: Api; eposta: string | null; dem
     sonGuncelleme: sonGuncelleme.data ?? null,
     git,
     programPaneli: ben?.rol === "yonetici" || yetkilerim.some((y) => DUZENLEYEN_YETKILER.includes(y.yetki ?? "ana_egitmen")),
+    dersNotlari: dersNotlari.data ?? { acik: false, izleyici: false },
     bakis: !DEMO && gercekBen?.rol === "yonetici"
       ? { yonetici: true, aktif: !!ben && ben.id !== gercekBen.id, gercekAd: gercekBen.ad, sec: setBakisId }
       : null,
@@ -164,6 +167,7 @@ function Ana({ api, eposta, demoKisiId }: { api: Api; eposta: string | null; dem
         ) : sekme === "takvim" ? <TakvimSayfasi />
           : sekme === "etkinlikler" ? <Etkinlikler />
           : sekme === "program" && baglam.programPaneli ? <Program />
+          : sekme === "notlar" && baglam.dersNotlari.izleyici ? <DersNotlari />
           : sekme === "degisenler" ? <Degisenler />
           : sekme === "profil" ? <Profil demoSec={setDemoId} />
           : <Bugun />}

@@ -11,6 +11,7 @@ const SEKMELER: { id: Sekme; ad: string; ikon: string }[] = [
   { id: "takvim", ad: "Takvim", ikon: "takvim" },
   { id: "etkinlikler", ad: "Etkinlikler", ikon: "etkinlik" },
   { id: "program", ad: "Program", ikon: "dosya" },
+  { id: "notlar", ad: "Notlar", ikon: "not" },
   { id: "degisenler", ad: "Değişenler", ikon: "zil" },
   { id: "profil", ad: "Profil", ikon: "kisi" },
 ];
@@ -20,8 +21,8 @@ function basHarfler(ad: string) {
 }
 
 export function Kabuk({ sekme, children }: { sekme: Sekme; children: ReactNode }) {
-  const { git, yeniDegisiklik, ben, tz, bakis, programPaneli } = useBaglam();
-  const sekmeler = SEKMELER.filter((s) => s.id !== "program" || programPaneli);
+  const { git, yeniDegisiklik, ben, tz, bakis, programPaneli, dersNotlari } = useBaglam();
+  const sekmeler = SEKMELER.filter((s) => (s.id !== "program" || programPaneli) && (s.id !== "notlar" || dersNotlari.izleyici));
   return (
     <div className="min-h-dvh bg-zemin text-murekkep lg:flex">
       <aside className="hidden w-64 shrink-0 flex-col gap-7 bg-yesil px-4 py-6 text-white lg:sticky lg:top-0 lg:flex lg:h-dvh">
